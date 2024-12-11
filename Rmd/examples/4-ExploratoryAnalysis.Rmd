@@ -1,6 +1,28 @@
 # Exploratory analysis
 A brief exploratory analysis example. 
 
+```r
+# DAL ToolBox
+# version 1.1.727
+
+
+
+#loading DAL
+library(daltoolbox) 
+```
+
+
+```r
+library(RColorBrewer)
+library(ggplot2)
+
+colors <- brewer.pal(4, 'Set1')
+
+# setting the font size for all charts
+font <- theme(text = element_text(size=16))
+```
+
+
 ### Iris datasets
 The exploratory analysis is done using iris dataset.
 
