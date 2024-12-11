@@ -1064,7 +1064,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.002197266 secs
+## Time difference of 0.002536058 secs
 ```
 
 ```r
@@ -1089,7 +1089,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 6.462269 secs
+## Time difference of 6.475234 secs
 ```
 
 #### convert the entire column
@@ -1108,7 +1108,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2573357 secs
+## Time difference of 0.2514923 secs
 ```
 
 #### apply family
