@@ -1,6 +1,10 @@
 # Exploratory analysis
 A brief exploratory analysis example. 
 
+### Iris datasets
+The exploratory analysis is done using iris dataset.
+
+
 ```{r}
 #loading DAL Toolbox
 library(daltoolbox) 
@@ -17,32 +21,15 @@ colors <- brewer.pal(4, 'Set1')
 font <- theme(text = element_text(size=16))
 ```
 
-
-### Iris datasets
-The exploratory analysis is done using iris dataset.
-
 ```{r}
-colors <- brewer.pal(4, 'Set1')
-font <- theme(text = element_text(size=16))
-```
-
-```{r}
-# DAL ToolBox
-# version 1.0.77
-
-
-
-library(daltoolbox)
-library(ggplot2)
 library(dplyr)
 library(reshape)
-library(RColorBrewer)
 library(corrplot)
 library(WVPlots)
 library(GGally)
 library(aplpack)
 
-source("https://raw.githubusercontent.com/eogasawara/mylibrary/master/tutorial/graphics_extra.R")
+source("https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R")
 ```
 
 ## Part 1
@@ -97,7 +84,7 @@ grf3 <- plot_hist(iris %>% dplyr::select(Petal.Length),
 grf4 <- plot_hist(iris %>% dplyr::select(Petal.Width), 
                   label_x = "Petal.Width", color=colors[1]) + font
 
-load_library("gridExtra") 
+library(gridExtra) 
 options(repr.plot.width=16, repr.plot.height=4)
 grid.arrange(grf1, grf2, grf3, grf4, ncol=4)
 options(repr.plot.width=4, repr.plot.height=4)
