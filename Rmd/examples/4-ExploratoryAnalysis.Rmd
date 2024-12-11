@@ -1,18 +1,13 @@
 # Exploratory analysis
 A brief exploratory analysis example. 
 
-```r
-# DAL ToolBox
-# version 1.1.727
-
-
-
-#loading DAL
+```{r}
+#loading DAL Toolbox
 library(daltoolbox) 
 ```
 
 
-```r
+```{r}
 library(RColorBrewer)
 library(ggplot2)
 
