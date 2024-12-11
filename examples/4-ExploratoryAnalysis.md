@@ -86,11 +86,6 @@ print(sprintf("IQR=%.1f", IQR))
 
 ## Part 2
 
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
-
 ### Histogram analysis
 
 
@@ -107,7 +102,7 @@ grf <- plot_hist(iris %>% dplyr::select(Sepal.Length),
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-9](fig/4-ExploratoryAnalysis/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-8](fig/4-ExploratoryAnalysis/unnamed-chunk-8-1.png)
 
 Grouping graphics
 
@@ -150,29 +145,10 @@ grf4 <- plot_hist(iris %>% dplyr::select(Petal.Width),
 
 ```r
 library(gridExtra) 
-```
-
-```
-## 
-## Attaching package: 'gridExtra'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     combine
-```
-
-```r
-options(repr.plot.width=16, repr.plot.height=4)
 grid.arrange(grf1, grf2, grf3, grf4, ncol=4)
 ```
 
-![plot of chunk unnamed-chunk-10](fig/4-ExploratoryAnalysis/unnamed-chunk-10-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-9](fig/4-ExploratoryAnalysis/unnamed-chunk-9-1.png)
 
 ### Density distribution
 
@@ -214,15 +190,10 @@ grf4 <- plot_density(iris %>% dplyr::select(Petal.Width),
 ```
 
 ```r
-options(repr.plot.width=16, repr.plot.height=4)
 grid.arrange(grf1, grf2, grf3, grf4, ncol=4)
 ```
 
-![plot of chunk unnamed-chunk-11](fig/4-ExploratoryAnalysis/unnamed-chunk-11-1.png)
-
-```r
-options(repr.plot.width=5, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-10](fig/4-ExploratoryAnalysis/unnamed-chunk-10-1.png)
 
 ### Box-plot analysis
 
@@ -239,7 +210,7 @@ grf <- plot_boxplot(iris, colors=colors[1]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-12](fig/4-ExploratoryAnalysis/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-11](fig/4-ExploratoryAnalysis/unnamed-chunk-11-1.png)
 
 ### Consider the classification problem targeting to predict the species
 
@@ -256,15 +227,10 @@ grfC <- plot_density_class(iris %>% dplyr::select(Species, Petal.Length),
 grfD <- plot_density_class(iris %>% dplyr::select(Species, Petal.Width), 
             class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
 
-options(repr.plot.width=8, repr.plot.height=8)
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-13](fig/4-ExploratoryAnalysis/unnamed-chunk-13-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-12](fig/4-ExploratoryAnalysis/unnamed-chunk-12-1.png)
 
 ### Box-plot analysis grouped by the classifier
 
@@ -279,15 +245,10 @@ grfC <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Length),
 grfD <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Width), 
           class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
 
-options(repr.plot.width=8, repr.plot.height=8)
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-14](fig/4-ExploratoryAnalysis/unnamed-chunk-14-1.png)
-
-```r
-options(repr.plot.width=5, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-13](fig/4-ExploratoryAnalysis/unnamed-chunk-13-1.png)
 
 ## Part 3
 
@@ -323,7 +284,7 @@ grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width,
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-16](fig/4-ExploratoryAnalysis/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-15](fig/4-ExploratoryAnalysis/unnamed-chunk-15-1.png)
 
 ### Correlation matrix
 
@@ -333,10 +294,9 @@ grf <- plot_correlation(iris %>%
                  dplyr::select(Sepal.Width, Sepal.Length, Petal.Width, Petal.Length))
 ```
 
-![plot of chunk unnamed-chunk-17](fig/4-ExploratoryAnalysis/unnamed-chunk-17-1.png)
+![plot of chunk unnamed-chunk-16](fig/4-ExploratoryAnalysis/unnamed-chunk-16-1.png)
 
 ```r
-options(repr.plot.width=8, repr.plot.height=8)
 grf
 ```
 
@@ -366,10 +326,6 @@ grf
 ## [1] "upper"
 ```
 
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
-
 ## Matrix dispersion
 
 
@@ -377,15 +333,10 @@ options(repr.plot.width=4, repr.plot.height=4)
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  title="Iris", colors=colors[1])
 
-options(repr.plot.width=10, repr.plot.height=10)
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-18](fig/4-ExploratoryAnalysis/unnamed-chunk-18-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-17](fig/4-ExploratoryAnalysis/unnamed-chunk-17-1.png)
 
 ## Matrix dispersion by the classifier
 
@@ -393,15 +344,10 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  clabel='Species', title="Iris", colors=colors[1:3])
-options(repr.plot.width=10, repr.plot.height=10)
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-19](fig/4-ExploratoryAnalysis/unnamed-chunk-19-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-18](fig/4-ExploratoryAnalysis/unnamed-chunk-18-1.png)
 
 ## Advanced matrix dispersion
 
@@ -409,21 +355,20 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
                      title="Iris", colors=colors[1])
-options(repr.plot.width=10, repr.plot.height=10)
 grf
 ```
 
 ```
 ## plot: [1, 1] [=======>-----------------------------------------------------------------------------------------------------------------] 6% est: 0s
-## plot: [1, 2] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 1s
+## plot: [1, 2] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 0s
 ## plot: [1, 3] [======================>--------------------------------------------------------------------------------------------------] 19% est: 1s
 ## plot: [1, 4] [=============================>-------------------------------------------------------------------------------------------] 25% est: 1s
 ## plot: [2, 1] [=====================================>-----------------------------------------------------------------------------------] 31% est: 1s
 ## plot: [2, 2] [============================================>----------------------------------------------------------------------------] 38% est: 1s
-## plot: [2, 3] [====================================================>--------------------------------------------------------------------] 44% est: 1s
-## plot: [2, 4] [===========================================================>-------------------------------------------------------------] 50% est: 1s
-## plot: [3, 1] [===================================================================>-----------------------------------------------------] 56% est: 1s
-## plot: [3, 2] [===========================================================================>---------------------------------------------] 62% est: 1s
+## plot: [2, 3] [====================================================>--------------------------------------------------------------------] 44% est: 0s
+## plot: [2, 4] [===========================================================>-------------------------------------------------------------] 50% est: 0s
+## plot: [3, 1] [===================================================================>-----------------------------------------------------] 56% est: 0s
+## plot: [3, 2] [===========================================================================>---------------------------------------------] 62% est: 0s
 ## plot: [3, 3] [==================================================================================>--------------------------------------] 69% est: 0s
 ## plot: [3, 4] [==========================================================================================>------------------------------] 75% est: 0s
 ## plot: [4, 1] [=================================================================================================>-----------------------] 81% est: 0s
@@ -432,11 +377,7 @@ grf
 ## plot: [4, 4] [=========================================================================================================================]100% est: 0s
 ```
 
-![plot of chunk unnamed-chunk-20](fig/4-ExploratoryAnalysis/unnamed-chunk-20-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-19](fig/4-ExploratoryAnalysis/unnamed-chunk-19-1.png)
 
 ## Advanced matrix dispersion with the classifier
 
@@ -444,7 +385,6 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
                         title="Iris", clabel='Species', colors=colors[1:3])
-options(repr.plot.width=10, repr.plot.height=10)
 grf
 ```
 
@@ -484,11 +424,7 @@ grf
 ## [=========================================================================================================================]100% est: 0s
 ```
 
-![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-20](fig/4-ExploratoryAnalysis/unnamed-chunk-20-1.png)
 
 ## Parallel coordinates
 
@@ -497,15 +433,10 @@ options(repr.plot.width=4, repr.plot.height=4)
 grf <- ggparcoord(data = iris, columns = c(1:4), group=5) + 
     theme_bw(base_size = 10) + scale_color_manual(values=colors[1:3]) + font
 
-options(repr.plot.width=10, repr.plot.height=5)
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-22](fig/4-ExploratoryAnalysis/unnamed-chunk-22-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
 
 ## Images
 
@@ -515,18 +446,13 @@ mat <- as.matrix(iris[,1:4])
 x <- (1:nrow(mat))
 y <- (1:ncol(mat))
 
-options(repr.plot.width=12, repr.plot.height=5)
 image(x, y, mat, col = brewer.pal(11, 'Spectral'), axes = FALSE,  
       main = "Iris", xlab="sample", ylab="Attributes")
 axis(2, at = seq(0, ncol(mat), by = 1))
 axis(1, at = seq(0, nrow(mat), by = 10))
 ```
 
-![plot of chunk unnamed-chunk-23](fig/4-ExploratoryAnalysis/unnamed-chunk-23-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-22](fig/4-ExploratoryAnalysis/unnamed-chunk-22-1.png)
 
 ## Chernoff faces
 
@@ -539,15 +465,10 @@ isample = iris[sample_rows,]
 labels = as.character(rownames(isample))
 isample$Species <- NULL
 
-options(repr.plot.width=12, repr.plot.height=12)
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-![plot of chunk unnamed-chunk-24](fig/4-ExploratoryAnalysis/unnamed-chunk-24-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-23](fig/4-ExploratoryAnalysis/unnamed-chunk-23-1.png)
 
 ## Chernoff faces with the classifier
 
@@ -560,13 +481,8 @@ isample = iris[sample_rows,]
 labels = as.character(isample$Species)
 isample$Species <- NULL
 
-options(repr.plot.width=12, repr.plot.height=12)
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-![plot of chunk unnamed-chunk-25](fig/4-ExploratoryAnalysis/unnamed-chunk-25-1.png)
-
-```r
-options(repr.plot.width=4, repr.plot.height=4)
-```
+![plot of chunk unnamed-chunk-24](fig/4-ExploratoryAnalysis/unnamed-chunk-24-1.png)
 
