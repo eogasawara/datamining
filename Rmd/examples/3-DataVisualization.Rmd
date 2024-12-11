@@ -1,5 +1,5 @@
-# Introduction
-Introduction
+# Data visualization
+Data visualization
 
 
 ```{r}

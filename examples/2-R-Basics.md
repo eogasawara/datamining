@@ -1064,7 +1064,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.003554583 secs
+## Time difference of 0.003860474 secs
 ```
 
 ```r
@@ -1089,7 +1089,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 8.614295 secs
+## Time difference of 11.5883 secs
 ```
 
 #### convert the entire column
@@ -1108,7 +1108,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2773616 secs
+## Time difference of 0.2704763 secs
 ```
 
 #### apply family
@@ -1291,7 +1291,7 @@ head(result)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'result' not found
+## Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'head': object 'result' not found
 ```
 
 
