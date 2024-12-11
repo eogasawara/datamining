@@ -1,24 +1,35 @@
 # Exploratory analysis
 A brief exploratory analysis example. 
 
+```r
+# DAL ToolBox
+# version 1.1.727
+
+
+
+#loading DAL
+library(daltoolbox) 
+```
+
+
+```r
+library(RColorBrewer)
+library(ggplot2)
+
+colors <- brewer.pal(4, 'Set1')
+
+# setting the font size for all charts
+font <- theme(text = element_text(size=16))
+```
+
+
 ### Iris datasets
 The exploratory analysis is done using iris dataset.
 
 
 ```r
 colors <- brewer.pal(4, 'Set1')
-```
-
-```
-## Error in brewer.pal(4, "Set1"): could not find function "brewer.pal"
-```
-
-```r
 font <- theme(text = element_text(size=16))
-```
-
-```
-## Error in theme(text = element_text(size = 16)): could not find function "theme"
 ```
 
 
@@ -29,75 +40,15 @@ font <- theme(text = element_text(size=16))
 
 
 library(daltoolbox)
-```
-
-```
-## Registered S3 method overwritten by 'quantmod':
-##   method            from
-##   as.zoo.data.frame zoo
-```
-
-```
-## 
-## Attaching package: 'daltoolbox'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     transform
-```
-
-```r
 library(ggplot2)
 library(dplyr)
 library(reshape)
 library(RColorBrewer)
 library(corrplot)
-```
-
-```
-## corrplot 0.92 loaded
-```
-
-```r
 library(WVPlots)
-```
-
-```
-## Loading required package: wrapr
-```
-
-```
-## 
-## Attaching package: 'wrapr'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     coalesce
-```
-
-```r
 library(GGally)
-```
-
-```
-## Registered S3 method overwritten by 'GGally':
-##   method from   
-##   +.gg   ggplot2
-```
-
-```r
 library(aplpack)
-```
 
-```
-## Warning in fun(libname, pkgname): couldn't connect to display ":0"
-```
-
-```r
 source("https://raw.githubusercontent.com/eogasawara/mylibrary/master/tutorial/graphics_extra.R")
 ```
 
@@ -106,20 +57,6 @@ source("https://raw.githubusercontent.com/eogasawara/mylibrary/master/tutorial/g
 
 ```r
 library(MASS)
-```
-
-```
-## 
-## Attaching package: 'MASS'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     select
-```
-
-```r
 data(iris)
 ```
 
@@ -183,17 +120,11 @@ grf <- plot_hist(iris %>% dplyr::select(Sepal.Length),
 ## Using  as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 plot(grf)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'grf' not found
-```
+![plot of chunk unnamed-chunk-8](fig/4-ExploratoryAnalysis/unnamed-chunk-8-1.png)
 
 Grouping graphics
 
@@ -207,10 +138,6 @@ grf1 <- plot_hist(iris %>% dplyr::select(Sepal.Length),
 ## Using  as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 grf2 <- plot_hist(iris %>% dplyr::select(Sepal.Width), 
                   label_x = "Sepal.Width", color=colors[1]) + font  
@@ -218,10 +145,6 @@ grf2 <- plot_hist(iris %>% dplyr::select(Sepal.Width),
 
 ```
 ## Using  as id variables
-```
-
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
 ```
 
 ```r
@@ -233,10 +156,6 @@ grf3 <- plot_hist(iris %>% dplyr::select(Petal.Length),
 ## Using  as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 grf4 <- plot_hist(iris %>% dplyr::select(Petal.Width), 
                   label_x = "Petal.Width", color=colors[1]) + font
@@ -244,10 +163,6 @@ grf4 <- plot_hist(iris %>% dplyr::select(Petal.Width),
 
 ```
 ## Using  as id variables
-```
-
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
 ```
 
 ```r
@@ -283,10 +198,6 @@ grf1 <- plot_density(iris %>% dplyr::select(Sepal.Length),
 ## Using  as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 grf2 <- plot_density(iris %>% dplyr::select(Sepal.Width), 
                   label_x = "Sepal.Width", color=colors[1]) + font  
@@ -294,10 +205,6 @@ grf2 <- plot_density(iris %>% dplyr::select(Sepal.Width),
 
 ```
 ## Using  as id variables
-```
-
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
 ```
 
 ```r
@@ -309,10 +216,6 @@ grf3 <- plot_density(iris %>% dplyr::select(Petal.Length),
 ## Using  as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 grf4 <- plot_density(iris %>% dplyr::select(Petal.Width), 
                   label_x = "Petal.Width", color=colors[1]) + font
@@ -320,10 +223,6 @@ grf4 <- plot_density(iris %>% dplyr::select(Petal.Width),
 
 ```
 ## Using  as id variables
-```
-
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
 ```
 
 ```r
@@ -350,17 +249,11 @@ grf <- plot_boxplot(iris, colors=colors[1]) + font
 ## Using Species as id variables
 ```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
 ```r
 plot(grf)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'grf' not found
-```
+![plot of chunk unnamed-chunk-11](fig/4-ExploratoryAnalysis/unnamed-chunk-11-1.png)
 
 ### Consider the classification problem targeting to predict the species
 
@@ -370,40 +263,13 @@ plot(grf)
 ```r
 grfA <- plot_density_class(iris %>% dplyr::select(Species, Sepal.Length), 
             class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfB <- plot_density_class(iris %>% dplyr::select(Species, Sepal.Width), 
             class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfC <- plot_density_class(iris %>% dplyr::select(Species, Petal.Length), 
             class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfD <- plot_density_class(iris %>% dplyr::select(Species, Petal.Width), 
             class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
-```
 
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=8, repr.plot.height=8)
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
@@ -422,40 +288,13 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grfA <- plot_boxplot_class(iris %>% dplyr::select(Species, Sepal.Length), 
           class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfB <- plot_boxplot_class(iris %>% dplyr::select(Species, Sepal.Width), 
           class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfC <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Length), 
           class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-```
-
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 grfD <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Width), 
           class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
-```
 
-```
-## Error in colors[c(1:3)]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=8, repr.plot.height=8)
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
@@ -481,7 +320,8 @@ grf <- plot_scatter(iris |> dplyr::select(x=Sepal.Length, value=Sepal.Width) |> 
 ```
 
 ```
-## Error in colors[1]: object of type 'closure' is not subsettable
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.
 ```
 
 ```r
@@ -489,26 +329,19 @@ plot(grf)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'grf' not found
+## Error in `train_continuous()`:
+## ! Discrete value supplied to a continuous scale
 ```
 
 
 ```r
 grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width, variable = Species), 
                     label_x = "Sepal.Length", label_y = "Sepal.Width", colors=colors[1:3]) + font
-```
 
-```
-## Error in colors[1:3]: object of type 'closure' is not subsettable
-```
-
-```r
 plot(grf)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'grf' not found
-```
+![plot of chunk unnamed-chunk-15](fig/4-ExploratoryAnalysis/unnamed-chunk-15-1.png)
 
 ### Correlation matrix
 
@@ -561,20 +394,12 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  title="Iris", colors=colors[1])
-```
 
-```
-## Error in colors[1]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=10, repr.plot.height=10)
 plot(grf)
 ```
 
-```
-## Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
-```
+![plot of chunk unnamed-chunk-17](fig/4-ExploratoryAnalysis/unnamed-chunk-17-1.png)
 
 ```r
 options(repr.plot.width=4, repr.plot.height=4)
@@ -586,20 +411,11 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  clabel='Species', title="Iris", colors=colors[1:3])
-```
-
-```
-## Error in colors[1:3]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=10, repr.plot.height=10)
 plot(grf)
 ```
 
-```
-## Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
-```
+![plot of chunk unnamed-chunk-18](fig/4-ExploratoryAnalysis/unnamed-chunk-18-1.png)
 
 ```r
 options(repr.plot.width=4, repr.plot.height=4)
@@ -617,15 +433,24 @@ grf
 
 ```
 ## plot: [1, 1] [=======>-----------------------------------------------------------------------------------------------------------------] 6% est: 0s
+## plot: [1, 2] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 0s
+## plot: [1, 3] [======================>--------------------------------------------------------------------------------------------------] 19% est: 1s
+## plot: [1, 4] [=============================>-------------------------------------------------------------------------------------------] 25% est: 1s
+## plot: [2, 1] [=====================================>-----------------------------------------------------------------------------------] 31% est: 1s
+## plot: [2, 2] [============================================>----------------------------------------------------------------------------] 38% est: 1s
+## plot: [2, 3] [====================================================>--------------------------------------------------------------------] 44% est: 1s
+## plot: [2, 4] [===========================================================>-------------------------------------------------------------] 50% est: 0s
+## plot: [3, 1] [===================================================================>-----------------------------------------------------] 56% est: 0s
+## plot: [3, 2] [===========================================================================>---------------------------------------------] 62% est: 0s
+## plot: [3, 3] [==================================================================================>--------------------------------------] 69% est: 0s
+## plot: [3, 4] [==========================================================================================>------------------------------] 75% est: 0s
+## plot: [4, 1] [=================================================================================================>-----------------------] 81% est: 0s
+## plot: [4, 2] [=========================================================================================================>---------------] 88% est: 0s
+## plot: [4, 3] [================================================================================================================>--------] 94% est: 0s
+## plot: [4, 4] [=========================================================================================================================]100% est: 0s
 ```
 
-```
-## Error in `geom_density()`:
-## ! Problem while computing aesthetics.
-## ℹ Error occurred in the 1st layer.
-## Caused by error in `colors[1]`:
-## ! object of type 'closure' is not subsettable
-```
+![plot of chunk unnamed-chunk-19](fig/4-ExploratoryAnalysis/unnamed-chunk-19-1.png)
 
 ```r
 options(repr.plot.width=4, repr.plot.height=4)
@@ -637,32 +462,47 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
                         title="Iris", clabel='Species', colors=colors[1:3])
-```
-
-```
-## Error in colors[1:3]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=10, repr.plot.height=10)
 grf
 ```
 
 ```
-## plot: [1, 1] [=======>-----------------------------------------------------------------------------------------------------------------] 6% est: 0s
+## plot: [1, 1] [====>--------------------------------------------------------------------------------------------------------------------] 4% est: 0s
+## plot: [1, 2] [=========>---------------------------------------------------------------------------------------------------------------] 8% est: 1s
+## plot: [1, 3] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 1s
+## plot: [1, 4] [==================>------------------------------------------------------------------------------------------------------] 16% est: 1s
+## plot: [1, 5] [=======================>-------------------------------------------------------------------------------------------------] 20% est: 1s
+## plot: [2, 1] [============================>--------------------------------------------------------------------------------------------] 24% est: 1s
+## plot: [2, 2] [=================================>---------------------------------------------------------------------------------------] 28% est: 1s
+## plot: [2, 3] [======================================>----------------------------------------------------------------------------------] 32% est: 1s
+## plot: [2, 4] [===========================================>-----------------------------------------------------------------------------] 36% est: 1s
+## plot: [2, 5] [===============================================>-------------------------------------------------------------------------] 40% est: 1s
+## plot: [3, 1] [====================================================>--------------------------------------------------------------------] 44% est: 1s
+## plot: [3, 2] [=========================================================>---------------------------------------------------------------] 48% est: 1s
+## plot: [3, 3] [==============================================================>----------------------------------------------------------] 52% est: 1s
+## plot: [3, 4] [===================================================================>-----------------------------------------------------] 56% est: 1s
+## plot: [3, 5] [========================================================================>------------------------------------------------] 60% est: 1s
+## plot: [4, 1] [============================================================================>--------------------------------------------] 64% est: 1s
+## plot: [4, 2] [=================================================================================>---------------------------------------] 68% est: 1s
+## plot: [4, 3] [======================================================================================>----------------------------------] 72% est: 1s
+## plot: [4, 4] [===========================================================================================>-----------------------------] 76% est: 0s
+## plot: [4, 5] [================================================================================================>------------------------] 80% est: 0s
+## plot: [5, 1] [=====================================================================================================>-------------------] 84% est: 0s
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+ plot: [5, 2]
+## [=========================================================================================================>---------------] 88% est: 0s `stat_bin()`
+## using `bins = 30`. Pick better value with `binwidth`.
+ plot: [5, 3]
+## [==============================================================================================================>----------] 92% est: 0s `stat_bin()`
+## using `bins = 30`. Pick better value with `binwidth`.
+ plot: [5, 4]
+## [===================================================================================================================>-----] 96% est: 0s `stat_bin()`
+## using `bins = 30`. Pick better value with `binwidth`.
+ plot: [5, 5]
+## [=========================================================================================================================]100% est: 0s
 ```
 
-```
-## Warning in FUN(X[[i]], ...): restarting interrupted promise evaluation
-```
-
-```
-## Error in `geom_density()`:
-## ! Problem while computing aesthetics.
-## ℹ Error occurred in the 1st layer.
-## Caused by error in `colors[1]`:
-## ! object of type 'closure' is not subsettable
-```
+![plot of chunk unnamed-chunk-20](fig/4-ExploratoryAnalysis/unnamed-chunk-20-1.png)
 
 ```r
 options(repr.plot.width=4, repr.plot.height=4)
@@ -674,20 +514,12 @@ options(repr.plot.width=4, repr.plot.height=4)
 ```r
 grf <- ggparcoord(data = iris, columns = c(1:4), group=5) + 
     theme_bw(base_size = 10) + scale_color_manual(values=colors[1:3]) + font
-```
 
-```
-## Error in colors[1:3]: object of type 'closure' is not subsettable
-```
-
-```r
 options(repr.plot.width=10, repr.plot.height=5)
 plot(grf)
 ```
 
-```
-## Error in xy.coords(x, y, xlabel, ylabel, log): 'x' is a list, but does not have components 'x' and 'y'
-```
+![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
 
 ```r
 options(repr.plot.width=4, repr.plot.height=4)

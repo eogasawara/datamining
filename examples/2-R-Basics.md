@@ -1064,7 +1064,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.002536058 secs
+## Time difference of 0.003530502 secs
 ```
 
 ```r
@@ -1089,7 +1089,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 6.475234 secs
+## Time difference of 10.01032 secs
 ```
 
 #### convert the entire column
@@ -1108,7 +1108,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2514923 secs
+## Time difference of 0.2833683 secs
 ```
 
 #### apply family
@@ -1277,36 +1277,21 @@ head(flight_data)
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 result <- flight_data %>% 
    filter(Delays > 5) %>% 
    select(Year, Quarter, Flights)
+```
+
+```
+## Error in select(., Year, Quarter, Flights): unused arguments (Year, Quarter, Flights)
+```
+
+```r
 head(result)
 ```
 
 ```
-##   Year Quarter Flights
-## 1 2016       1      11
-## 2 2017       4      25
+## Error in eval(expr, envir, enclos): object 'result' not found
 ```
 
 
@@ -1354,20 +1339,6 @@ head(flight_data)
 ```r
 #install.packages(reshape)
 library(reshape)
-```
-
-```
-## 
-## Attaching package: 'reshape'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     rename
-```
-
-```r
 result <- melt(flight_data[,c('Year', 'Quarter', 'Flights', 'Delays')], 
              id.vars = c(1,2))
 nrow(result)
