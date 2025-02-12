@@ -71,3 +71,9 @@ if (TRUE) {
   }
 }
 
+
+if (FALSE) {
+  convert_rmd_md("Rmd/examples/4-ExploratoryAnalysis.Rmd")
+}
+
+

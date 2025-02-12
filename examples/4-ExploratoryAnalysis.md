@@ -1,22 +1,16 @@
-# Exploratory analysis
+#### Exploratory analysis
 A brief exploratory analysis example. 
 
-### Iris datasets
-The exploratory analysis is done using iris dataset.
+#### Basic configuration for exploratory analysis
 
 
-
-```r
-#loading DAL Toolbox
+``` r
+# basic packages
 library(daltoolbox) 
-```
-
-
-
-```r
 library(RColorBrewer)
 library(ggplot2)
 
+# choosing colors
 colors <- brewer.pal(4, 'Set1')
 
 # setting the font size for all charts
@@ -24,47 +18,84 @@ font <- theme(text = element_text(size=16))
 ```
 
 
-```r
+``` r
+# additional packages
+{
 library(dplyr)
 library(reshape)
 library(corrplot)
 library(WVPlots)
 library(GGally)
 library(aplpack)
+}
+```
 
+```
+## 
+## Anexando pacote: 'reshape'
+```
+
+```
+## O seguinte objeto é mascarado por 'package:dplyr':
+## 
+##     rename
+```
+
+```
+## corrplot 0.95 loaded
+```
+
+```
+## Carregando pacotes exigidos: wrapr
+```
+
+```
+## 
+## Anexando pacote: 'wrapr'
+```
+
+```
+## O seguinte objeto é mascarado por 'package:dplyr':
+## 
+##     coalesce
+```
+
+```
+## Registered S3 method overwritten by 'GGally':
+##   method from   
+##   +.gg   ggplot2
+```
+
+``` r
 source("https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R")
 ```
 
-## Part 1
+#### Iris datasets
+The exploratory analysis is done using iris dataset.
+There are three basic species
 
 
-```r
-library(MASS)
-data(iris)
-```
-
-
-```r
-head(iris[c(1:3,51:53,101:103),])
+``` r
+head(iris[c(1:2,51:52,101:102),])
 ```
 
 ```
-##    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-## 1           5.1         3.5          1.4         0.2     setosa
-## 2           4.9         3.0          1.4         0.2     setosa
-## 3           4.7         3.2          1.3         0.2     setosa
-## 51          7.0         3.2          4.7         1.4 versicolor
-## 52          6.4         3.2          4.5         1.5 versicolor
-## 53          6.9         3.1          4.9         1.5 versicolor
+##     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+## 1            5.1         3.5          1.4         0.2     setosa
+## 2            4.9         3.0          1.4         0.2     setosa
+## 51           7.0         3.2          4.7         1.4 versicolor
+## 52           6.4         3.2          4.5         1.5 versicolor
+## 101          6.3         3.3          6.0         2.5  virginica
+## 102          5.8         2.7          5.1         1.9  virginica
 ```
 
-### Data Summary
+#### Data Summary
 A preliminary analysis using the $Sepal.Length$ attribute. 
 
 This should be done for all attributes. 
 
 
-```r
+``` r
 sum <- summary(iris$Sepal.Length)
 sum
 ```
@@ -75,22 +106,21 @@ sum
 ```
 
 
-```r
+``` r
 IQR <- sum["3rd Qu."]-sum["1st Qu."]
-print(sprintf("IQR=%.1f", IQR))
+IQR
 ```
 
 ```
-## [1] "IQR=1.3"
+## 3rd Qu. 
+##     1.3
 ```
 
-## Part 2
-
-### Histogram analysis
+#### Histogram analysis
 
 
-```r
-grf <- plot_hist(iris %>% dplyr::select(Sepal.Length), 
+``` r
+grf <- plot_hist(iris |> dplyr::select(Sepal.Length), 
           label_x = "Sepal Length", color=colors[1]) + font
 ```
 
@@ -98,107 +128,75 @@ grf <- plot_hist(iris %>% dplyr::select(Sepal.Length),
 ## Using  as id variables
 ```
 
-```r
+``` r
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-8](fig/4-ExploratoryAnalysis/unnamed-chunk-8-1.png)
+![plot of chunk unnamed-chunk-6](fig/4-ExploratoryAnalysis/unnamed-chunk-6-1.png)
 
 Grouping graphics
 
 
-```r
-grf1 <- plot_hist(iris %>% dplyr::select(Sepal.Length), 
+``` r
+{
+grf1 <- plot_hist(iris |> dplyr::select(Sepal.Length), 
                   label_x = "Sepal.Length", color=colors[1]) + font
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf2 <- plot_hist(iris %>% dplyr::select(Sepal.Width), 
+grf2 <- plot_hist(iris |> dplyr::select(Sepal.Width), 
                   label_x = "Sepal.Width", color=colors[1]) + font  
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf3 <- plot_hist(iris %>% dplyr::select(Petal.Length), 
+grf3 <- plot_hist(iris |> dplyr::select(Petal.Length), 
                   label_x = "Petal.Length", color=colors[1]) + font 
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf4 <- plot_hist(iris %>% dplyr::select(Petal.Width), 
+grf4 <- plot_hist(iris |> dplyr::select(Petal.Width), 
                   label_x = "Petal.Width", color=colors[1]) + font
+}
 ```
 
 ```
 ## Using  as id variables
+## Using  as id variables
+## Using  as id variables
+## Using  as id variables
 ```
 
-```r
+``` r
 library(gridExtra) 
-grid.arrange(grf1, grf2, grf3, grf4, ncol=4)
+grid.arrange(grf1, grf2, grf3, grf4, ncol=2)
 ```
 
-![plot of chunk unnamed-chunk-9](fig/4-ExploratoryAnalysis/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-7](fig/4-ExploratoryAnalysis/unnamed-chunk-7-1.png)
 
-### Density distribution
+#### Density distribution
 
 
-```r
-grf1 <- plot_density(iris %>% dplyr::select(Sepal.Length), 
+``` r
+{
+grf1 <- plot_density(iris |> dplyr::select(Sepal.Length), 
                   label_x = "Sepal.Length", color=colors[1]) + font
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf2 <- plot_density(iris %>% dplyr::select(Sepal.Width), 
+grf2 <- plot_density(iris |> dplyr::select(Sepal.Width), 
                   label_x = "Sepal.Width", color=colors[1]) + font  
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf3 <- plot_density(iris %>% dplyr::select(Petal.Length), 
+grf3 <- plot_density(iris |> dplyr::select(Petal.Length), 
                   label_x = "Petal.Length", color=colors[1]) + font 
-```
-
-```
-## Using  as id variables
-```
-
-```r
-grf4 <- plot_density(iris %>% dplyr::select(Petal.Width), 
+grf4 <- plot_density(iris |> dplyr::select(Petal.Width), 
                   label_x = "Petal.Width", color=colors[1]) + font
+}
 ```
 
 ```
 ## Using  as id variables
+## Using  as id variables
+## Using  as id variables
+## Using  as id variables
 ```
 
-```r
-grid.arrange(grf1, grf2, grf3, grf4, ncol=4)
+``` r
+grid.arrange(grf1, grf2, grf3, grf4, ncol=2)
 ```
 
-![plot of chunk unnamed-chunk-10](fig/4-ExploratoryAnalysis/unnamed-chunk-10-1.png)
+![plot of chunk unnamed-chunk-8](fig/4-ExploratoryAnalysis/unnamed-chunk-8-1.png)
 
-### Box-plot analysis
+#### Box-plot analysis
 
 
-```r
+``` r
 grf <- plot_boxplot(iris, colors=colors[1]) + font
 ```
 
@@ -206,97 +204,85 @@ grf <- plot_boxplot(iris, colors=colors[1]) + font
 ## Using Species as id variables
 ```
 
-```r
+``` r
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-11](fig/4-ExploratoryAnalysis/unnamed-chunk-11-1.png)
+![plot of chunk unnamed-chunk-9](fig/4-ExploratoryAnalysis/unnamed-chunk-9-1.png)
 
-### Consider the classification problem targeting to predict the species
+#### Consider the classification problem targeting to predict the species
 
-### Density distribution colored by the classifier
+Until previous analysis, the goal of classification problem was not explored. 
+
+#### Density distribution colored by the classifier
 
 
-```r
-grfA <- plot_density_class(iris %>% dplyr::select(Species, Sepal.Length), 
+``` r
+grfA <- plot_density_class(iris |> dplyr::select(Species, Sepal.Length), 
             class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-grfB <- plot_density_class(iris %>% dplyr::select(Species, Sepal.Width), 
+grfB <- plot_density_class(iris |> dplyr::select(Species, Sepal.Width), 
             class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-grfC <- plot_density_class(iris %>% dplyr::select(Species, Petal.Length), 
+grfC <- plot_density_class(iris |> dplyr::select(Species, Petal.Length), 
             class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-grfD <- plot_density_class(iris %>% dplyr::select(Species, Petal.Width), 
+grfD <- plot_density_class(iris |> dplyr::select(Species, Petal.Width), 
             class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
 
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-12](fig/4-ExploratoryAnalysis/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-10](fig/4-ExploratoryAnalysis/unnamed-chunk-10-1.png)
 
-### Box-plot analysis grouped by the classifier
+#### Box-plot analysis grouped by the classifier
 
 
-```r
-grfA <- plot_boxplot_class(iris %>% dplyr::select(Species, Sepal.Length), 
+``` r
+grfA <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Length), 
           class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-grfB <- plot_boxplot_class(iris %>% dplyr::select(Species, Sepal.Width), 
+grfB <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Width), 
           class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-grfC <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Length), 
+grfC <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Length), 
           class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-grfD <- plot_boxplot_class(iris %>% dplyr::select(Species, Petal.Width), 
+grfD <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Width), 
           class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
 
 grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
 ```
 
-![plot of chunk unnamed-chunk-13](fig/4-ExploratoryAnalysis/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-11](fig/4-ExploratoryAnalysis/unnamed-chunk-11-1.png)
 
-## Part 3
-
-### Scatter plot
+#### Scatter plot
 
 
-```r
+``` r
 grf <- plot_scatter(iris |> dplyr::select(x=Sepal.Length, value=Sepal.Width) |> mutate(variable = "iris"), 
-                    label_x = "Sepal.Length", 
-                    label_y = "Sepal.Width", colors=colors[1]) +
-                    theme(legend.position = "none") + font
-```
-
-```
-## Scale for colour is already present.
-## Adding another scale for colour, which will replace the existing scale.
-```
-
-```r
+                    label_x = "Sepal.Length") +
+  theme(legend.position = "none") + font
 plot(grf)
 ```
 
-```
-## Error in `train_continuous()`:
-## ! Discrete value supplied to a continuous scale
-```
+![plot of chunk unnamed-chunk-12](fig/4-ExploratoryAnalysis/unnamed-chunk-12-1.png)
 
 
-```r
+``` r
 grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width, variable = Species), 
                     label_x = "Sepal.Length", label_y = "Sepal.Width", colors=colors[1:3]) + font
 
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-15](fig/4-ExploratoryAnalysis/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-13](fig/4-ExploratoryAnalysis/unnamed-chunk-13-1.png)
 
-### Correlation matrix
+#### Correlation matrix
 
 
-```r
-grf <- plot_correlation(iris %>% 
+``` r
+grf <- plot_correlation(iris |> 
                  dplyr::select(Sepal.Width, Sepal.Length, Petal.Width, Petal.Length))
 ```
 
-![plot of chunk unnamed-chunk-16](fig/4-ExploratoryAnalysis/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-14](fig/4-ExploratoryAnalysis/unnamed-chunk-14-1.png)
 
-```r
+``` r
 grf
 ```
 
@@ -326,122 +312,122 @@ grf
 ## [1] "upper"
 ```
 
-## Matrix dispersion
+#### Matrix dispersion
 
 
-```r
+``` r
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  title="Iris", colors=colors[1])
 
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-17](fig/4-ExploratoryAnalysis/unnamed-chunk-17-1.png)
+![plot of chunk unnamed-chunk-15](fig/4-ExploratoryAnalysis/unnamed-chunk-15-1.png)
 
-## Matrix dispersion by the classifier
+#### Matrix dispersion by the classifier
 
 
-```r
+``` r
 grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
                  clabel='Species', title="Iris", colors=colors[1:3])
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-18](fig/4-ExploratoryAnalysis/unnamed-chunk-18-1.png)
+![plot of chunk unnamed-chunk-16](fig/4-ExploratoryAnalysis/unnamed-chunk-16-1.png)
 
-## Advanced matrix dispersion
+#### Advanced matrix dispersion
 
 
-```r
+``` r
 grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
                      title="Iris", colors=colors[1])
 grf
 ```
 
 ```
-## plot: [1, 1] [=======>-----------------------------------------------------------------------------------------------------------------] 6% est: 0s
-## plot: [1, 2] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 0s
-## plot: [1, 3] [======================>--------------------------------------------------------------------------------------------------] 19% est: 1s
-## plot: [1, 4] [=============================>-------------------------------------------------------------------------------------------] 25% est: 1s
-## plot: [2, 1] [=====================================>-----------------------------------------------------------------------------------] 31% est: 1s
-## plot: [2, 2] [============================================>----------------------------------------------------------------------------] 38% est: 1s
-## plot: [2, 3] [====================================================>--------------------------------------------------------------------] 44% est: 0s
-## plot: [2, 4] [===========================================================>-------------------------------------------------------------] 50% est: 0s
-## plot: [3, 1] [===================================================================>-----------------------------------------------------] 56% est: 0s
-## plot: [3, 2] [===========================================================================>---------------------------------------------] 62% est: 0s
-## plot: [3, 3] [==================================================================================>--------------------------------------] 69% est: 0s
-## plot: [3, 4] [==========================================================================================>------------------------------] 75% est: 0s
-## plot: [4, 1] [=================================================================================================>-----------------------] 81% est: 0s
-## plot: [4, 2] [=========================================================================================================>---------------] 88% est: 0s
-## plot: [4, 3] [================================================================================================================>--------] 94% est: 0s
-## plot: [4, 4] [=========================================================================================================================]100% est: 0s
+## plot: [1, 1] [=======>----------------------------------------------------------------------------------------------------------------------] 6% est: 0s
+## plot: [1, 2] [===============>--------------------------------------------------------------------------------------------------------------] 12% est: 1s
+## plot: [1, 3] [=======================>------------------------------------------------------------------------------------------------------] 19% est: 1s
+## plot: [1, 4] [===============================>----------------------------------------------------------------------------------------------] 25% est: 1s
+## plot: [2, 1] [======================================>---------------------------------------------------------------------------------------] 31% est: 1s
+## plot: [2, 2] [==============================================>-------------------------------------------------------------------------------] 38% est: 1s
+## plot: [2, 3] [======================================================>-----------------------------------------------------------------------] 44% est: 1s
+## plot: [2, 4] [==============================================================>---------------------------------------------------------------] 50% est: 1s
+## plot: [3, 1] [======================================================================>-------------------------------------------------------] 56% est: 1s
+## plot: [3, 2] [==============================================================================>-----------------------------------------------] 62% est: 1s
+## plot: [3, 3] [======================================================================================>---------------------------------------] 69% est: 1s
+## plot: [3, 4] [=============================================================================================>--------------------------------] 75% est: 1s
+## plot: [4, 1] [=====================================================================================================>------------------------] 81% est: 0s
+## plot: [4, 2] [=============================================================================================================>----------------] 88% est: 0s
+## plot: [4, 3] [=====================================================================================================================>--------] 94% est: 0s
+## plot: [4, 4] [==============================================================================================================================]100% est: 0s
 ```
 
-![plot of chunk unnamed-chunk-19](fig/4-ExploratoryAnalysis/unnamed-chunk-19-1.png)
+![plot of chunk unnamed-chunk-17](fig/4-ExploratoryAnalysis/unnamed-chunk-17-1.png)
 
-## Advanced matrix dispersion with the classifier
+#### Advanced matrix dispersion with the classifier
 
 
-```r
+``` r
 grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
                         title="Iris", clabel='Species', colors=colors[1:3])
 grf
 ```
 
 ```
-## plot: [1, 1] [====>--------------------------------------------------------------------------------------------------------------------] 4% est: 0s
-## plot: [1, 2] [=========>---------------------------------------------------------------------------------------------------------------] 8% est: 1s
-## plot: [1, 3] [==============>----------------------------------------------------------------------------------------------------------] 12% est: 1s
-## plot: [1, 4] [==================>------------------------------------------------------------------------------------------------------] 16% est: 2s
-## plot: [1, 5] [=======================>-------------------------------------------------------------------------------------------------] 20% est: 1s
-## plot: [2, 1] [============================>--------------------------------------------------------------------------------------------] 24% est: 1s
-## plot: [2, 2] [=================================>---------------------------------------------------------------------------------------] 28% est: 1s
-## plot: [2, 3] [======================================>----------------------------------------------------------------------------------] 32% est: 1s
-## plot: [2, 4] [===========================================>-----------------------------------------------------------------------------] 36% est: 1s
-## plot: [2, 5] [===============================================>-------------------------------------------------------------------------] 40% est: 1s
-## plot: [3, 1] [====================================================>--------------------------------------------------------------------] 44% est: 1s
-## plot: [3, 2] [=========================================================>---------------------------------------------------------------] 48% est: 1s
-## plot: [3, 3] [==============================================================>----------------------------------------------------------] 52% est: 1s
-## plot: [3, 4] [===================================================================>-----------------------------------------------------] 56% est: 1s
-## plot: [3, 5] [========================================================================>------------------------------------------------] 60% est: 1s
-## plot: [4, 1] [============================================================================>--------------------------------------------] 64% est: 1s
-## plot: [4, 2] [=================================================================================>---------------------------------------] 68% est: 1s
-## plot: [4, 3] [======================================================================================>----------------------------------] 72% est: 1s
-## plot: [4, 4] [===========================================================================================>-----------------------------] 76% est: 0s
-## plot: [4, 5] [================================================================================================>------------------------] 80% est: 0s
-## plot: [5, 1] [=====================================================================================================>-------------------] 84% est: 0s
+## plot: [1, 1] [====>-------------------------------------------------------------------------------------------------------------------------] 4% est: 0s
+## plot: [1, 2] [=========>--------------------------------------------------------------------------------------------------------------------] 8% est: 2s
+## plot: [1, 3] [==============>---------------------------------------------------------------------------------------------------------------] 12% est: 2s
+## plot: [1, 4] [===================>----------------------------------------------------------------------------------------------------------] 16% est: 2s
+## plot: [1, 5] [========================>-----------------------------------------------------------------------------------------------------] 20% est: 2s
+## plot: [2, 1] [=============================>------------------------------------------------------------------------------------------------] 24% est: 2s
+## plot: [2, 2] [==================================>-------------------------------------------------------------------------------------------] 28% est: 2s
+## plot: [2, 3] [=======================================>--------------------------------------------------------------------------------------] 32% est: 2s
+## plot: [2, 4] [============================================>---------------------------------------------------------------------------------] 36% est: 2s
+## plot: [2, 5] [=================================================>----------------------------------------------------------------------------] 40% est: 2s
+## plot: [3, 1] [======================================================>-----------------------------------------------------------------------] 44% est: 2s
+## plot: [3, 2] [===========================================================>------------------------------------------------------------------] 48% est: 2s
+## plot: [3, 3] [=================================================================>------------------------------------------------------------] 52% est: 2s
+## plot: [3, 4] [======================================================================>-------------------------------------------------------] 56% est: 2s
+## plot: [3, 5] [===========================================================================>--------------------------------------------------] 60% est: 1s
+## plot: [4, 1] [================================================================================>---------------------------------------------] 64% est: 1s
+## plot: [4, 2] [=====================================================================================>----------------------------------------] 68% est: 1s
+## plot: [4, 3] [==========================================================================================>-----------------------------------] 72% est: 1s
+## plot: [4, 4] [===============================================================================================>------------------------------] 76% est: 1s
+## plot: [4, 5] [====================================================================================================>-------------------------] 80% est: 1s
+## plot: [5, 1] [=========================================================================================================>--------------------] 84% est: 1s
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
  plot: [5, 2]
-## [=========================================================================================================>---------------] 88% est: 0s `stat_bin()`
+## [==============================================================================================================>---------------] 88% est: 0s `stat_bin()`
 ## using `bins = 30`. Pick better value with `binwidth`.
  plot: [5, 3]
-## [==============================================================================================================>----------] 92% est: 0s `stat_bin()`
+## [===================================================================================================================>----------] 92% est: 0s `stat_bin()`
 ## using `bins = 30`. Pick better value with `binwidth`.
  plot: [5, 4]
-## [===================================================================================================================>-----] 96% est: 0s `stat_bin()`
+## [========================================================================================================================>-----] 96% est: 0s `stat_bin()`
 ## using `bins = 30`. Pick better value with `binwidth`.
  plot: [5, 5]
-## [=========================================================================================================================]100% est: 0s
+## [==============================================================================================================================]100% est: 0s
 ```
 
-![plot of chunk unnamed-chunk-20](fig/4-ExploratoryAnalysis/unnamed-chunk-20-1.png)
+![plot of chunk unnamed-chunk-18](fig/4-ExploratoryAnalysis/unnamed-chunk-18-1.png)
 
-## Parallel coordinates
+#### Parallel coordinates
 
 
-```r
+``` r
 grf <- ggparcoord(data = iris, columns = c(1:4), group=5) + 
     theme_bw(base_size = 10) + scale_color_manual(values=colors[1:3]) + font
 
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
+![plot of chunk unnamed-chunk-19](fig/4-ExploratoryAnalysis/unnamed-chunk-19-1.png)
 
-## Images
+#### Images
 
 
-```r
+``` r
 mat <- as.matrix(iris[,1:4])
 x <- (1:nrow(mat))
 y <- (1:ncol(mat))
@@ -452,12 +438,12 @@ axis(2, at = seq(0, ncol(mat), by = 1))
 axis(1, at = seq(0, nrow(mat), by = 10))
 ```
 
-![plot of chunk unnamed-chunk-22](fig/4-ExploratoryAnalysis/unnamed-chunk-22-1.png)
+![plot of chunk unnamed-chunk-20](fig/4-ExploratoryAnalysis/unnamed-chunk-20-1.png)
 
-## Chernoff faces
+#### Chernoff faces
 
 
-```r
+``` r
 set.seed(1)
 sample_rows = sample(1:nrow(iris), 25)
 
@@ -468,12 +454,12 @@ isample$Species <- NULL
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-![plot of chunk unnamed-chunk-23](fig/4-ExploratoryAnalysis/unnamed-chunk-23-1.png)
+![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
 
-## Chernoff faces with the classifier
+#### Chernoff faces with the classifier
 
 
-```r
+``` r
 set.seed(1)
 sample_rows = sample(1:nrow(iris), 25)
 
@@ -484,5 +470,5 @@ isample$Species <- NULL
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-![plot of chunk unnamed-chunk-24](fig/4-ExploratoryAnalysis/unnamed-chunk-24-1.png)
+![plot of chunk unnamed-chunk-22](fig/4-ExploratoryAnalysis/unnamed-chunk-22-1.png)
 
