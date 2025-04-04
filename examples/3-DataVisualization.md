@@ -110,7 +110,8 @@ grf <- grf + geom_errorbar(aes(x=Species, ymin=mean-sd, ymax=mean+sd),
 ## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 ## ℹ Please use `linewidth` instead.
 ## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
 ```
 
 ``` r
@@ -180,12 +181,12 @@ head(example)
 
 ```
 ##   exponential  uniform   normal
-## 1  1.78942828 3.333973 6.419892
-## 2  0.06446564 2.663986 5.536918
-## 3  1.40954950 3.482835 4.677125
-## 4  0.53585186 3.306603 5.509169
-## 5  0.27470571 2.574568 4.924507
-## 6  0.37255054 3.130733 4.259048
+## 1   0.0181614 3.400416 6.076401
+## 2   0.6706045 2.643557 5.396565
+## 3   0.3418539 3.244209 4.718134
+## 4   0.1537865 2.695374 4.507139
+## 5   1.7734549 2.529411 4.675322
+## 6   3.3056854 2.579815 2.706893
 ```
 
 

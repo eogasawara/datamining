@@ -332,7 +332,7 @@ for (i in 1:length(height)) {
     lev[i] <- "tall"
 }
 
-lev <- as.factor(lev)
+lev <- factor(lev, levels=c("small", "medium", "tall"), ordered=TRUE)
 lev
 ```
 

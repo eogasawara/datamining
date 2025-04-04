@@ -529,13 +529,13 @@ for (i in 1:length(height)) {
     lev[i] <- "tall"
 }
 
-lev <- as.factor(lev)
+lev <- factor(lev, levels=c("small", "medium", "tall"), ordered=TRUE)
 lev
 ```
 
 ```
 ## [1] medium medium medium tall   medium tall  
-## Levels: medium tall
+## Levels: small < medium < tall
 ```
 
 #### Using the function cut
@@ -547,7 +547,8 @@ lev
 ```
 
 ```
-## [1] (1.5,1.9]      (1.5,1.9]      (1.5,1.9]      (1.5,1.9]      (1.5,1.9]      (1.9,1.8e+308]
+## [1] (1.5,1.9]      (1.5,1.9]      (1.5,1.9]      (1.5,1.9]     
+## [5] (1.5,1.9]      (1.9,1.8e+308]
 ## Levels: (0,1.5] < (1.5,1.9] < (1.9,1.8e+308]
 ```
 
@@ -867,13 +868,20 @@ head(wine)
 ```
 
 ```
-##   Type Alcohol Malic  Ash Alcalinity Magnesium Phenols Flavanoids Nonflavanoids Proanthocyanins Color  Hue Dilution Proline
-## 1    1   13.20  1.78 2.14       11.2       100    2.65       2.76          0.26            1.28  4.38 1.05     3.40    1050
-## 2    1   13.16  2.36 2.67       18.6       101    2.80       3.24          0.30            2.81  5.68 1.03     3.17    1185
-## 3    1   14.37  1.95 2.50       16.8       113    3.85       3.49          0.24            2.18  7.80 0.86     3.45    1480
-## 4    1   13.24  2.59 2.87       21.0       118    2.80       2.69          0.39            1.82  4.32 1.04     2.93     735
-## 5    1   14.20  1.76 2.45       15.2       112    3.27       3.39          0.34            1.97  6.75 1.05     2.85    1450
-## 6    1   14.39  1.87 2.45       14.6        96    2.50       2.52          0.30            1.98  5.25 1.02     3.58    1290
+##   Type Alcohol Malic  Ash Alcalinity Magnesium Phenols Flavanoids
+## 1    1   13.20  1.78 2.14       11.2       100    2.65       2.76
+## 2    1   13.16  2.36 2.67       18.6       101    2.80       3.24
+## 3    1   14.37  1.95 2.50       16.8       113    3.85       3.49
+## 4    1   13.24  2.59 2.87       21.0       118    2.80       2.69
+## 5    1   14.20  1.76 2.45       15.2       112    3.27       3.39
+## 6    1   14.39  1.87 2.45       14.6        96    2.50       2.52
+##   Nonflavanoids Proanthocyanins Color  Hue Dilution Proline
+## 1          0.26            1.28  4.38 1.05     3.40    1050
+## 2          0.30            2.81  5.68 1.03     3.17    1185
+## 3          0.24            2.18  7.80 0.86     3.45    1480
+## 4          0.39            1.82  4.32 1.04     2.93     735
+## 5          0.34            1.97  6.75 1.05     2.85    1450
+## 6          0.30            1.98  5.25 1.02     3.58    1290
 ```
 
 ####  saving in binary format 
@@ -902,10 +910,14 @@ head(wine, 3)
 ```
 
 ```
-##   Type Alcohol Malic  Ash Alcalinity Magnesium Phenols Flavanoids Nonflavanoids Proanthocyanins Color  Hue Dilution Proline
-## 1    1   13.20  1.78 2.14       11.2       100    2.65       2.76          0.26            1.28  4.38 1.05     3.40    1050
-## 2    1   13.16  2.36 2.67       18.6       101    2.80       3.24          0.30            2.81  5.68 1.03     3.17    1185
-## 3    1   14.37  1.95 2.50       16.8       113    3.85       3.49          0.24            2.18  7.80 0.86     3.45    1480
+##   Type Alcohol Malic  Ash Alcalinity Magnesium Phenols Flavanoids
+## 1    1   13.20  1.78 2.14       11.2       100    2.65       2.76
+## 2    1   13.16  2.36 2.67       18.6       101    2.80       3.24
+## 3    1   14.37  1.95 2.50       16.8       113    3.85       3.49
+##   Nonflavanoids Proanthocyanins Color  Hue Dilution Proline
+## 1          0.26            1.28  4.38 1.05     3.40    1050
+## 2          0.30            2.81  5.68 1.03     3.17    1185
+## 3          0.24            2.18  7.80 0.86     3.45    1480
 ```
 
 ####  exporting data.frame into csv file
@@ -998,7 +1010,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.002660036 secs
+## Time difference of 0.00169611 secs
 ```
 
 ``` r
@@ -1023,7 +1035,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 16.74769 secs
+## Time difference of 11.40589 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1047,7 +1059,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.5131021 secs
+## Time difference of 0.332453 secs
 ```
 
 #### Pipelines
