@@ -9,6 +9,21 @@ if(!require(daltoolbox)) {
 }
 ```
 
+```
+## Loading required package: daltoolbox
+```
+
+```
+## 
+## Attaching package: 'daltoolbox'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     transform
+```
+
 Package loading
 
 
@@ -977,7 +992,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.00232935 secs
+## Time difference of 0.001842976 secs
 ```
 
 ``` r
@@ -1002,7 +1017,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 9.431901 secs
+## Time difference of 7.750893 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1026,7 +1041,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2801681 secs
+## Time difference of 0.2421246 secs
 ```
 
 #### Pipelines
@@ -1077,6 +1092,23 @@ head(flight_data)
 
 ``` r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
 ```
 
 
@@ -1244,29 +1276,12 @@ Library reticulate enables seamless integration with Python
 ``` r
 library(reticulate)
 source_python('https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/python/retic.py')
-```
-
-```
-## No module named 'pyreadr'
-```
-
-``` r
 x <- add(5, 10)
-```
-
-```
-## Error in add(5, 10): could not find function "add"
-```
-
-``` r
 x
 ```
 
 ```
-##      [,1] [,2] [,3]
-## [1,]    1    4    7
-## [2,]    2    5    8
-## [3,]    3    6    9
+## [1] 15
 ```
 
 
@@ -1279,7 +1294,12 @@ dfm <- read_rdata_mem(data)
 ```
 
 ```
-## Error in read_rdata_mem(data): could not find function "read_rdata_mem"
+## 0    1
+## 1    2
+## 2    3
+## 3    4
+## 4    5
+## Name: x, dtype: int32
 ```
 
 ``` r
@@ -1287,5 +1307,10 @@ head(dfm)
 ```
 
 ```
-## Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'head': object 'dfm' not found
+##   x  y  z
+## 1 1 11 12
+## 2 2 12 14
+## 3 3 13 16
+## 4 4 14 18
+## 5 5 15 20
 ```

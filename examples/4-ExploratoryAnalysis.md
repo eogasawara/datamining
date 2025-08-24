@@ -31,6 +31,46 @@ library(daltoolbox)
 }
 ```
 
+```
+## 
+## Attaching package: 'reshape'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     rename
+```
+
+```
+## corrplot 0.95 loaded
+```
+
+```
+## Loading required package: wrapr
+```
+
+```
+## 
+## Attaching package: 'wrapr'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     coalesce
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     grepv
+```
+
+```
+## Warning in fun(libname, pkgname): couldn't connect to display ":0"
+```
+
 #### Iris datasets
 The exploratory analysis is done using iris dataset.
 There are three basic species

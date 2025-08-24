@@ -104,6 +104,16 @@ data <- iris |> group_by(Species) |> summarize(mean=mean(Sepal.Length), sd=sd(Se
 grf <- plot_bar(data, colors=colors[1], alpha=1) + font
 grf <- grf + geom_errorbar(aes(x=Species, ymin=mean-sd, ymax=mean+sd), 
                            width=0.2, colour="darkred", alpha=0.8, size=1.1) 
+```
+
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
+```
+
+``` r
 plot(grf)
 ```
 
@@ -230,6 +240,17 @@ grfu <- plot_hist(example |> select(uniform), label_x = "uniform", color=colors[
 grfn <- plot_hist(example |> select(normal), label_x = "normal", color=colors[1]) + font
 grid.arrange(grfe, grfu, grfn, ncol=3)
 }
+```
+
+```
+## 
+## Attaching package: 'gridExtra'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     combine
 ```
 
 ```
