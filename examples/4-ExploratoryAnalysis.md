@@ -32,11 +32,11 @@ library(aplpack)
 
 ```
 ## 
-## Anexando pacote: 'reshape'
+## Attaching package: 'reshape'
 ```
 
 ```
-## O seguinte objeto é mascarado por 'package:dplyr':
+## The following object is masked from 'package:dplyr':
 ## 
 ##     rename
 ```
@@ -46,28 +46,28 @@ library(aplpack)
 ```
 
 ```
-## Carregando pacotes exigidos: wrapr
+## Loading required package: wrapr
 ```
 
 ```
 ## 
-## Anexando pacote: 'wrapr'
+## Attaching package: 'wrapr'
 ```
 
 ```
-## O seguinte objeto é mascarado por 'package:dplyr':
+## The following object is masked from 'package:dplyr':
 ## 
 ##     coalesce
 ```
 
 ```
-## Registered S3 method overwritten by 'GGally':
-##   method from   
-##   +.gg   ggplot2
+## The following object is masked from 'package:base':
+## 
+##     grepv
 ```
 
 ```
-## Error in library(aplpack): não há nenhum pacote chamado 'aplpack'
+## Warning in fun(libname, pkgname): couldn't connect to display ":0"
 ```
 
 ``` r
@@ -76,7 +76,8 @@ source("https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/
 
 ```
 ## Warning in file(filename, "r", encoding = encoding): cannot open URL
-## 'https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R': HTTP status was '404 Not Found'
+## 'https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R': HTTP status was '404 Not
+## Found'
 ```
 
 ```
@@ -294,7 +295,7 @@ grf <- plot_correlation(iris |>
 ```
 
 ```
-## Error in plot_correlation(dplyr::select(iris, Sepal.Width, Sepal.Length, : não foi possível encontrar a função "plot_correlation"
+## Error in plot_correlation(dplyr::select(iris, Sepal.Width, Sepal.Length, : could not find function "plot_correlation"
 ```
 
 ``` r
@@ -312,7 +313,7 @@ grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4],
 ```
 
 ```
-## Error in plot_pair(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : não foi possível encontrar a função "plot_pair"
+## Error in plot_pair(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : could not find function "plot_pair"
 ```
 
 ``` r
@@ -330,7 +331,7 @@ grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4],
 ```
 
 ```
-## Error in plot_pair(data = iris, cnames = colnames(iris)[1:4], clabel = "Species", : não foi possível encontrar a função "plot_pair"
+## Error in plot_pair(data = iris, cnames = colnames(iris)[1:4], clabel = "Species", : could not find function "plot_pair"
 ```
 
 ``` r
@@ -348,7 +349,7 @@ grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4],
 ```
 
 ```
-## Error in plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : não foi possível encontrar a função "plot_pair_adv"
+## Error in plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : could not find function "plot_pair_adv"
 ```
 
 ``` r
@@ -366,7 +367,7 @@ grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4],
 ```
 
 ```
-## Error in plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : não foi possível encontrar a função "plot_pair_adv"
+## Error in plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", : could not find function "plot_pair_adv"
 ```
 
 ``` r
@@ -417,9 +418,7 @@ isample$Species <- NULL
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-```
-## Error in faces(isample, labels = labels, print.info = F, cex = 1): não foi possível encontrar a função "faces"
-```
+![plot of chunk unnamed-chunk-21](fig/4-ExploratoryAnalysis/unnamed-chunk-21-1.png)
 
 #### Chernoff faces with the classifier
 
@@ -435,7 +434,5 @@ isample$Species <- NULL
 faces(isample, labels = labels, print.info=F, cex=1)
 ```
 
-```
-## Error in faces(isample, labels = labels, print.info = F, cex = 1): não foi possível encontrar a função "faces"
-```
+![plot of chunk unnamed-chunk-22](fig/4-ExploratoryAnalysis/unnamed-chunk-22-1.png)
 

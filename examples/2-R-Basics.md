@@ -9,6 +9,21 @@ if(!require(daltoolbox)) {
 }
 ```
 
+```
+## Loading required package: daltoolbox
+```
+
+```
+## 
+## Attaching package: 'daltoolbox'
+```
+
+```
+## The following object is masked from 'package:base':
+## 
+##     transform
+```
+
 Package loading
 
 
@@ -977,7 +992,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.001540899 secs
+## Time difference of 0.001838207 secs
 ```
 
 ``` r
@@ -1002,7 +1017,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 10.9819 secs
+## Time difference of 7.92716 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1026,7 +1041,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.413646 secs
+## Time difference of 0.2411947 secs
 ```
 
 #### Pipelines
@@ -1081,17 +1096,17 @@ library(dplyr)
 
 ```
 ## 
-## Anexando pacote: 'dplyr'
+## Attaching package: 'dplyr'
 ```
 
 ```
-## Os seguintes objetos são mascarados por 'package:stats':
+## The following objects are masked from 'package:stats':
 ## 
 ##     filter, lag
 ```
 
 ```
-## Os seguintes objetos são mascarados por 'package:base':
+## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union
 ```
@@ -1261,12 +1276,29 @@ Library reticulate enables seamless integration with Python
 ``` r
 library(reticulate)
 source_python('https://raw.githubusercontent.com/eogasawara/analise-dados/refs/heads/main/python/retic.py')
+```
+
+```
+## No module named 'pyreadr'
+```
+
+``` r
 x <- add(5, 10)
+```
+
+```
+## Error in add(5, 10): could not find function "add"
+```
+
+``` r
 x
 ```
 
 ```
-## [1] 15
+##      [,1] [,2] [,3]
+## [1,]    1    4    7
+## [2,]    2    5    8
+## [3,]    3    6    9
 ```
 
 
@@ -1279,12 +1311,7 @@ dfm <- read_rdata_mem(data)
 ```
 
 ```
-## 0    1
-## 1    2
-## 2    3
-## 3    4
-## 4    5
-## Name: x, dtype: int32
+## Error in read_rdata_mem(data): could not find function "read_rdata_mem"
 ```
 
 ``` r
@@ -1292,10 +1319,5 @@ head(dfm)
 ```
 
 ```
-##   x  y  z
-## 1 1 11 12
-## 2 2 12 14
-## 3 3 13 16
-## 4 4 14 18
-## 5 5 15 20
+## Error: object 'dfm' not found
 ```
