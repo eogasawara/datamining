@@ -10,60 +10,8 @@
 library(daltoolbox)
 
 library(arules)
-```
-
-```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:wrapr':
-## 
-##     pack, unpack
-```
-
-```
-## The following object is masked from 'package:reshape':
-## 
-##     expand
-```
-
-```
-## 
-## Attaching package: 'arules'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     abbreviate, write
-```
-
-``` r
 library(arulesViz)
 library(arulesSequences)
-```
-
-```
-## 
-## Attaching package: 'arulesSequences'
-```
-
-```
-## The following object is masked from 'package:arules':
-## 
-##     itemsets
 ```
 
 
@@ -415,9 +363,9 @@ s1 <- cspade(x, parameter = list(support = 0.4), control = list(verbose = TRUE))
 ## summary  : FALSE
 ## tidLists : FALSE
 ## 
-## preprocessing ... 1 partition(s), 0 MB [0.008s]
+## preprocessing ... 1 partition(s), 0 MB [0.003s]
 ## mining transactions ... 0 MB [0.002s]
-## reading sequences ... [0.011s]
+## reading sequences ... [0.016s]
 ## 
 ## total elapsed time: 0.021s
 ```

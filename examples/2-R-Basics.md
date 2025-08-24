@@ -9,21 +9,6 @@ if(!require(daltoolbox)) {
 }
 ```
 
-```
-## Loading required package: daltoolbox
-```
-
-```
-## 
-## Attaching package: 'daltoolbox'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     transform
-```
-
 Package loading
 
 
@@ -992,7 +977,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.001838207 secs
+## Time difference of 0.00232935 secs
 ```
 
 ``` r
@@ -1017,7 +1002,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 7.92716 secs
+## Time difference of 9.431901 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1041,7 +1026,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2411947 secs
+## Time difference of 0.2801681 secs
 ```
 
 #### Pipelines
@@ -1092,23 +1077,6 @@ head(flight_data)
 
 ``` r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
 ```
 
 
@@ -1275,7 +1243,7 @@ Library reticulate enables seamless integration with Python
 
 ``` r
 library(reticulate)
-source_python('https://raw.githubusercontent.com/eogasawara/analise-dados/refs/heads/main/python/retic.py')
+source_python('https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/python/retic.py')
 ```
 
 ```
@@ -1319,5 +1287,5 @@ head(dfm)
 ```
 
 ```
-## Error: object 'dfm' not found
+## Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'head': object 'dfm' not found
 ```

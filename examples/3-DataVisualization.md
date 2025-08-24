@@ -104,16 +104,6 @@ data <- iris |> group_by(Species) |> summarize(mean=mean(Sepal.Length), sd=sd(Se
 grf <- plot_bar(data, colors=colors[1], alpha=1) + font
 grf <- grf + geom_errorbar(aes(x=Species, ymin=mean-sd, ymax=mean+sd), 
                            width=0.2, colour="darkred", alpha=0.8, size=1.1) 
-```
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
-```
-
-``` r
 plot(grf)
 ```
 
@@ -195,12 +185,12 @@ head(example)
 
 ```
 ##   exponential  uniform   normal
-## 1 0.615291323 2.833252 4.483738
-## 2 0.247291435 2.918612 4.374111
-## 3 0.591563738 3.456614 6.649327
-## 4 0.298802834 2.689374 4.754095
-## 5 0.001719291 3.336072 4.300361
-## 6 1.342140507 2.739230 3.818268
+## 1  0.12260385 2.586433 5.331589
+## 2  0.03942747 3.334119 4.388309
+## 3  0.31239736 2.604191 6.273726
+## 4  2.02476689 2.909577 5.625941
+## 5  0.49887937 3.172632 4.818255
+## 6  0.84701798 2.694884 5.021169
 ```
 
 
@@ -240,17 +230,6 @@ grfu <- plot_hist(example |> select(uniform), label_x = "uniform", color=colors[
 grfn <- plot_hist(example |> select(normal), label_x = "normal", color=colors[1]) + font
 grid.arrange(grfe, grfu, grfn, ncol=3)
 }
-```
-
-```
-## 
-## Attaching package: 'gridExtra'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     combine
 ```
 
 ```

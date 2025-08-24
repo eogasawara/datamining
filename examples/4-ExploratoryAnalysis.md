@@ -27,61 +27,8 @@ library(corrplot)
 library(WVPlots)
 library(GGally)
 library(aplpack)
+library(daltoolbox)
 }
-```
-
-```
-## 
-## Attaching package: 'reshape'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     rename
-```
-
-```
-## corrplot 0.95 loaded
-```
-
-```
-## Loading required package: wrapr
-```
-
-```
-## 
-## Attaching package: 'wrapr'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     coalesce
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     grepv
-```
-
-```
-## Warning in fun(libname, pkgname): couldn't connect to display ":0"
-```
-
-``` r
-source("https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R")
-```
-
-```
-## Warning in file(filename, "r", encoding = encoding): cannot open URL
-## 'https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R': HTTP status was '404 Not
-## Found'
-```
-
-```
-## Error in file(filename, "r", encoding = encoding): cannot open the connection to 'https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R'
 ```
 
 #### Iris datasets

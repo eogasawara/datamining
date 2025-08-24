@@ -25,9 +25,8 @@ library(corrplot)
 library(WVPlots)
 library(GGally)
 library(aplpack)
+library(daltoolbox)
 }
-
-source("https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/4-ExploratoryAnalysis.R")
 ```
 
 #### Iris datasets

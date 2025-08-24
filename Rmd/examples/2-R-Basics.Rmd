@@ -727,7 +727,7 @@ def read_rdata_mem(data):
 Library reticulate enables seamless integration with Python
 ```{r}
 library(reticulate)
-source_python('https://raw.githubusercontent.com/eogasawara/analise-dados/refs/heads/main/python/retic.py')
+source_python('https://raw.githubusercontent.com/eogasawara/datamining/refs/heads/main/python/retic.py')
 x <- add(5, 10)
 x
 ```
