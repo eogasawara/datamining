@@ -1,6 +1,4 @@
-# datamining
-
-## Slides de Metodologia Cientifica
+# Slides de Mineração de Dados
 - 1. Introduction - Visao geral do curso e do papel da metodologia cientifica na mineracao de dados. [PDF](1-Introduction.pdf)
 - 2. R Basics - Fundamentos da linguagem R e ferramentas necessarias para analises reprodutiveis. [PDF](2-R-Basics.pdf)
 - 3. Data Visualization - Principios e exemplos de visualizacao de dados para explorar padroes iniciais. [PDF](3-DataVisualization.pdf)
