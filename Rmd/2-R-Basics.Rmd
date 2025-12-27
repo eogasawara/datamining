@@ -285,12 +285,6 @@ plot(height, weight)
 plot(height, weight, pch=2)
 ```
 
-#### All functions in R that belongs to packages have help with examples
-
-```{r}
-?base::plot
-```
-
 #### Canvas for plotting is still active until a new plot
 
 ```{r fig.width=6, fig.height=4.5}

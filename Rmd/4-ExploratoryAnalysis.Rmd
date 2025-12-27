@@ -8,6 +8,8 @@ A brief exploratory analysis example.
 library(daltoolbox) 
 library(RColorBrewer)
 library(ggplot2)
+library(WVPlots)
+library(GGally)  
 
 # choosing colors
 colors <- brewer.pal(4, 'Set1')
@@ -28,6 +30,193 @@ library(aplpack)
 library(daltoolbox)
 }
 ```
+
+
+```{r}
+# additional packages
+# ============================================================
+# Correlation heatmap (publication/dissertation style) with values
+# Function: plot_correlation(df, ...)
+# - Uses ggplot2 and tidy tools
+# - Handles missing values
+# - Lets you choose method, triangle, variable selection, ordering, etc.
+# ============================================================
+
+plot_correlation <- function(df,
+                             vars = NULL,
+                             method = c("pearson", "spearman", "kendall"),
+                             use = "pairwise.complete.obs",
+                             triangle = c("full", "upper", "lower"),
+                             reorder = c("none", "hclust", "alphabetical"),
+                             digits = 2,
+                             label_size = 3,
+                             tile_color = "white",
+                             show_diag = TRUE,
+                             title = NULL) {
+  # ---- Dependencies (explicitly) ----
+  needed <- c("ggplot2", "dplyr", "tidyr", "tibble")
+  missing_pkgs <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
+  if (length(missing_pkgs) > 0) {
+    stop("Missing packages: ", paste(missing_pkgs, collapse = ", "),
+         ". Install with install.packages(c(", paste0('"', missing_pkgs, '"', collapse = ", "), ")).")
+  }
+
+  method   <- match.arg(method)
+  triangle <- match.arg(triangle)
+  reorder  <- match.arg(reorder)
+
+  # ---- Select numeric columns / user vars ----
+  if (!is.null(vars)) {
+    if (!all(vars %in% names(df))) {
+      bad <- vars[!vars %in% names(df)]
+      stop("These vars are not in df: ", paste(bad, collapse = ", "))
+    }
+    df2 <- df[, vars, drop = FALSE]
+  } else {
+    df2 <- df[, vapply(df, is.numeric, logical(1)), drop = FALSE]
+  }
+
+  if (ncol(df2) < 2) {
+    stop("Need at least 2 numeric columns to compute correlations.")
+  }
+
+  # ---- Correlation matrix ----
+  corr <- stats::cor(df2, use = use, method = method)
+
+  # ---- Reorder variables (optional) ----
+  var_names <- colnames(corr)
+
+  if (reorder == "alphabetical") {
+    ord <- order(var_names)
+    corr <- corr[ord, ord, drop = FALSE]
+  } else if (reorder == "hclust") {
+    # distance based on correlation; robust to small numerical issues
+    d <- stats::as.dist(1 - corr)
+    hc <- stats::hclust(d, method = "complete")
+    ord <- hc$order
+    corr <- corr[ord, ord, drop = FALSE]
+  }
+
+  # ---- Tidy long format ----
+  corr_long <- as.data.frame(corr) |>
+    tibble::rownames_to_column("Var1") |>
+    tidyr::pivot_longer(-Var1, names_to = "Var2", values_to = "value") |>
+    dplyr::mutate(
+      Var1 = factor(Var1, levels = rownames(corr)),
+      Var2 = factor(Var2, levels = colnames(corr))
+    )
+
+  # ---- Filter triangle (optional) ----
+  # Use factor indices to compare positions
+  corr_long <- corr_long |>
+    dplyr::mutate(
+      i = as.integer(Var1),
+      j = as.integer(Var2)
+    )
+
+  if (triangle == "upper") {
+    corr_long <- corr_long |>
+      dplyr::filter(j > i | (show_diag & j == i))
+  } else if (triangle == "lower") {
+    corr_long <- corr_long |>
+      dplyr::filter(i > j | (show_diag & j == i))
+  } else {
+    if (!show_diag) corr_long <- corr_long |>
+      dplyr::filter(i != j)
+  }
+
+  # ---- Labels ----
+  corr_long <- corr_long |>
+    dplyr::mutate(label = dplyr::if_else(is.na(value), "", format(round(value, digits), nsmall = digits)))
+
+  # ---- Plot ----
+  ggplot2::ggplot(corr_long, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
+    ggplot2::geom_tile(color = tile_color, linewidth = 0.3) +
+    ggplot2::geom_text(ggplot2::aes(label = label), size = label_size) +
+    ggplot2::scale_fill_gradient2(
+      low = "#4575b4",
+      mid = "white",
+      high = "#d73027",
+      midpoint = 0,
+      limits = c(-1, 1),
+      oob = scales::squish,
+      name = paste0("Corr (", method, ")")
+    ) +
+    ggplot2::coord_fixed() +
+    ggplot2::labs(
+      title = title,
+      x = NULL,
+      y = NULL
+    ) +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      panel.grid = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+      plot.title = ggplot2::element_text(face = "bold")
+    )
+}
+
+
+plot_pair <- function(data, cnames, title = NULL, clabel = NULL, colors) {
+  grf <- PairPlot(data, cnames, title, group_var = clabel, palette=NULL) + theme_bw(base_size = 10)
+  if (is.null(clabel)) 
+    grf <- grf + geom_point(color=colors)
+  else
+    grf <- grf + scale_color_manual(values=colors) 
+  return (grf)
+}
+
+plot_pair_adv <- function(data, cnames, title = NULL, clabel= NULL, colors) {
+  if (!is.null(clabel)) {
+    data$clabel <- data[,clabel]
+    cnames <- c(cnames, 'clabel')
+  }
+  
+  icol <- match(cnames, colnames(data))
+  icol <- icol[!is.na(icol)]
+  
+  if (!is.null(clabel)) {
+    grf <- ggpairs(data, columns = icol, aes(colour = clabel, alpha = 0.4)) + theme_bw(base_size = 10) 
+    
+    for(i in 1:grf$nrow) {
+      for(j in 1:grf$ncol){
+        grf[i,j] <- grf[i,j] + 
+          scale_fill_manual(values=colors) +
+          scale_color_manual(values=colors)  
+      }
+    }
+  }
+  else {
+    grf <- ggpairs(data, columns = icol, aes(colour = colors))  + theme_bw(base_size = 10)
+  }
+  return(grf)
+}
+
+```
+
+# ============================================================
+# Example usage
+# ============================================================
+
+# Example with mtcars (only numeric columns)
+p1 <- plot_correlation(mtcars,
+                       method = "pearson",
+                       triangle = "full",
+                       reorder = "hclust",
+                       digits = 2,
+                       title = "Correlation heatmap (mtcars)")
+print(p1)
+
+# Example selecting variables explicitly
+p2 <- plot_correlation(mtcars,
+                       vars = c("mpg", "disp", "hp", "wt", "qsec"),
+                       method = "spearman",
+                       triangle = "upper",
+                       reorder = "hclust",
+                       digits = 2,
+                       title = "Spearman correlation (upper triangle)")
+print(p2)
+
 
 #### Iris datasets
 The exploratory analysis is done using iris dataset.

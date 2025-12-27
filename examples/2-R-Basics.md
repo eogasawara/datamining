@@ -9,21 +9,6 @@ if(!require(daltoolbox)) {
 }
 ```
 
-```
-## Loading required package: daltoolbox
-```
-
-```
-## 
-## Attaching package: 'daltoolbox'
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     transform
-```
-
 Package loading
 
 
@@ -459,13 +444,6 @@ plot(height, weight, pch=2)
 
 ![plot of chunk unnamed-chunk-34](fig/2-R-Basics/unnamed-chunk-34-1.png)
 
-#### All functions in R that belongs to packages have help with examples
-
-
-``` r
-?base::plot
-```
-
 #### Canvas for plotting is still active until a new plot
 
 
@@ -475,7 +453,7 @@ hh = c(1.65, 1.70, 1.75, 1.80, 1.85, 1.90)
 lines(hh, 22.5 * hh^2)
 ```
 
-![plot of chunk unnamed-chunk-36](fig/2-R-Basics/unnamed-chunk-36-1.png)
+![plot of chunk unnamed-chunk-35](fig/2-R-Basics/unnamed-chunk-35-1.png)
 
 #### Factors
 
@@ -992,7 +970,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.001842976 secs
+## Time difference of 0.002028704 secs
 ```
 
 ``` r
@@ -1017,7 +995,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 7.750893 secs
+## Time difference of 7.567192 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1041,7 +1019,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2421246 secs
+## Time difference of 0.240591 secs
 ```
 
 #### Pipelines
@@ -1092,23 +1070,6 @@ head(flight_data)
 
 ``` r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
 ```
 
 

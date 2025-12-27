@@ -10,66 +10,15 @@
 library(daltoolbox)
 
 library(arules)
-```
-
-```
-## Loading required package: Matrix
-```
-
-```
-## 
-## Attaching package: 'Matrix'
-```
-
-```
-## The following objects are masked from 'package:wrapr':
-## 
-##     pack, unpack
-```
-
-```
-## The following object is masked from 'package:reshape':
-## 
-##     expand
-```
-
-```
-## 
-## Attaching package: 'arules'
-```
-
-```
-## The following object is masked from 'package:dplyr':
-## 
-##     recode
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     abbreviate, write
-```
-
-``` r
 library(arulesViz)
 library(arulesSequences)
-```
-
-```
-## 
-## Attaching package: 'arulesSequences'
-```
-
-```
-## The following object is masked from 'package:arules':
-## 
-##     itemsets
 ```
 
 
 ``` r
 data(AdultUCI)
-dim(AdultUCI)
+myAdultUCI <- as.data.frame(AdultUCI)
+dim(myAdultUCI)
 ```
 
 ```
@@ -77,7 +26,7 @@ dim(AdultUCI)
 ```
 
 ``` r
-head(AdultUCI)
+head(myAdultUCI)
 ```
 
 ```
@@ -101,30 +50,70 @@ head(AdultUCI)
 
 
 ``` r
-AdultUCI$fnlwgt <- NULL
-AdultUCI$"education-num" <- NULL
+myAdultUCI$fnlwgt <- NULL
+myAdultUCI$"education-num" <- NULL
 ```
 
 ## Conceptual Hierarchy and Binning
 
 
 ``` r
-AdultUCI$age <- ordered(cut(AdultUCI$age, c(15,25,45,65,100)),
+print(0)
+```
+
+```
+## [1] 0
+```
+
+``` r
+myAdultUCI$age <- ordered(cut(myAdultUCI$age, c(15,25,45,65,100)),
                               labels = c("Young", "Middle-aged", "Senior", "Old"))
 
-AdultUCI$"hours-per-week" <- ordered(cut(AdultUCI$"hours-per-week",
+print(1)
+```
+
+```
+## [1] 1
+```
+
+``` r
+myAdultUCI$"hours-per-week" <- ordered(cut(myAdultUCI$"hours-per-week",
                                              c(0,25,40,60,168)),
                                          labels = c("Part-time", "Full-time", "Over-time", "Workaholic"))
 
-AdultUCI$"capital-gain" <- ordered(cut(AdultUCI$"capital-gain",
-                                           c(-Inf,0,median(AdultUCI$"capital-gain"[AdultUCI$"capital-gain">0]),
+print(2)
+```
+
+```
+## [1] 2
+```
+
+``` r
+myAdultUCI$"capital-gain" <- ordered(cut(myAdultUCI$"capital-gain",
+                                           c(-Inf,0,median(myAdultUCI$"capital-gain"[myAdultUCI$"capital-gain">0]),
                                              Inf)), labels = c("None", "Low", "High"))
 
-AdultUCI$"capital-loss" <- ordered(cut(AdultUCI$"capital-loss",
-                                           c(-Inf,0, median(AdultUCI$"capital-loss"[AdultUCI$"capital-loss">0]),
+print(3)
+```
+
+```
+## [1] 3
+```
+
+``` r
+myAdultUCI$"capital-loss" <- ordered(cut(myAdultUCI$"capital-loss",
+                                           c(-Inf,0, median(myAdultUCI$"capital-loss"[myAdultUCI$"capital-loss">0]),
                                              Inf)), labels = c("None", "Low", "High"))
 
-head(AdultUCI)
+print(4)
+```
+
+```
+## [1] 4
+```
+
+``` r
+head(myAdultUCI)
 ```
 
 ```
@@ -148,7 +137,7 @@ head(AdultUCI)
 
 
 ``` r
-AdultTrans <- as(AdultUCI, "transactions")
+AdultTrans <- as(myAdultUCI, "transactions")
 ```
 
 ## A Priori
@@ -176,9 +165,9 @@ rules <- apriori(AdultTrans, parameter=list(supp = 0.5, conf = 0.9, minlen=2, ma
 ## set transactions ...[115 item(s), 48842 transaction(s)] done [0.03s].
 ## sorting and recoding items ... [9 item(s)] done [0.00s].
 ## creating transaction tree ... done [0.01s].
-## checking subsets of size 1 2 3 4 done [0.00s].
+## checking subsets of size 1 2 3 4 done [0.14s].
 ## writing ... [18 rule(s)] done [0.00s].
-## creating S4 object  ... done [0.00s].
+## creating S4 object  ... done [0.01s].
 ```
 
 ``` r
@@ -254,41 +243,41 @@ head(imrules)
 ## 4 0.7817862  0.9143240 0.9966616 38184 -0.003062649   Inf        0.9999966      1.625916       -0.003062649 -0.03707209
 ## 5 0.8219565  0.9159062 0.9983862 40146 -0.001480488   Inf        0.9999966      1.663875       -0.001480488 -0.01792069
 ## 6 0.8706646  0.9133376 0.9955863 42525 -0.004049047   Inf        0.9999964      1.705438       -0.004049047 -0.04901203
-##   chiSquared collectiveStrength confirmedConfidence conviction    cosine counterexample  coverage         doc
-## 1  124.02435          2100.4687           0.8581377  1.1646971 0.7419648      0.9236535 0.5850907  0.02815593
-## 2  194.72472           885.1584           0.8102910  0.8709477 0.7726575      0.8952052 0.6684820 -0.03692468
-## 3   62.20252          1505.6653           0.8478145  1.0856928 0.8036996      0.9176403 0.6941976  0.02132291
-## 4   35.65606           444.0500           0.8286481  0.9642531 0.8827096      0.9062958 0.8550428 -0.02112795
-## 5   12.35817           343.0174           0.8318124  0.9823948 0.9058863      0.9081851 0.8974243 -0.01443313
-## 6  215.57271             0.0000           0.8266753  0.9532779 0.9310326      0.9051146 0.9532779 -0.08666237
-##   fishersExactTest         gini hyperConfidence hyperLift  imbalance implicationIndex   importance improvement   jaccard
-## 1     1.121041e-28 3.848983e-04    1.000000e+00 1.0100434 0.34654311        -6.870784  0.013370119   0.9290688 0.5668958
-## 2     1.000000e+00 6.043106e-04    4.037659e-47 0.9844437 0.25377839         7.695561 -0.017351596   0.9051455 0.6169213
-## 3     4.115642e-15 1.930399e-04    1.000000e+00 1.0050048 0.23004199        -4.177348  0.010154765   0.9239073 0.6610674
-## 4     1.000000e+00 1.106554e-04    3.318642e-10 0.9953600 0.06293273         2.177523 -0.009873694   0.9143240 0.7891702
-## 5     9.998511e-01 3.835248e-05    1.488781e-04 0.9973170 0.02010599         1.078389 -0.006719212   0.9159062 0.8278721
-## 6     1.000000e+00 6.690104e-04    0.000000e+00 0.9948765 0.03589124         3.039724 -0.039186904   0.9133376 0.8706646
-##       jMeasure       kappa kulczynski lambda   laplace leastContradiction     lerman     leverage LIC maxconfidence
-## 1 5.511463e-04  0.03186770  0.7608051      0 0.9290388          0.5925413  2.0618407  0.006835121 Inf     0.9290688
-## 2 6.331921e-04 -0.04554272  0.7823538      0 0.9051207          0.6595621 -2.3093466 -0.008183018 Inf     0.9051455
-## 3 1.995834e-04  0.02679332  0.8115196      0 0.9238823          0.6991318  1.2535725  0.004526583 Inf     0.9239073
-## 4 5.232738e-05 -0.02572143  0.8832562      0 0.9143042          0.8521883 -0.6534489 -0.002618696 Inf     0.9143240
-## 5 1.290712e-05 -0.01579434  0.9059411      0 0.9158872          0.8959761 -0.3236118 -0.001328626 Inf     0.9159062
-## 6 1.016120e-04 -0.06347647  0.9312040      0 0.9133199          0.9490705 -0.9121852 -0.003859867 Inf     0.9490705
-##   mutualInformation oddsRatio         phi ralambondrainy relativeRisk rhsSupport        RLD rulePowerFactor    sebag
-## 1      0.0043952671 1.4406055  0.05039144     0.04150117    1.0312527  0.9173867 0.14140765       0.5050321 13.09817
-## 2      0.0073965786 0.5867856 -0.06314134     0.06340854    0.9608047  0.9173867 0.29878331       0.5476795  9.54246
-## 3      0.0021731163 1.3104671  0.03568677     0.05282339    1.0236243  0.9173867 0.07892913       0.5925703 12.14186
-## 4      0.0013600755 0.7363809 -0.02701904     0.07325662    0.9774142  0.9173867 0.21867298       0.7148059 10.67188
-## 5      0.0004640834 0.8155175 -0.01590671     0.07546784    0.9844862  0.9173867 0.15678640       0.7528351 10.89148
-## 6               NaN 0.0000000 -0.06643549     0.08261332    0.9133376  0.9173867 1.00000000       0.7952107 10.53903
-##      stdLift table.n11 table.n01 table.n10 table.n00 varyingLiaison      yuleQ       yuleY
-## 1 0.29068832     26550     18257      2027      2008    0.012734168  0.1805312  0.09101332
-## 2 0.05145482     29553     15254      3097       938   -0.013343548 -0.2604097 -0.13249043
-## 3 0.23907273     31326     13481      2580      1455    0.007107796  0.1343742  0.06749314
-## 4 0.11325898     38184      6623      3578       457   -0.003338449 -0.1518210 -0.07635304
-## 5 0.08649318     40146      4661      3686       349   -0.001613810 -0.1016143 -0.05093898
-## 6 0.00000000     42525      2282      4035         0   -0.004413675 -1.0000000 -1.00000000
+##   chiSquared collectiveStrength confirmedConfidence conviction    cosine counterexample  coverage         doc fishersExactTest
+## 1  124.02435          2100.4687           0.8581377  1.1646971 0.7419648      0.9236535 0.5850907  0.02815593     1.121041e-28
+## 2  194.72472           885.1584           0.8102910  0.8709477 0.7726575      0.8952052 0.6684820 -0.03692468     1.000000e+00
+## 3   62.20252          1505.6653           0.8478145  1.0856928 0.8036996      0.9176403 0.6941976  0.02132291     4.115642e-15
+## 4   35.65606           444.0500           0.8286481  0.9642531 0.8827096      0.9062958 0.8550428 -0.02112795     1.000000e+00
+## 5   12.35817           343.0174           0.8318124  0.9823948 0.9058863      0.9081851 0.8974243 -0.01443313     9.998511e-01
+## 6  215.57271             0.0000           0.8266753  0.9532779 0.9310326      0.9051146 0.9532779 -0.08666237     1.000000e+00
+##           gini hyperConfidence hyperLift  imbalance implicationIndex   importance improvement   jaccard     jMeasure
+## 1 3.848983e-04    1.000000e+00 1.0100434 0.34654311        -6.870784  0.013370119   0.9290688 0.5668958 5.511463e-04
+## 2 6.043106e-04    4.037659e-47 0.9844437 0.25377839         7.695561 -0.017351596   0.9051455 0.6169213 6.331921e-04
+## 3 1.930399e-04    1.000000e+00 1.0050048 0.23004199        -4.177348  0.010154765   0.9239073 0.6610674 1.995834e-04
+## 4 1.106554e-04    3.318642e-10 0.9953600 0.06293273         2.177523 -0.009873694   0.9143240 0.7891702 5.232738e-05
+## 5 3.835248e-05    1.488781e-04 0.9973170 0.02010599         1.078389 -0.006719212   0.9159062 0.8278721 1.290712e-05
+## 6 6.690104e-04    0.000000e+00 0.9948765 0.03589124         3.039724 -0.039186904   0.9133376 0.8706646 1.016120e-04
+##         kappa kulczynski lambda   laplace leastContradiction     lerman     leverage LIC maxconfidence mutualInformation
+## 1  0.03186770  0.7608051      0 0.9290388          0.5925413  2.0618407  0.006835121 Inf     0.9290688      0.0043952671
+## 2 -0.04554272  0.7823538      0 0.9051207          0.6595621 -2.3093466 -0.008183018 Inf     0.9051455      0.0073965786
+## 3  0.02679332  0.8115196      0 0.9238823          0.6991318  1.2535725  0.004526583 Inf     0.9239073      0.0021731163
+## 4 -0.02572143  0.8832562      0 0.9143042          0.8521883 -0.6534489 -0.002618696 Inf     0.9143240      0.0013600755
+## 5 -0.01579434  0.9059411      0 0.9158872          0.8959761 -0.3236118 -0.001328626 Inf     0.9159062      0.0004640834
+## 6 -0.06347647  0.9312040      0 0.9133199          0.9490705 -0.9121852 -0.003859867 Inf     0.9490705               NaN
+##   oddsRatio         phi ralambondrainy relativeRisk rhsSupport        RLD rulePowerFactor    sebag    stdLift table.n11
+## 1 1.4406055  0.05039144     0.04150117    1.0312527  0.9173867 0.14140765       0.5050321 13.09817 0.29068832     26550
+## 2 0.5867856 -0.06314134     0.06340854    0.9608047  0.9173867 0.29878331       0.5476795  9.54246 0.05145482     29553
+## 3 1.3104671  0.03568677     0.05282339    1.0236243  0.9173867 0.07892913       0.5925703 12.14186 0.23907273     31326
+## 4 0.7363809 -0.02701904     0.07325662    0.9774142  0.9173867 0.21867298       0.7148059 10.67188 0.11325898     38184
+## 5 0.8155175 -0.01590671     0.07546784    0.9844862  0.9173867 0.15678640       0.7528351 10.89148 0.08649318     40146
+## 6 0.0000000 -0.06643549     0.08261332    0.9133376  0.9173867 1.00000000       0.7952107 10.53903 0.00000000     42525
+##   table.n01 table.n10 table.n00 varyingLiaison      yuleQ       yuleY
+## 1     18257      2027      2008    0.012734168  0.1805312  0.09101332
+## 2     15254      3097       938   -0.013343548 -0.2604097 -0.13249043
+## 3     13481      2580      1455    0.007107796  0.1343742  0.06749314
+## 4      6623      3578       457   -0.003338449 -0.1518210 -0.07635304
+## 5      4661      3686       349   -0.001613810 -0.1016143 -0.05093898
+## 6      2282      4035         0   -0.004413675 -1.0000000 -1.00000000
 ```
 
 ## Removing redundant rules
@@ -415,11 +404,11 @@ s1 <- cspade(x, parameter = list(support = 0.4), control = list(verbose = TRUE))
 ## summary  : FALSE
 ## tidLists : FALSE
 ## 
-## preprocessing ... 1 partition(s), 0 MB [0.007s]
-## mining transactions ... 0 MB [0.002s]
-## reading sequences ... [0.01s]
+## preprocessing ... 1 partition(s), 0 MB [0.004s]
+## mining transactions ... 0 MB [0.001s]
+## reading sequences ... [0.006s]
 ## 
-## total elapsed time: 0.019s
+## total elapsed time: 0.011s
 ```
 
 ``` r
