@@ -970,7 +970,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.002028704 secs
+## Time difference of 0.001956224 secs
 ```
 
 ``` r
@@ -995,7 +995,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 7.567192 secs
+## Time difference of 16.32852 secs
 ```
 
 #### Converting a data frame to a matrix, processing it, and going back
@@ -1019,7 +1019,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.240591 secs
+## Time difference of 0.3573921 secs
 ```
 
 #### Pipelines

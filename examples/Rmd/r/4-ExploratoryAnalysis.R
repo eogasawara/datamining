@@ -1,36 +1,40 @@
-# basic packages
-library(daltoolbox) 
-library(RColorBrewer)
-library(ggplot2)
-library(WVPlots)
-library(GGally)  
-
-# choosing colors
-colors <- brewer.pal(4, 'Set1')
-
-# setting the font size for all charts
-font <- theme(text = element_text(size=16))
-
-# additional packages
-{
-library(dplyr)
-library(reshape)
-library(corrplot)
-library(WVPlots)
-library(GGally)
-library(aplpack)
-library(daltoolbox)
+# Slides 1–3: contexto e objetivos da EDA
+require_pkg <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    stop(sprintf("Pacote '%s' não instalado. Instale com install.packages('%s').", pkg, pkg))
+  }
+  invisible(TRUE)
 }
 
-# additional packages
-# ============================================================
-# Correlation heatmap (publication/dissertation style) with values
-# Function: plot_correlation(df, ...)
-# - Uses ggplot2 and tidy tools
-# - Handles missing values
-# - Lets you choose method, triangle, variable selection, ordering, etc.
-# ============================================================
+pkgs <- c(
+  "daltoolbox",
+  "RColorBrewer",
+  "ggplot2",
+  "GGally",
+  "dplyr",
+  "tidyr",
+  "scales",
+  "gridExtra",
+  "aplpack"
+)
+invisible(lapply(pkgs, require_pkg))
 
+suppressPackageStartupMessages({
+  library(daltoolbox)
+  library(RColorBrewer)
+  library(ggplot2)
+  library(GGally)
+  library(dplyr)
+  library(tidyr)
+  library(scales)
+  library(gridExtra)
+  library(aplpack)
+})
+
+colors <- brewer.pal(4, "Set1")
+font <- theme(text = element_text(size = 16))
+
+# Slide 31: correlograma
 plot_correlation <- function(df,
                              vars = NULL,
                              method = c("pearson", "spearman", "kendall"),
@@ -42,66 +46,41 @@ plot_correlation <- function(df,
                              tile_color = "white",
                              show_diag = TRUE,
                              title = NULL) {
-  # ---- Dependencies (explicitly) ----
-  needed <- c("ggplot2", "dplyr", "tidyr", "tibble")
-  missing_pkgs <- needed[!vapply(needed, requireNamespace, logical(1), quietly = TRUE)]
-  if (length(missing_pkgs) > 0) {
-    stop("Missing packages: ", paste(missing_pkgs, collapse = ", "),
-         ". Install with install.packages(c(", paste0('"', missing_pkgs, '"', collapse = ", "), ")).")
-  }
-
   method   <- match.arg(method)
   triangle <- match.arg(triangle)
   reorder  <- match.arg(reorder)
 
-  # ---- Select numeric columns / user vars ----
   if (!is.null(vars)) {
     if (!all(vars %in% names(df))) {
       bad <- vars[!vars %in% names(df)]
-      stop("These vars are not in df: ", paste(bad, collapse = ", "))
+      stop("Vars ausentes: ", paste(bad, collapse = ", "))
     }
     df2 <- df[, vars, drop = FALSE]
   } else {
     df2 <- df[, vapply(df, is.numeric, logical(1)), drop = FALSE]
   }
 
-  if (ncol(df2) < 2) {
-    stop("Need at least 2 numeric columns to compute correlations.")
-  }
+  if (ncol(df2) < 2) stop("Precisa de ao menos 2 colunas numéricas.")
 
-  # ---- Correlation matrix ----
   corr <- stats::cor(df2, use = use, method = method)
 
-  # ---- Reorder variables (optional) ----
-  var_names <- colnames(corr)
-
   if (reorder == "alphabetical") {
-    ord <- order(var_names)
+    ord <- order(colnames(corr))
     corr <- corr[ord, ord, drop = FALSE]
   } else if (reorder == "hclust") {
-    # distance based on correlation; robust to small numerical issues
     d <- stats::as.dist(1 - corr)
-    hc <- stats::hclust(d, method = "complete")
-    ord <- hc$order
+    ord <- stats::hclust(d, method = "complete")$order
     corr <- corr[ord, ord, drop = FALSE]
   }
 
-  # ---- Tidy long format ----
   corr_long <- as.data.frame(corr) |>
     tibble::rownames_to_column("Var1") |>
     tidyr::pivot_longer(-Var1, names_to = "Var2", values_to = "value") |>
     dplyr::mutate(
       Var1 = factor(Var1, levels = rownames(corr)),
       Var2 = factor(Var2, levels = colnames(corr))
-    )
-
-  # ---- Filter triangle (optional) ----
-  # Use factor indices to compare positions
-  corr_long <- corr_long |>
-    dplyr::mutate(
-      i = as.integer(Var1),
-      j = as.integer(Var2)
-    )
+    ) |>
+    dplyr::mutate(i = as.integer(Var1), j = as.integer(Var2))
 
   if (triangle == "upper") {
     corr_long <- corr_long |>
@@ -114,11 +93,9 @@ plot_correlation <- function(df,
       dplyr::filter(i != j)
   }
 
-  # ---- Labels ----
   corr_long <- corr_long |>
     dplyr::mutate(label = dplyr::if_else(is.na(value), "", format(round(value, digits), nsmall = digits)))
 
-  # ---- Plot ----
   ggplot2::ggplot(corr_long, ggplot2::aes(x = Var1, y = Var2, fill = value)) +
     ggplot2::geom_tile(color = tile_color, linewidth = 0.3) +
     ggplot2::geom_text(ggplot2::aes(label = label), size = label_size) +
@@ -132,11 +109,7 @@ plot_correlation <- function(df,
       name = paste0("Corr (", method, ")")
     ) +
     ggplot2::coord_fixed() +
-    ggplot2::labs(
-      title = title,
-      x = NULL,
-      y = NULL
-    ) +
+    ggplot2::labs(title = title, x = NULL, y = NULL) +
     ggplot2::theme_minimal(base_size = 12) +
     ggplot2::theme(
       panel.grid = ggplot2::element_blank(),
@@ -145,164 +118,163 @@ plot_correlation <- function(df,
     )
 }
 
-
 plot_pair <- function(data, cnames, title = NULL, clabel = NULL, colors) {
-  grf <- PairPlot(data, cnames, title, group_var = clabel, palette=NULL) + theme_bw(base_size = 10)
-  if (is.null(clabel)) 
-    grf <- grf + geom_point(color=colors)
-  else
-    grf <- grf + scale_color_manual(values=colors) 
-  return (grf)
-}
-
-plot_pair_adv <- function(data, cnames, title = NULL, clabel= NULL, colors) {
-  if (!is.null(clabel)) {
-    data$clabel <- data[,clabel]
-    cnames <- c(cnames, 'clabel')
-  }
-  
   icol <- match(cnames, colnames(data))
   icol <- icol[!is.na(icol)]
-  
   if (!is.null(clabel)) {
-    grf <- ggpairs(data, columns = icol, aes(colour = clabel, alpha = 0.4)) + theme_bw(base_size = 10) 
-    
-    for(i in 1:grf$nrow) {
-      for(j in 1:grf$ncol){
-        grf[i,j] <- grf[i,j] + 
-          scale_fill_manual(values=colors) +
-          scale_color_manual(values=colors)  
-      }
-    }
+    grf <- ggpairs(data, columns = icol, aes(colour = .data[[clabel]], alpha = 0.4)) +
+      theme_bw(base_size = 10) +
+      scale_color_manual(values = colors)
+  } else {
+    grf <- ggpairs(data, columns = icol) + theme_bw(base_size = 10)
   }
-  else {
-    grf <- ggpairs(data, columns = icol, aes(colour = colors))  + theme_bw(base_size = 10)
-  }
-  return(grf)
+  if (!is.null(title)) grf <- grf + ggtitle(title)
+  grf
 }
 
+plot_pair_adv <- function(data, cnames, title = NULL, clabel = NULL, colors) {
+  if (!is.null(clabel)) {
+    data$clabel <- data[, clabel]
+    cnames <- c(cnames, "clabel")
+  }
+  icol <- match(cnames, colnames(data))
+  icol <- icol[!is.na(icol)]
 
-head(iris[c(1:2,51:52,101:102),])
+  if (!is.null(clabel)) {
+    grf <- ggpairs(data, columns = icol, aes(colour = clabel, alpha = 0.4)) + theme_bw(base_size = 10)
+    for (i in 1:grf$nrow) {
+      for (j in 1:grf$ncol) {
+        grf[i, j] <- grf[i, j] + scale_fill_manual(values = colors) + scale_color_manual(values = colors)
+      }
+    }
+  } else {
+    grf <- ggpairs(data, columns = icol) + theme_bw(base_size = 10)
+  }
+  if (!is.null(title)) grf <- grf + ggtitle(title)
+  grf
+}
 
+# Slide 11: O Dataset Iris
+head(iris[c(1:2, 51:52, 101:102), ])
+
+# Slides 12–13: medidas descritivas básicas
 sum <- summary(iris$Sepal.Length)
 sum
 
-IQR <- sum["3rd Qu."]-sum["1st Qu."]
+# Slide 14: quartis e IQR
+IQR <- sum["3rd Qu."] - sum["1st Qu."]
 IQR
 
-grf <- plot_hist(iris |> dplyr::select(Sepal.Length), 
-          label_x = "Sepal Length", color=colors[1]) + font
+# Slide 18: histograma
+grf <- plot_hist(iris |> dplyr::select(Sepal.Length),
+                 label_x = "Sepal Length", color = colors[1]) + font
 plot(grf)
 
-{
-grf1 <- plot_hist(iris |> dplyr::select(Sepal.Length), 
-                  label_x = "Sepal.Length", color=colors[1]) + font
-grf2 <- plot_hist(iris |> dplyr::select(Sepal.Width), 
-                  label_x = "Sepal.Width", color=colors[1]) + font  
-grf3 <- plot_hist(iris |> dplyr::select(Petal.Length), 
-                  label_x = "Petal.Length", color=colors[1]) + font 
-grf4 <- plot_hist(iris |> dplyr::select(Petal.Width), 
-                  label_x = "Petal.Width", color=colors[1]) + font
-}
-library(gridExtra) 
-grid.arrange(grf1, grf2, grf3, grf4, ncol=2)
+# Slides 16–17: histogramas agrupados
+grf1 <- plot_hist(iris |> dplyr::select(Sepal.Length),
+                  label_x = "Sepal.Length", color = colors[1]) + font
+grf2 <- plot_hist(iris |> dplyr::select(Sepal.Width),
+                  label_x = "Sepal.Width", color = colors[1]) + font
+grf3 <- plot_hist(iris |> dplyr::select(Petal.Length),
+                  label_x = "Petal.Length", color = colors[1]) + font
+grf4 <- plot_hist(iris |> dplyr::select(Petal.Width),
+                  label_x = "Petal.Width", color = colors[1]) + font
+grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 
-{
-grf1 <- plot_density(iris |> dplyr::select(Sepal.Length), 
-                  label_x = "Sepal.Length", color=colors[1]) + font
-grf2 <- plot_density(iris |> dplyr::select(Sepal.Width), 
-                  label_x = "Sepal.Width", color=colors[1]) + font  
-grf3 <- plot_density(iris |> dplyr::select(Petal.Length), 
-                  label_x = "Petal.Length", color=colors[1]) + font 
-grf4 <- plot_density(iris |> dplyr::select(Petal.Width), 
-                  label_x = "Petal.Width", color=colors[1]) + font
-}
-grid.arrange(grf1, grf2, grf3, grf4, ncol=2)
+# Slide 17: densidade
+grf1 <- plot_density(iris |> dplyr::select(Sepal.Length),
+                     label_x = "Sepal.Length", color = colors[1]) + font
+grf2 <- plot_density(iris |> dplyr::select(Sepal.Width),
+                     label_x = "Sepal.Width", color = colors[1]) + font
+grf3 <- plot_density(iris |> dplyr::select(Petal.Length),
+                     label_x = "Petal.Length", color = colors[1]) + font
+grf4 <- plot_density(iris |> dplyr::select(Petal.Width),
+                     label_x = "Petal.Width", color = colors[1]) + font
+grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 
-grf <- plot_boxplot(iris, colors=colors[1]) + font
+# Slide 24: boxplot do Iris
+grf <- plot_boxplot(iris, colors = colors[1]) + font
 plot(grf)
 
-grfA <- plot_density_class(iris |> dplyr::select(Species, Sepal.Length), 
-            class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-grfB <- plot_density_class(iris |> dplyr::select(Species, Sepal.Width), 
-            class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-grfC <- plot_density_class(iris |> dplyr::select(Species, Petal.Length), 
-            class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-grfD <- plot_density_class(iris |> dplyr::select(Species, Petal.Width), 
-            class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
+# Slide 25: densidade com rótulo de classe
+grfA <- plot_density_class(iris |> dplyr::select(Species, Sepal.Length),
+                           class_label = "Species", label_x = "Sepal.Length", color = colors[c(1:3)]) + font
+grfB <- plot_density_class(iris |> dplyr::select(Species, Sepal.Width),
+                           class_label = "Species", label_x = "Sepal.Width", color = colors[c(1:3)]) + font
+grfC <- plot_density_class(iris |> dplyr::select(Species, Petal.Length),
+                           class_label = "Species", label_x = "Petal.Length", color = colors[c(1:3)]) + font
+grfD <- plot_density_class(iris |> dplyr::select(Species, Petal.Width),
+                           class_label = "Species", label_x = "Petal.Width", color = colors[c(1:3)]) + font
+grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 
-grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
+# Slide 26: boxplot com rótulo de classe
+grfA <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Length),
+                           class_label = "Species", label_x = "Sepal.Length", color = colors[c(1:3)]) + font
+grfB <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Width),
+                           class_label = "Species", label_x = "Sepal.Width", color = colors[c(1:3)]) + font
+grfC <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Length),
+                           class_label = "Species", label_x = "Petal.Length", color = colors[c(1:3)]) + font
+grfD <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Width),
+                           class_label = "Species", label_x = "Petal.Width", color = colors[c(1:3)]) + font
+grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 
-grfA <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Length), 
-          class_label="Species", label_x = "Sepal.Length", color=colors[c(1:3)]) + font
-grfB <- plot_boxplot_class(iris |> dplyr::select(Species, Sepal.Width), 
-          class_label="Species", label_x = "Sepal.Width", color=colors[c(1:3)]) + font
-grfC <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Length), 
-          class_label="Species", label_x = "Petal.Length", color=colors[c(1:3)]) + font
-grfD <- plot_boxplot_class(iris |> dplyr::select(Species, Petal.Width), 
-          class_label="Species", label_x = "Petal.Width", color=colors[c(1:3)]) + font
-
-grid.arrange(grfA, grfB, grfC, grfD, ncol=2, nrow=2)
-
-grf <- plot_scatter(iris |> dplyr::select(x=Sepal.Length, value=Sepal.Width) |> mutate(variable = "iris"), 
+# Slide 28: scatter plot
+grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width) |> mutate(variable = "iris"),
                     label_x = "Sepal.Length") +
   theme(legend.position = "none") + font
 plot(grf)
 
-grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width, variable = Species), 
-                    label_x = "Sepal.Length", label_y = "Sepal.Width", colors=colors[1:3]) + font
-
+# Slide 29: scatter plot com classe
+grf <- plot_scatter(iris |> dplyr::select(x = Sepal.Length, value = Sepal.Width, variable = Species),
+                    label_x = "Sepal.Length", label_y = "Sepal.Width", colors = colors[1:3]) + font
 plot(grf)
 
-grf <- plot_correlation(iris |> 
-                 dplyr::select(Sepal.Width, Sepal.Length, Petal.Width, Petal.Length))
+# Slide 31: correlograma
+grf <- plot_correlation(iris |> dplyr::select(Sepal.Width, Sepal.Length, Petal.Width, Petal.Length))
 grf
 
-grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
-                 title="Iris", colors=colors[1])
+# Slide 32: matriz de dispersão
+grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
+print(grf)
 
-plot(grf)
+# Slide 33: matriz de dispersão com classe
+grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], clabel = "Species", title = "Iris", colors = colors[1:3])
+print(grf)
 
-grf <- plot_pair(data=iris, cnames=colnames(iris)[1:4], 
-                 clabel='Species', title="Iris", colors=colors[1:3])
-plot(grf)
-
-grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
-                     title="Iris", colors=colors[1])
+# Slide 34: matriz de dispersão avançada
+grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
 grf
 
-grf <- plot_pair_adv(data=iris, cnames=colnames(iris)[1:4], 
-                        title="Iris", clabel='Species', colors=colors[1:3])
+# Slide 35: matriz de dispersão avançada com classe
+grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", clabel = "Species", colors = colors[1:3])
 grf
 
-grf <- ggparcoord(data = iris, columns = c(1:4), group=5) + 
-    theme_bw(base_size = 10) + scale_color_manual(values=colors[1:3]) + font
-
+# Slide 37: coordenadas paralelas
+grf <- ggparcoord(data = iris, columns = c(1:4), group = 5) +
+  theme_bw(base_size = 10) + scale_color_manual(values = colors[1:3]) + font
 plot(grf)
 
-mat <- as.matrix(iris[,1:4])
+# Slide 38: visualização orientada a pixels
+mat <- as.matrix(iris[, 1:4])
 x <- (1:nrow(mat))
 y <- (1:ncol(mat))
-
-image(x, y, mat, col = brewer.pal(11, 'Spectral'), axes = FALSE,  
-      main = "Iris", xlab="sample", ylab="Attributes")
+image(x, y, mat, col = brewer.pal(11, "Spectral"), axes = FALSE,
+      main = "Iris", xlab = "sample", ylab = "Attributes")
 axis(2, at = seq(0, ncol(mat), by = 1))
 axis(1, at = seq(0, nrow(mat), by = 10))
 
+# Slides 40–41: Chernoff faces
 set.seed(1)
-sample_rows = sample(1:nrow(iris), 25)
-
-isample = iris[sample_rows,]
-labels = as.character(rownames(isample))
+sample_rows <- sample(1:nrow(iris), 25)
+isample <- iris[sample_rows,]
+labels <- as.character(rownames(isample))
 isample$Species <- NULL
+faces(isample, labels = labels, print.info = FALSE, cex = 1)
 
-faces(isample, labels = labels, print.info=F, cex=1)
-
+# Slide 42: Chernoff faces com classe
 set.seed(1)
-sample_rows = sample(1:nrow(iris), 25)
-
-isample = iris[sample_rows,]
-labels = as.character(isample$Species)
+sample_rows <- sample(1:nrow(iris), 25)
+isample <- iris[sample_rows,]
+labels <- as.character(isample$Species)
 isample$Species <- NULL
-
-faces(isample, labels = labels, print.info=F, cex=1)
+faces(isample, labels = labels, print.info = FALSE, cex = 1)
