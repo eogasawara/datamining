@@ -18,16 +18,26 @@ split_random <- train_test(split_random, Boston, perc = 0.7)
 train <- split_random$train
 test <- split_random$test
 
+eval_reg <- function(model, y_true, y_pred, attribute = "medv") {
+  # Alguns modelos (ex.: reg_lm) podem retornar NULL em evaluate(model, ...)
+  eval <- evaluate(model, y_true, y_pred)
+  if (is.null(eval) || is.null(eval$metrics)) {
+    proxy <- regression(attribute)
+    eval <- evaluate(proxy, as.vector(y_true), as.vector(y_pred))
+  }
+  eval
+}
+
 # Slides 8 e 11: regressão linear simples e ajuste
 model_lm_simple <- reg_lm(formula = medv ~ lstat)
 model_lm_simple <- fit(model_lm_simple, train)
 summary(model_lm_simple$model)
 
 train_pred_simple <- predict(model_lm_simple, newdata = train)
-evaluate(model_lm_simple, train$medv, train_pred_simple)$metrics
+eval_reg(model_lm_simple, train$medv, train_pred_simple, "medv")$metrics
 
 test_pred_simple <- predict(model_lm_simple, newdata = test)
-evaluate(model_lm_simple, test$medv, test_pred_simple)$metrics
+eval_reg(model_lm_simple, test$medv, test_pred_simple, "medv")$metrics
 
 # Slides 17: visualização do ajuste
 ggplot(train, aes(x = lstat, y = medv)) +
@@ -68,10 +78,10 @@ model_lm_multi <- fit(model_lm_multi, train)
 summary(model_lm_multi$model)
 
 train_pred_multi <- predict(model_lm_multi, newdata = train)
-evaluate(model_lm_multi, train$medv, train_pred_multi)$metrics
+eval_reg(model_lm_multi, train$medv, train_pred_multi, "medv")$metrics
 
 test_pred_multi <- predict(model_lm_multi, newdata = test)
-evaluate(model_lm_multi, test$medv, test_pred_multi)$metrics
+eval_reg(model_lm_multi, test$medv, test_pred_multi, "medv")$metrics
 
 # Slides 30: ANOVA para regressão múltipla
 model_lm_multi2 <- reg_lm(formula = medv ~ lstat + rm + ptratio + nox)
@@ -126,41 +136,41 @@ boston_test <- split_random_m$test
 model_dtree <- reg_dtree("medv")
 model_dtree <- fit(model_dtree, boston_train)
 train_pred <- predict(model_dtree, boston_train)
-evaluate(model_dtree, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_dtree, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_dtree, boston_test)
-evaluate(model_dtree, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_dtree, boston_test[, "medv"], test_pred, "medv")$metrics
 
 # Slides 7: taxonomia (kNN para regressão)
 model_knn <- reg_knn("medv", k = 5)
 model_knn <- fit(model_knn, boston_train)
 train_pred <- predict(model_knn, boston_train)
-evaluate(model_knn, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_knn, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_knn, boston_test)
-evaluate(model_knn, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_knn, boston_test[, "medv"], test_pred, "medv")$metrics
 
 # Slides 7: taxonomia (MLP para regressão)
 model_mlp <- reg_mlp("medv", size = 5, decay = 0.54)
 model_mlp <- fit(model_mlp, boston_train)
 train_pred <- predict(model_mlp, boston_train)
-evaluate(model_mlp, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_mlp, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_mlp, boston_test)
-evaluate(model_mlp, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_mlp, boston_test[, "medv"], test_pred, "medv")$metrics
 
 # Slides 7: taxonomia (Random Forest para regressão)
 model_rf <- reg_rf("medv", mtry = 7, ntree = 30)
 model_rf <- fit(model_rf, boston_train)
 train_pred <- predict(model_rf, boston_train)
-evaluate(model_rf, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_rf, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_rf, boston_test)
-evaluate(model_rf, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_rf, boston_test[, "medv"], test_pred, "medv")$metrics
 
 # Slides 7: taxonomia (SVR)
 model_svm <- reg_svm("medv", epsilon = 0.2, cost = 40.000)
 model_svm <- fit(model_svm, boston_train)
 train_pred <- predict(model_svm, boston_train)
-evaluate(model_svm, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_svm, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_svm, boston_test)
-evaluate(model_svm, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_svm, boston_test[, "medv"], test_pred, "medv")$metrics
 
 # Slides 19: extensões e ajuste de modelos (tuning)
 tune <- reg_tune(
@@ -169,6 +179,6 @@ tune <- reg_tune(
 )
 model_tuned <- fit(tune, boston_train)
 train_pred <- predict(model_tuned, boston_train)
-evaluate(model_tuned, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_tuned, boston_train[, "medv"], train_pred, "medv")$metrics
 test_pred <- predict(model_tuned, boston_test)
-evaluate(model_tuned, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_tuned, boston_test[, "medv"], test_pred, "medv")$metrics
