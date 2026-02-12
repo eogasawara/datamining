@@ -49,21 +49,47 @@ slevels <- levels(iris$Species)
 # Slides 20–24: avaliacao comparativa
 
 eval_model <- function(model, train, test, target_col) {
+  evaluate_safe <- function(data, prediction, target_col) {
+    predictand <- adjust_class_label(data[, target_col])
+    eval <- evaluate(model, predictand, prediction)
+
+    if (is.null(eval) || is.null(eval$metrics)) {
+      proxy <- classification(target_col, colnames(predictand))
+
+      if (is.factor(prediction) || is.character(prediction) || is.vector(prediction)) {
+        pred <- factor(as.vector(prediction), levels = colnames(predictand))
+        prediction <- adjust_class_label(pred)
+      } else {
+        prediction <- as.matrix(prediction)
+        if (is.null(colnames(prediction))) {
+          colnames(prediction) <- colnames(predictand)[seq_len(ncol(prediction))]
+        }
+        aligned <- matrix(0, nrow(prediction), ncol(predictand))
+        colnames(aligned) <- colnames(predictand)
+        common <- intersect(colnames(prediction), colnames(predictand))
+        aligned[, common] <- prediction[, common, drop = FALSE]
+        prediction <- aligned
+      }
+
+      eval <- evaluate(proxy, predictand, prediction)
+    }
+
+    list(eval = eval, predictand = predictand)
+  }
+
   train_prediction <- predict(model, train)
-  train_predictand <- adjust_class_label(train[, target_col])
-  train_eval <- evaluate(model, train_predictand, train_prediction)
-  print(train_eval$metrics)
+  train_res <- evaluate_safe(train, train_prediction, target_col)
+  print(train_res$eval$metrics)
 
   test_prediction <- predict(model, test)
-  test_predictand <- adjust_class_label(test[, target_col])
-  test_eval <- evaluate(model, test_predictand, test_prediction)
-  print(test_eval$metrics)
+  test_res <- evaluate_safe(test, test_prediction, target_col)
+  print(test_res$eval$metrics)
 
   list(
     train_prediction = train_prediction,
-    train_predictand = train_predictand,
+    train_predictand = train_res$predictand,
     test_prediction = test_prediction,
-    test_predictand = test_predictand
+    test_predictand = test_res$predictand
   )
 }
 ```
@@ -121,8 +147,10 @@ res_bag <- eval_model(model_bag, iris_train, iris_test, "Species")
 ```
 
 ```
-## NULL
-## NULL
+##   accuracy TP TN FP FN precision recall sensitivity specificity f1
+## 1        1 39 81  0  0         1      1           1           1  1
+##    accuracy TP TN FP FN precision recall sensitivity specificity f1
+## 1 0.9333333 11 19  0  0         1      1           1           1  1
 ```
 
 ``` r
@@ -153,8 +181,10 @@ res_boost <- eval_model(model_boost, iris_train, iris_test, "Species")
 ```
 
 ```
-## NULL
-## NULL
+##   accuracy TP TN FP FN precision recall sensitivity specificity f1
+## 1        1 39 81  0  0         1      1           1           1  1
+##    accuracy TP TN FP FN precision recall sensitivity specificity f1
+## 1 0.9333333 11 19  0  0         1      1           1           1  1
 ```
 
 ## XGBoost
@@ -170,8 +200,10 @@ res_xgb <- eval_model(model_xgb, iris_train, iris_test, "Species")
 ```
 
 ```
-## NULL
-## NULL
+##    accuracy TP TN FP FN precision    recall sensitivity specificity        f1
+## 1 0.3583333 15 48 33 24    0.3125 0.3846154   0.3846154   0.5925926 0.3448276
+##   accuracy TP TN FP FN precision    recall sensitivity specificity        f1
+## 1      0.3  7 11  8  4 0.4666667 0.6363636   0.6363636   0.5789474 0.5384615
 ```
 
 ## Seleção de Atributos

@@ -82,7 +82,7 @@ pm_apriori <- pat_apriori(
   control = NULL
 )
 pm_apriori <- fit(pm_apriori, AdultTrans)
-rules <- discover(pm_apriori)
+rules <- discover(pm_apriori, AdultTrans)
 inspect(rules)
 
 rules_a <- as(rules, "data.frame")
@@ -91,7 +91,7 @@ head(rules_a)
 # ECLAT (itemsets frequentes)
 pm_eclat <- pat_eclat(parameter = list(supp = 0.5, maxlen = 3))
 pm_eclat <- fit(pm_eclat, AdultTrans)
-itemsets_eclat <- discover(pm_eclat)
+itemsets_eclat <- discover(pm_eclat, AdultTrans)
 inspect(head(sort(itemsets_eclat, by = "support")))
 
 # Padrões fechados e max-padrões
@@ -135,7 +135,7 @@ plot(rules, method="paracoord", control=list(reorder=TRUE))
 # Padrões raros e negativos
 pm_apriori_rare <- pat_apriori(parameter = list(supp = 0.05, conf = 0.6, minlen = 2, maxlen = 3))
 pm_apriori_rare <- fit(pm_apriori_rare, AdultTrans)
-rare_rules <- discover(pm_apriori_rare)
+rare_rules <- discover(pm_apriori_rare, AdultTrans)
 neg_rules <- subset(rare_rules, lift < 1)
 length(neg_rules)
 inspect(head(neg_rules))
@@ -160,7 +160,7 @@ pm_apriori_md <- pat_apriori(
   appearance = list(rhs = income_labels, default = "lhs")
 )
 pm_apriori_md <- fit(pm_apriori_md, AdultTransML)
-rules_md <- discover(pm_apriori_md)
+rules_md <- discover(pm_apriori_md, AdultTransML)
 inspect(rules_md)
 
 # Sequence Mining
@@ -169,7 +169,7 @@ as(x, "data.frame")
 
 pm_cspade <- pat_cspade(parameter = list(support = 0.4), control = list(verbose = TRUE))
 pm_cspade <- fit(pm_cspade, x)
-s1 <- discover(pm_cspade)
+s1 <- discover(pm_cspade, x)
 as(s1, "data.frame")
 
 # Graph Pattern Mining (toy example)

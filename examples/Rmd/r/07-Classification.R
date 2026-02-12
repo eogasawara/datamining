@@ -30,21 +30,47 @@ class_tbl
 # Slides 21–25: avaliacao
 
 eval_model <- function(model, train, test, target_col) {
+  evaluate_safe <- function(data, prediction, target_col) {
+    predictand <- adjust_class_label(data[, target_col])
+    eval <- evaluate(model, predictand, prediction)
+
+    if (is.null(eval) || is.null(eval$metrics)) {
+      proxy <- classification(target_col, colnames(predictand))
+
+      if (is.factor(prediction) || is.character(prediction) || is.vector(prediction)) {
+        pred <- factor(as.vector(prediction), levels = colnames(predictand))
+        prediction <- adjust_class_label(pred)
+      } else {
+        prediction <- as.matrix(prediction)
+        if (is.null(colnames(prediction))) {
+          colnames(prediction) <- colnames(predictand)[seq_len(ncol(prediction))]
+        }
+        aligned <- matrix(0, nrow(prediction), ncol(predictand))
+        colnames(aligned) <- colnames(predictand)
+        common <- intersect(colnames(prediction), colnames(predictand))
+        aligned[, common] <- prediction[, common, drop = FALSE]
+        prediction <- aligned
+      }
+
+      eval <- evaluate(proxy, predictand, prediction)
+    }
+
+    list(eval = eval, predictand = predictand)
+  }
+
   train_prediction <- predict(model, train)
-  train_predictand <- adjust_class_label(train[, target_col])
-  train_eval <- evaluate(model, train_predictand, train_prediction)
-  print(train_eval$metrics)
+  train_res <- evaluate_safe(train, train_prediction, target_col)
+  print(train_res$eval$metrics)
 
   test_prediction <- predict(model, test)
-  test_predictand <- adjust_class_label(test[, target_col])
-  test_eval <- evaluate(model, test_predictand, test_prediction)
-  print(test_eval$metrics)
+  test_res <- evaluate_safe(test, test_prediction, target_col)
+  print(test_res$eval$metrics)
 
   list(
     train_prediction = train_prediction,
-    train_predictand = train_predictand,
+    train_predictand = train_res$predictand,
     test_prediction = test_prediction,
-    test_predictand = test_predictand
+    test_predictand = test_res$predictand
   )
 }
 
@@ -96,80 +122,35 @@ iris_bin_test <- transform(fg_bin, iris_test)
 iris_bin_train$IsVersicolor <- factor(iris_bin_train$IsVersicolor)
 iris_bin_test$IsVersicolor <- factor(iris_bin_test$IsVersicolor)
 
-binary_metrics <- function(actual, pred, positive = "versicolor") {
-  actual <- factor(actual, levels = c(positive, setdiff(levels(actual), positive)))
-  pred <- factor(pred, levels = levels(actual))
-  tp <- sum(pred == positive & actual == positive)
-  tn <- sum(pred != positive & actual != positive)
-  fp <- sum(pred == positive & actual != positive)
-  fn <- sum(pred != positive & actual == positive)
-
-  acc <- (tp + tn) / length(actual)
-  prec <- if ((tp + fp) == 0) NA else tp / (tp + fp)
-  rec <- if ((tp + fn) == 0) NA else tp / (tp + fn)
-  f1 <- if (is.na(prec) || is.na(rec) || (prec + rec) == 0) NA else 2 * prec * rec / (prec + rec)
-
-  c(accuracy = acc, precision = prec, recall = rec, f1 = f1)
-}
-
 # Modelo completo
-glm_full <- glm(
-  IsVersicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
-  data = iris_bin_train,
-  family = binomial
+model_glm_full <- cla_glm(
+  attribute = "IsVersicolor",
+  positive = "versicolor",
+  features = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 )
-
-prob_full <- predict(glm_full, newdata = iris_bin_test, type = "response")
-pred_full <- ifelse(prob_full >= 0.5, "versicolor", "not_versicolor")
-pred_full <- factor(pred_full, levels = levels(iris_bin_train$IsVersicolor))
-conf_full <- table(Pred = pred_full, Actual = iris_bin_test$IsVersicolor)
+model_glm_full <- fit(model_glm_full, iris_bin_train)
+res_glm_full <- eval_model(model_glm_full, iris_bin_train, iris_bin_test, "IsVersicolor")
+conf_full <- table(
+  Pred = pred_to_label(res_glm_full$test_prediction),
+  Actual = pred_to_label(res_glm_full$test_predictand)
+)
 conf_full
-binary_metrics(iris_bin_test$IsVersicolor, pred_full)
 
 # Modelo simplificado (petal length/width)
-glm_simple <- glm(
-  IsVersicolor ~ Petal.Length + Petal.Width,
-  data = iris_bin_train,
-  family = binomial
+model_glm_simple <- cla_glm(
+  attribute = "IsVersicolor",
+  positive = "versicolor",
+  features = c("Petal.Length", "Petal.Width")
 )
-
-prob_simple <- predict(glm_simple, newdata = iris_bin_test, type = "response")
-pred_simple <- ifelse(prob_simple >= 0.5, "versicolor", "not_versicolor")
-pred_simple <- factor(pred_simple, levels = levels(iris_bin_train$IsVersicolor))
-conf_simple <- table(Pred = pred_simple, Actual = iris_bin_test$IsVersicolor)
+model_glm_simple <- fit(model_glm_simple, iris_bin_train)
+res_glm_simple <- eval_model(model_glm_simple, iris_bin_train, iris_bin_test, "IsVersicolor")
+conf_simple <- table(
+  Pred = pred_to_label(res_glm_simple$test_prediction),
+  Actual = pred_to_label(res_glm_simple$test_predictand)
+)
 conf_simple
-binary_metrics(iris_bin_test$IsVersicolor, pred_simple)
 
 # Slides 48–53: Aprendizagem preguiçosa (k-NN)
 model_knn <- cla_knn("Species", slevels, k = 1)
 model_knn <- fit(model_knn, iris_train)
 res_knn <- eval_model(model_knn, iris_train, iris_test, "Species")
-
-# Slides 7–8: familias de metodos (exemplos adicionais do DALToolbox)
-# SVM
-model_svm <- cla_svm("Species", slevels, epsilon = 0.0, cost = 20.000)
-model_svm <- fit(model_svm, iris_train)
-res_svm <- eval_model(model_svm, iris_train, iris_test, "Species")
-
-# Random Forest
-model_rf <- cla_rf("Species", slevels, mtry = 3, ntree = 5)
-model_rf <- fit(model_rf, iris_train)
-res_rf <- eval_model(model_rf, iris_train, iris_test, "Species")
-
-# MLP
-model_mlp <- cla_mlp("Species", slevels, size = 3, decay = 0.03)
-model_mlp <- fit(model_mlp, iris_train)
-res_mlp <- eval_model(model_mlp, iris_train, iris_test, "Species")
-
-# Tuning (SVM)
-tune <- cla_tune(
-  cla_svm("Species", slevels),
-  ranges = list(
-    epsilon = seq(0, 1, 0.2),
-    cost = seq(20, 100, 20),
-    kernel = c("linear", "radial", "polynomial", "sigmoid")
-  )
-)
-
-model_tuned <- fit(tune, iris_train)
-res_tuned <- eval_model(model_tuned, iris_train, iris_test, "Species")

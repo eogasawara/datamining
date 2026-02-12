@@ -160,7 +160,7 @@ pm_apriori <- pat_apriori(
   control = NULL
 )
 pm_apriori <- fit(pm_apriori, AdultTrans)
-rules <- discover(pm_apriori)
+rules <- discover(pm_apriori, AdultTrans)
 ```
 
 ```
@@ -283,7 +283,7 @@ Slides: 22–24.
 # ECLAT (itemsets frequentes)
 pm_eclat <- pat_eclat(parameter = list(supp = 0.5, maxlen = 3))
 pm_eclat <- fit(pm_eclat, AdultTrans)
-itemsets_eclat <- discover(pm_eclat)
+itemsets_eclat <- discover(pm_eclat, AdultTrans)
 ```
 
 ```
@@ -304,7 +304,7 @@ itemsets_eclat <- discover(pm_eclat)
 ## sorting and recoding items ... [9 item(s)] done [0.00s].
 ## creating bit matrix ... [9 row(s), 30162 column(s)] done [0.00s].
 ## writing  ... [58 set(s)] done [0.00s].
-## Creating S4 object  ... done [0.02s].
+## Creating S4 object  ... done [0.00s].
 ```
 
 ``` r
@@ -521,7 +521,7 @@ Slides: 39.
 # Padrões raros e negativos
 pm_apriori_rare <- pat_apriori(parameter = list(supp = 0.05, conf = 0.6, minlen = 2, maxlen = 3))
 pm_apriori_rare <- fit(pm_apriori_rare, AdultTrans)
-rare_rules <- discover(pm_apriori_rare)
+rare_rules <- discover(pm_apriori_rare, AdultTrans)
 ```
 
 ```
@@ -545,7 +545,7 @@ rare_rules <- discover(pm_apriori_rare)
 ```
 
 ```
-##  done [0.01s].
+##  done [0.02s].
 ## writing ... [2146 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].
 ```
@@ -599,7 +599,7 @@ pm_apriori_md <- pat_apriori(
   appearance = list(rhs = income_labels, default = "lhs")
 )
 pm_apriori_md <- fit(pm_apriori_md, AdultTransML)
-rules_md <- discover(pm_apriori_md)
+rules_md <- discover(pm_apriori_md, AdultTransML)
 ```
 
 ```
@@ -616,14 +616,14 @@ rules_md <- discover(pm_apriori_md)
 ## Absolute minimum support count: 6032 
 ## 
 ## set item appearances ...[2 item(s)] done [0.00s].
-## set transactions ...[116 item(s), 30162 transaction(s)] done [0.01s].
+## set transactions ...[116 item(s), 30162 transaction(s)] done [0.02s].
 ## sorting and recoding items ... [21 item(s)] done [0.00s].
 ## creating transaction tree ... done [0.01s].
 ## checking subsets of size 1 2 3
 ```
 
 ```
-##  done [0.00s].
+##  done [0.01s].
 ## writing ... [71 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].
 ```
@@ -736,7 +736,7 @@ as(x, "data.frame")
 ``` r
 pm_cspade <- pat_cspade(parameter = list(support = 0.4), control = list(verbose = TRUE))
 pm_cspade <- fit(pm_cspade, x)
-s1 <- discover(pm_cspade)
+s1 <- discover(pm_cspade, x)
 ```
 
 ```
@@ -753,10 +753,10 @@ s1 <- discover(pm_cspade)
 ## tidLists : FALSE
 ## 
 ## preprocessing ... 1 partition(s), 0 MB [0.14s]
-## mining transactions ... 0 MB [1.1s]
-## reading sequences ... [0.02s]
+## mining transactions ... 0 MB [1.9s]
+## reading sequences ... [0.09s]
 ## 
-## total elapsed time: 1.3s
+## total elapsed time: 2.1s
 ```
 
 ``` r
