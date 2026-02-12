@@ -77,12 +77,11 @@ eval_tune <- daltoolbox::evaluate(model_tune, clu_tune, iris$Species)
 eval_tune
 
 # Slides 47–56: clustering probabilistico (GMM via mclust)
-{
 set.seed(1)
 model_gmm <- cluster_gmm()
-model_gmm <- daltoolbox::fit(model_gmm, X)
+# Silencia a barra de progresso textual exibida durante o ajuste
+invisible(capture.output(model_gmm <- daltoolbox::fit(model_gmm, X)))
 clu_gmm <- daltoolbox::cluster(model_gmm, X)
-}
 
 # classificação
 table(clu_gmm)
