@@ -1,1 +1,0 @@
-# temp validation script

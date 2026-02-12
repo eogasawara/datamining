@@ -76,7 +76,7 @@ table(clu_km)
 ```
 ## clu_km
 ##  1  2  3 
-## 62 38 50
+## 50 62 38
 ```
 
 ``` r
@@ -89,9 +89,9 @@ eval_km
 ## # A tibble: 3 × 4
 ##   x        ce   qtd    ceg
 ##   <fct> <dbl> <int>  <dbl>
-## 1 1     0.771    62 0.319 
-## 2 2     0.297    38 0.0754
-## 3 3     0        50 0     
+## 1 1     0        50 0     
+## 2 2     0.771    62 0.319 
+## 3 3     0.297    38 0.0754
 ## 
 ## $clustering_entropy
 ## [1] 0.3938863
@@ -119,9 +119,9 @@ eval_km_norm
 ## # A tibble: 3 × 4
 ##   x        ce   qtd   ceg
 ##   <fct> <dbl> <int> <dbl>
-## 1 1     0.391    39 0.102
-## 2 2     0        50 0    
-## 3 3     0.777    61 0.316
+## 1 1     0.777    61 0.316
+## 2 2     0.391    39 0.102
+## 3 3     0        50 0    
 ## 
 ## $clustering_entropy
 ## [1] 0.4177655
@@ -253,7 +253,7 @@ model_tune$k
 ```
 
 ```
-## [1] 7
+## [1] 8
 ```
 
 ``` r
@@ -264,19 +264,20 @@ eval_tune
 
 ```
 ## $clusters_entropy
-## # A tibble: 7 × 4
+## # A tibble: 8 × 4
 ##   x        ce   qtd    ceg
 ##   <fct> <dbl> <int>  <dbl>
-## 1 1     0        19 0     
-## 2 2     0         8 0     
-## 3 3     0.918    39 0.239 
-## 4 4     0        12 0     
-## 5 5     0.242    25 0.0404
-## 6 6     0        24 0     
-## 7 7     0        23 0     
+## 1 1     0         5 0     
+## 2 2     0        20 0     
+## 3 3     0         7 0     
+## 4 4     0.250    24 0.0400
+## 5 5     0         9 0     
+## 6 6     0        15 0     
+## 7 7     0.934    20 0.125 
+## 8 8     0        50 0     
 ## 
 ## $clustering_entropy
-## [1] 0.2791389
+## [1] 0.1645236
 ## 
 ## $data_entropy
 ## [1] 1.584963
@@ -289,9 +290,12 @@ Slides: 47–56.
 
 ``` r
 # Slides 47–56: clustering probabilistico (GMM via mclust)
+{
 set.seed(1)
 model_gmm <- cluster_gmm()
 model_gmm <- daltoolbox::fit(model_gmm, X)
+clu_gmm <- daltoolbox::cluster(model_gmm, X)
+}
 ```
 
 ```
@@ -556,8 +560,6 @@ model_gmm <- daltoolbox::fit(model_gmm, X)
 ```
 
 ``` r
-clu_gmm <- daltoolbox::cluster(model_gmm, X)
-
 # classificação
 table(clu_gmm)
 ```
