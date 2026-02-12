@@ -28,6 +28,8 @@ colors <- brewer.pal(4, "Set1")
 font <- theme(text = element_text(size = 16))
 ```
 
+Os helpers abaixo consolidam chamadas de visualização para manter os exemplos mais diretos.
+
 
 ``` r
 # Funcoes helper foram movidas para o daltoolbox:
@@ -66,6 +68,8 @@ sum
 ##   4.300   5.100   5.800   5.843   6.400   7.900
 ```
 
+Com o resumo estatístico, calculamos o IQR para reforçar leitura de dispersão e potencial presença de outliers.
+
 
 ``` r
 # Slides 14: quartis e IQR
@@ -90,6 +94,8 @@ plot(grf)
 
 ![plot of chunk hist_single](fig/04-ExploratoryAnalysis/hist_single-1.png)
 
+Em seguida, comparamos histogramas de todos os atributos para identificar diferenças globais de escala e formato.
+
 
 ``` r
 # Slides 16–17: histogramas agrupados
@@ -105,6 +111,8 @@ grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 ```
 
 ![plot of chunk hist_grid](fig/04-ExploratoryAnalysis/hist_grid-1.png)
+
+Depois da contagem por bins, avaliamos densidades para uma visão suavizada das mesmas distribuições.
 
 
 ``` r
@@ -151,6 +159,8 @@ grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 
 ![plot of chunk density_class](fig/04-ExploratoryAnalysis/density_class-1.png)
 
+A leitura por densidade é complementada por boxplot por classe, destacando mediana, quartis e amplitude.
+
 
 ``` r
 # Slides 26: boxplot com rótulo de classe
@@ -180,6 +190,8 @@ plot(grf)
 
 ![plot of chunk scatter](fig/04-ExploratoryAnalysis/scatter-1.png)
 
+Agora incluímos classe no gráfico de dispersão para avaliar separabilidade visual entre espécies.
+
 
 ``` r
 # Slides 29: grafico de dispersao com classe
@@ -201,6 +213,8 @@ grf
 
 ![plot of chunk correlation](fig/04-ExploratoryAnalysis/correlation-1.png)
 
+As próximas matrizes aumentam o detalhamento de relações par-a-par, com e sem informação de classe.
+
 
 ``` r
 # Slides 32: matriz de dispersão
@@ -209,6 +223,8 @@ print(grf)
 ```
 
 ![plot of chunk scatter_matrix](fig/04-ExploratoryAnalysis/scatter_matrix-1.png)
+
+Agora repetimos a matriz com rótulo de classe para destacar padrões de separação.
 
 
 ``` r
@@ -219,6 +235,8 @@ print(grf)
 
 ![plot of chunk scatter_matrix_class](fig/04-ExploratoryAnalysis/scatter_matrix_class-1.png)
 
+Em seguida, usamos a versão avançada para enriquecer leitura visual das relações.
+
 
 ``` r
 # Slides 34: matriz de dispersão avançada
@@ -228,6 +246,8 @@ grf
 
 ![plot of chunk scatter_matrix_adv](fig/04-ExploratoryAnalysis/scatter_matrix_adv-1.png)
 
+Por fim, combinamos versão avançada com informação de classe.
+
 
 ``` r
 # Slides 35: matriz de dispersão avançada com classe
@@ -236,6 +256,8 @@ grf
 ```
 
 ![plot of chunk scatter_matrix_adv_class](fig/04-ExploratoryAnalysis/scatter_matrix_adv_class-1.png)
+
+Na sequência, usamos representações multivariadas compactas para comparar padrões globais.
 
 ## Outras visualizações multivariadas
 
@@ -248,6 +270,8 @@ plot(grf)
 
 ![plot of chunk parallel](fig/04-ExploratoryAnalysis/parallel-1.png)
 
+Complementamos com visualização orientada a pixels para comparar padrões de intensidade entre atributos.
+
 
 ``` r
 # Slides 38: visualização orientada a pixels
@@ -256,6 +280,8 @@ plot(grf)
 ```
 
 ![plot of chunk pixel](fig/04-ExploratoryAnalysis/pixel-1.png)
+
+Fechamos com Chernoff Faces para uma leitura visual de perfis multivariados em amostras reduzidas.
 
 
 ``` r
@@ -269,6 +295,8 @@ faces(isample, labels = labels, print.info = FALSE, cex = 1)
 ```
 
 ![plot of chunk chernoff](fig/04-ExploratoryAnalysis/chernoff-1.png)
+
+Por fim, repetimos com rótulos de classe para destacar diferenças intergrupos.
 
 
 ``` r

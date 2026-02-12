@@ -28,20 +28,25 @@ slevels <- levels(iris$Species)
 
 eval_model <- function(model, train, test, target_col) {
   evaluate_safe <- function(data, prediction, target_col) {
+    # Garante representacao consistente do alvo verdadeiro
     predictand <- adjust_class_label(data[, target_col])
     eval <- evaluate(model, predictand, prediction)
 
+    # Caminho alternativo para padronizar formatos de saida diferentes
     if (is.null(eval) || is.null(eval$metrics)) {
       proxy <- classification(target_col, colnames(predictand))
 
+      # Saida por rotulos
       if (is.factor(prediction) || is.character(prediction) || is.vector(prediction)) {
         pred <- factor(as.vector(prediction), levels = colnames(predictand))
         prediction <- adjust_class_label(pred)
       } else {
+        # Saida matricial (escores/probabilidades)
         prediction <- as.matrix(prediction)
         if (is.null(colnames(prediction))) {
           colnames(prediction) <- colnames(predictand)[seq_len(ncol(prediction))]
         }
+        # Alinha colunas previstas com o espaco de classes observado
         aligned <- matrix(0, nrow(prediction), ncol(predictand))
         colnames(aligned) <- colnames(predictand)
         common <- intersect(colnames(prediction), colnames(predictand))
@@ -120,11 +125,13 @@ iris_bin$IsVersicolor <- factor(iris_bin$IsVersicolor)
 
 # Slides 32: Information Gain (discretizacao simples)
 entropy <- function(y) {
+  # Entropia de Shannon da distribuicao de classes
   p <- prop.table(table(y))
   -sum(p * log2(p))
 }
 
 make_bins <- function(x, bins = 3) {
+  # Discretiza variavel numerica via quantis para computar ganho de informacao
   q <- quantile(x, probs = seq(0, 1, length.out = bins + 1), na.rm = TRUE)
   q <- unique(q)
   if (length(q) < 2) {
@@ -145,6 +152,7 @@ info_gain <- function(x, y, bins = 3) {
   if (is.numeric(x)) {
     x <- make_bins(x, bins = bins)
   }
+  # IG = H(Y) - H(Y|X)
   total <- entropy(y)
   cond <- 0
   for (lvl in levels(x)) {
@@ -196,7 +204,7 @@ relief_simple <- function(df, target, m = 50) {
   for (i in idxs) {
     xi <- X[i, , drop = FALSE]
     yi <- y[i]
-    # distancias
+    # Distancias euclidianas entre a instancia atual e as demais
     d <- rowSums((X - matrix(xi, n, ncol(X), byrow = TRUE))^2)
     same <- which(y == yi & seq_len(n) != i)
     diff <- which(y != yi)

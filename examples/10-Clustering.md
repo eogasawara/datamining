@@ -36,6 +36,8 @@ Slides: 1–12.
   library(igraph)
 ```
 
+Com o ambiente pronto, carregamos o conjunto de dados base e isolamos apenas atributos numéricos para clustering.
+
 
 ``` r
 # Slides 4: conjunto de dados de exemplo

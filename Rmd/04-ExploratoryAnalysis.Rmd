@@ -29,6 +29,8 @@ colors <- brewer.pal(4, "Set1")
 font <- theme(text = element_text(size = 16))
 ```
 
+Os helpers abaixo consolidam chamadas de visualização para manter os exemplos mais diretos.
+
 ```{r helpers}
 # Funcoes helper foram movidas para o daltoolbox:
 # plot_correlation(), plot_pair(), plot_pair_adv(), plot_parallel(), plot_pixel()
@@ -49,6 +51,8 @@ sum <- summary(iris$Sepal.Length)
 sum
 ```
 
+Com o resumo estatístico, calculamos o IQR para reforçar leitura de dispersão e potencial presença de outliers.
+
 ```{r iqr}
 # Slides 14: quartis e IQR
 IQR <- sum["3rd Qu."] - sum["1st Qu."]
@@ -64,6 +68,8 @@ grf <- plot_hist(data.frame(Sepal.Length = iris$Sepal.Length),
 plot(grf)
 ```
 
+Em seguida, comparamos histogramas de todos os atributos para identificar diferenças globais de escala e formato.
+
 ```{r hist_grid, fig.width=9, fig.height=6.5}
 # Slides 16–17: histogramas agrupados
 grf1 <- plot_hist(data.frame(Sepal.Length = iris$Sepal.Length),
@@ -76,6 +82,8 @@ grf4 <- plot_hist(data.frame(Petal.Width = iris$Petal.Width),
                   label_x = "Petal.Width", color = colors[1]) + font
 grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 ```
+
+Depois da contagem por bins, avaliamos densidades para uma visão suavizada das mesmas distribuições.
 
 ```{r density_grid, fig.width=9, fig.height=6.5}
 # Slides 17: densidade
@@ -113,6 +121,8 @@ grfD <- plot_density_class(data.frame(Species = iris$Species, Petal.Width = iris
 grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 ```
 
+A leitura por densidade é complementada por boxplot por classe, destacando mediana, quartis e amplitude.
+
 ```{r boxplot_class, fig.width=9, fig.height=6.5}
 # Slides 26: boxplot com rótulo de classe
 grfA <- plot_boxplot_class(data.frame(Species = iris$Species, Sepal.Length = iris$Sepal.Length),
@@ -136,6 +146,8 @@ grf <- plot_scatter(data.frame(x = iris$Sepal.Length, value = iris$Sepal.Width, 
 plot(grf)
 ```
 
+Agora incluímos classe no gráfico de dispersão para avaliar separabilidade visual entre espécies.
+
 ```{r scatter_class, fig.width=6, fig.height=4.5}
 # Slides 29: grafico de dispersao com classe
 grf <- plot_scatter(data.frame(x = iris$Sepal.Length, value = iris$Sepal.Width, variable = iris$Species),
@@ -151,11 +163,15 @@ grf <- plot_correlation(iris[, c("Sepal.Width", "Sepal.Length", "Petal.Width", "
 grf
 ```
 
+As próximas matrizes aumentam o detalhamento de relações par-a-par, com e sem informação de classe.
+
 ```{r scatter_matrix, fig.width=9, fig.height=6.5}
 # Slides 32: matriz de dispersão
 grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
 print(grf)
 ```
+
+Agora repetimos a matriz com rótulo de classe para destacar padrões de separação.
 
 ```{r scatter_matrix_class, fig.width=10, fig.height=6.5}
 # Slides 33: matriz de dispersão com classe
@@ -163,17 +179,23 @@ grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], clabel = "Species", 
 print(grf)
 ```
 
+Em seguida, usamos a versão avançada para enriquecer leitura visual das relações.
+
 ```{r scatter_matrix_adv, fig.width=9, fig.height=6.5}
 # Slides 34: matriz de dispersão avançada
 grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
 grf
 ```
 
+Por fim, combinamos versão avançada com informação de classe.
+
 ```{r scatter_matrix_adv_class, fig.width=9, fig.height=6.5}
 # Slides 35: matriz de dispersão avançada com classe
 grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", clabel = "Species", colors = colors[1:3])
 grf
 ```
+
+Na sequência, usamos representações multivariadas compactas para comparar padrões globais.
 
 ## Outras visualizações multivariadas
 
@@ -183,11 +205,15 @@ grf <- plot_parallel(data = iris, columns = c(1:4), group = 5, colors = colors[1
 plot(grf)
 ```
 
+Complementamos com visualização orientada a pixels para comparar padrões de intensidade entre atributos.
+
 ```{r pixel, fig.width=9, fig.height=5}
 # Slides 38: visualização orientada a pixels
 grf <- plot_pixel(as.matrix(iris[, 1:4]), colors = brewer.pal(11, "Spectral"), title = "Iris")
 plot(grf)
 ```
+
+Fechamos com Chernoff Faces para uma leitura visual de perfis multivariados em amostras reduzidas.
 
 ```{r chernoff, fig.width=9, fig.height=6.5}
 # Slides 40–41: Chernoff faces
@@ -198,6 +224,8 @@ labels <- as.character(rownames(isample))
 isample$Species <- NULL
 faces(isample, labels = labels, print.info = FALSE, cex = 1)
 ```
+
+Por fim, repetimos com rótulos de classe para destacar diferenças intergrupos.
 
 ```{r chernoff_class, fig.width=9, fig.height=6.5}
 # Slides 42: Chernoff faces com classe

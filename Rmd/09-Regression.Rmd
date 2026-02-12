@@ -39,6 +39,8 @@ str(Boston)
 head(Boston)
 ```
 
+Com os dados inspecionados, definimos a divisão treino/teste e as métricas-base que serão reutilizadas em todo o roteiro.
+
 ```{r split}
 # Slides 10: preparação treino/teste
 set.seed(1)
@@ -239,6 +241,8 @@ test_pred <- predict(model_dtree, boston_test)
 evaluate(model_dtree, boston_test[, "medv"], test_pred)$metrics
 ```
 
+No kNN, o parâmetro `k` controla o equilíbrio entre variância e viés.
+
 ```{r dal_knn}
 # Slides 7: taxonomia (kNN para regressão)
 model_knn <- reg_knn("medv", k = 5)
@@ -248,6 +252,8 @@ evaluate(model_knn, boston_train[, "medv"], train_pred)$metrics
 test_pred <- predict(model_knn, boston_test)
 evaluate(model_knn, boston_test[, "medv"], test_pred)$metrics
 ```
+
+A MLP introduz não linearidade; compare com kNN e árvore para avaliar ganho real em teste.
 
 ```{r dal_mlp}
 # Slides 7: taxonomia (MLP para regressão)
@@ -259,6 +265,8 @@ test_pred <- predict(model_mlp, boston_test)
 evaluate(model_mlp, boston_test[, "medv"], test_pred)$metrics
 ```
 
+Random Forest tende a reduzir variância de árvores individuais; aqui observamos estabilidade preditiva.
+
 ```{r dal_rf}
 # Slides 7: taxonomia (Random Forest para regressão)
 model_rf <- reg_rf("medv", mtry = 7, ntree = 30)
@@ -269,6 +277,8 @@ test_pred <- predict(model_rf, boston_test)
 evaluate(model_rf, boston_test[, "medv"], test_pred)$metrics
 ```
 
+No SVR, `cost` e `epsilon` regulam margem e tolerância ao erro; observe sensibilidade das métricas.
+
 ```{r dal_svm}
 # Slides 7: taxonomia (SVR)
 model_svm <- reg_svm("medv", epsilon = 0.2, cost = 40.000)
@@ -278,6 +288,8 @@ evaluate(model_svm, boston_train[, "medv"], train_pred)$metrics
 test_pred <- predict(model_svm, boston_test)
 evaluate(model_svm, boston_test[, "medv"], test_pred)$metrics
 ```
+
+Por fim, fazemos tuning para testar se a configuração automática supera o SVR definido manualmente.
 
 ```{r dal_tune}
 # Slides 19: extensões e ajuste de modelos (tuning)

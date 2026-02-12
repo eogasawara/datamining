@@ -23,7 +23,7 @@ class_tbl <- rbind(
   table(iris_train[, "Species"]),
   table(iris_test[, "Species"])
 )
-rownames(class_tbl) <- c("dataset", "training", "test")
+rownames(class_tbl) <- c("dados", "treino", "teste")
 class_tbl
 
 # Helper: avaliacao padrao DALToolbox
@@ -31,20 +31,25 @@ class_tbl
 
 eval_model <- function(model, train, test, target_col) {
   evaluate_safe <- function(data, prediction, target_col) {
+    # Padroniza o alvo real no formato esperado pelo avaliador
     predictand <- adjust_class_label(data[, target_col])
     eval <- evaluate(model, predictand, prediction)
 
+    # Caminho alternativo para modelos cuja saida nao e aceita diretamente por evaluate()
     if (is.null(eval) || is.null(eval$metrics)) {
       proxy <- classification(target_col, colnames(predictand))
 
+      # Caso 1: saida em rótulos (vetor/fator)
       if (is.factor(prediction) || is.character(prediction) || is.vector(prediction)) {
         pred <- factor(as.vector(prediction), levels = colnames(predictand))
         prediction <- adjust_class_label(pred)
       } else {
+      # Caso 2: saida matricial (probabilidades ou escores)
         prediction <- as.matrix(prediction)
         if (is.null(colnames(prediction))) {
           colnames(prediction) <- colnames(predictand)[seq_len(ncol(prediction))]
         }
+        # Alinha colunas previstas com as colunas reais para evitar desalinhamento de classes
         aligned <- matrix(0, nrow(prediction), ncol(predictand))
         colnames(aligned) <- colnames(predictand)
         common <- intersect(colnames(prediction), colnames(predictand))
@@ -75,6 +80,7 @@ eval_model <- function(model, train, test, target_col) {
 }
 
 pred_to_label <- function(pred) {
+  # Converte probabilidades/scores em classe vencedora (argmax por linha)
   if (is.data.frame(pred) || is.matrix(pred)) {
     if (ncol(pred) == 1) {
       return(as.vector(pred[, 1]))

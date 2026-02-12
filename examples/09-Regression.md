@@ -70,6 +70,8 @@ head(Boston)
 ## 6 0.02985  0  2.18    0 0.458 6.430 58.7 6.0622   3 222    18.7 394.12  5.21 28.7
 ```
 
+Com os dados inspecionados, definimos a divisão treino/teste e as métricas-base que serão reutilizadas em todo o roteiro.
+
 
 ``` r
 # Slides 10: preparação treino/teste
@@ -485,6 +487,8 @@ evaluate(model_dtree, boston_test[, "medv"], test_pred)$metrics
 ## 1 29.38142 0.1642396 0.5117372
 ```
 
+No kNN, o parâmetro `k` controla o equilíbrio entre variância e viés.
+
 
 ``` r
 # Slides 7: taxonomia (kNN para regressão)
@@ -508,6 +512,8 @@ evaluate(model_knn, boston_test[, "medv"], test_pred)$metrics
 ##       mse     smape       R2
 ## 1 26.9483 0.1791238 0.552171
 ```
+
+A MLP introduz não linearidade; compare com kNN e árvore para avaliar ganho real em teste.
 
 
 ``` r
@@ -533,6 +539,8 @@ evaluate(model_mlp, boston_test[, "medv"], test_pred)$metrics
 ## 1 17.59761 0.1396753 0.7075616
 ```
 
+Random Forest tende a reduzir variância de árvores individuais; aqui observamos estabilidade preditiva.
+
 
 ``` r
 # Slides 7: taxonomia (Random Forest para regressão)
@@ -557,6 +565,8 @@ evaluate(model_rf, boston_test[, "medv"], test_pred)$metrics
 ## 1 12.6109 0.1170046 0.790431
 ```
 
+No SVR, `cost` e `epsilon` regulam margem e tolerância ao erro; observe sensibilidade das métricas.
+
 
 ``` r
 # Slides 7: taxonomia (SVR)
@@ -580,6 +590,8 @@ evaluate(model_svm, boston_test[, "medv"], test_pred)$metrics
 ##        mse     smape        R2
 ## 1 14.65598 0.1363336 0.7564457
 ```
+
+Por fim, fazemos tuning para testar se a configuração automática supera o SVR definido manualmente.
 
 
 ``` r

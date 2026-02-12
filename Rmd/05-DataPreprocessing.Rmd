@@ -24,6 +24,9 @@ library(ggplot2)
 
 ## Limpeza de dados
 
+Primeiro, avaliamos duas estratégias para valores ausentes: remover linhas incompletas ou imputar valores.
+Na prática, a escolha depende de volume de perda e risco de viés.
+
 ```{r na_removal}
 # Slides 6: Como lidar com dados ausentes (remoção)
 iris <- datasets::iris
@@ -33,6 +36,8 @@ tr_na <- na_removal()
 iris.na.omit <- transform(tr_na, iris.na)
 head(iris.na.omit)
 ```
+
+Agora comparamos com imputação por mediana, que preserva o tamanho da amostra e tende a ser robusta a outliers.
 
 ```{r imputation}
 # Slides 6: Imputação simples (média/mediana)
@@ -44,6 +49,8 @@ iris_imputed <- transform(tr_imp, iris_na)
 summary(iris_imputed$Sepal.Length)
 ```
 
+Em seguida, tratamos outliers por regra de boxplot (IQR), útil quando não há suposição forte de normalidade.
+
 ```{r outliers_boxplot}
 # Slides 10: Remoção de outliers (boxplot)
 tr_out_box <- outliers_boxplot()
@@ -52,6 +59,8 @@ iris.clean <- transform(tr_out_box, iris)
 head(iris.clean)
 ```
 
+A alternativa abaixo usa regra gaussiana (3 sigma), mais adequada quando a distribuição é aproximadamente normal.
+
 ```{r outliers_gaussian}
 # Slides 8–10: Remoção de outliers (regra 3σ)
 tr_out_gauss <- outliers_gaussian()
@@ -59,6 +68,8 @@ tr_out_gauss <- fit(tr_out_gauss, iris)
 iris.clean <- transform(tr_out_gauss, iris)
 head(iris.clean)
 ```
+
+Fechamos a seção com suavização LOESS para reduzir ruído local sem impor forma linear global.
 
 ```{r loess}
 # Slides 8: Suavização por regressão (LOESS)
@@ -74,6 +85,8 @@ ggplot(dat, aes(x, y)) +
 
 ## Redução e representação
 
+Aqui passamos de limpeza para representação: reduzir dimensionalidade e criar variáveis mais informativas.
+
 ```{r pca}
 # Slides 20–22: PCA
 iris <- datasets::iris
@@ -83,6 +96,8 @@ iris.pca <- transform(tr_pca, iris)
 head(iris.pca)
 ```
 
+Após PCA, avaliamos seleção por correlação para remover redundância entre atributos.
+
 ```{r feature_selection}
 # Slides 23–24: Seleção de atributos (correlação alta)
 tr_fs <- feature_selection_corr(cutoff = 0.9)
@@ -90,6 +105,8 @@ tr_fs <- fit(tr_fs, iris)
 iris_fs <- transform(tr_fs, iris)
 setdiff(names(iris), names(iris_fs))
 ```
+
+Na sequência, geramos atributos derivados para enriquecer sinal sem coletar novos dados.
 
 ```{r feature_generation}
 # Slides 26: Geração de features
@@ -101,6 +118,8 @@ tr_feat <- feature_generation(
 iris_feat <- transform(tr_feat, iris)
 head(iris_feat)
 ```
+
+Por fim, agregamos por classe para obter visão resumida (nível analítico mais alto).
 
 ```{r aggregation}
 # Slides 27: Agregação de dados
@@ -115,6 +134,8 @@ transform(tr_agg, iris)
 
 ## Transformação e normalização
 
+Normalização é crítica quando modelos dependem de distância ou escala dos atributos.
+
 ```{r minmax}
 # Slides 29: Normalização Min-Max
 tr_minmax <- minmax()
@@ -123,6 +144,8 @@ ndata <- transform(tr_minmax, iris)
 summary(ndata)
 ```
 
+O Z-score centraliza e escala por desvio padrão, útil quando queremos comparar variáveis em unidades padronizadas.
+
 ```{r zscore}
 # Slides 29: Normalização Z-Score
 tr_zscore <- zscore()
@@ -130,6 +153,8 @@ tr_zscore <- fit(tr_zscore, iris)
 ndata <- transform(tr_zscore, iris)
 summary(ndata)
 ```
+
+O comparativo visual abaixo ajuda a decidir qual transformação preserva melhor a estrutura que interessa ao problema.
 
 ```{r norm_compare}
 # Slides 30: Comparação visual de normalização
@@ -158,6 +183,8 @@ ggplot(vals_long, aes(value, fill = method)) +
 
 ## Discretização e suavização
 
+Nesta etapa, convertemos variável contínua em faixas para facilitar regras, árvores e relatórios interpretáveis.
+
 ```{r smooth_interval}
 # Slides 33–35: Binning por intervalos
 tr_smooth_inter <- smoothing_inter(n = 2)
@@ -166,6 +193,8 @@ sl.bi <- transform(tr_smooth_inter, iris$Sepal.Length)
 table(sl.bi)
 ```
 
+Aqui, os bins têm frequências semelhantes (quantis), o que tende a equilibrar representatividade entre faixas.
+
 ```{r smooth_freq}
 # Slides 33–35: Binning por frequência (quantis)
 tr_smooth_freq <- smoothing_freq(n = 2)
@@ -173,6 +202,8 @@ tr_smooth_freq <- fit(tr_smooth_freq, iris$Sepal.Length)
 sl.bi <- transform(tr_smooth_freq, iris$Sepal.Length)
 table(sl.bi)
 ```
+
+A discretização por clustering busca cortes orientados por estrutura dos dados, não apenas por posição/rank.
 
 ```{r smooth_cluster}
 # Slides 35: Discretização via clustering
@@ -184,12 +215,16 @@ table(sl.bi)
 
 ## Hierarquias e mapeamento categórico
 
+Quando o alvo é modelagem supervisionada, variáveis categóricas geralmente precisam de codificação explícita.
+
 ```{r onehot}
 # Slides 38–39: Mapeamento categórico (one-hot)
 tr_catmap <- categ_mapping("Species")
 iris_cm <- transform(tr_catmap, iris)
 head(iris_cm)
 ```
+
+Hierarquias conceituais simplificam interpretação ao trocar valores contínuos por níveis semânticos.
 
 ```{r hierarchy}
 # Slides 36–37: Hierarquia de conceitos (exemplo simples)
@@ -204,17 +239,23 @@ table(iris_h$Sepal.Length.Level)
 
 ## Amostragem e balanceamento
 
+A qualidade da divisão treino/teste impacta diretamente avaliação e generalização.
+
 ```{r sample_random}
 # Slides 40–41: Amostragem aleatória
 split_random <- train_test(sample_random(), iris)
 table(split_random$train$Species)
 ```
 
+Amostragem estratificada preserva proporção de classes, importante quando a distribuição é desigual.
+
 ```{r sample_stratified}
 # Slides 41–43: Amostragem estratificada
 split_strat <- train_test(sample_stratified("Species"), iris)
 table(split_strat$train$Species)
 ```
+
+O exemplo seguinte mostra o efeito de reposição na variabilidade da amostra.
 
 ```{r with_without_replacement}
 # Slides 42: Amostragem com e sem reposição
@@ -226,12 +267,16 @@ srswor
 srswr
 ```
 
+No caso de cluster sampling, a unidade amostral passa a ser o grupo, não o registro individual.
+
 ```{r cluster_sampling}
 # Slides 43: Amostragem por cluster (exemplo simples)
 tr_sample_cluster <- sample_cluster("Species", n_clusters = 2, seed = 123)
 cluster_sample <- transform(tr_sample_cluster, iris)
 table(cluster_sample$Species)
 ```
+
+Finalizamos com balanceamento de classes, essencial para evitar viés em classificadores com dados desbalanceados.
 
 ```{r imbalance}
 # Slides 45–46: Balanceamento de classes (up/down sampling)

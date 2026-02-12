@@ -23,6 +23,9 @@ library(ggplot2)
 
 ## Limpeza de dados
 
+Primeiro, avaliamos duas estratégias para valores ausentes: remover linhas incompletas ou imputar valores.
+Na prática, a escolha depende de volume de perda e risco de viés.
+
 
 ``` r
 # Slides 6: Como lidar com dados ausentes (remoção)
@@ -44,6 +47,8 @@ head(iris.na.omit)
 ## 7          4.6         3.4          1.4         0.3  setosa
 ```
 
+Agora comparamos com imputação por mediana, que preserva o tamanho da amostra e tende a ser robusta a outliers.
+
 
 ``` r
 # Slides 6: Imputação simples (média/mediana)
@@ -59,6 +64,8 @@ summary(iris_imputed$Sepal.Length)
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##   4.300   5.125   5.800   5.862   6.400   7.900
 ```
+
+Em seguida, tratamos outliers por regra de boxplot (IQR), útil quando não há suposição forte de normalidade.
 
 
 ``` r
@@ -79,6 +86,8 @@ head(iris.clean)
 ## 6          5.4         3.9          1.7         0.4  setosa
 ```
 
+A alternativa abaixo usa regra gaussiana (3 sigma), mais adequada quando a distribuição é aproximadamente normal.
+
 
 ``` r
 # Slides 8–10: Remoção de outliers (regra 3σ)
@@ -98,6 +107,8 @@ head(iris.clean)
 ## 6          5.4         3.9          1.7         0.4  setosa
 ```
 
+Fechamos a seção com suavização LOESS para reduzir ruído local sem impor forma linear global.
+
 
 ``` r
 # Slides 8: Suavização por regressão (LOESS)
@@ -114,6 +125,8 @@ ggplot(dat, aes(x, y)) +
 ![plot of chunk loess](fig/05-DataPreprocessing/loess-1.png)
 
 ## Redução e representação
+
+Aqui passamos de limpeza para representação: reduzir dimensionalidade e criar variáveis mais informativas.
 
 
 ``` r
@@ -135,6 +148,8 @@ head(iris.pca)
 ## 6 2.975946 -5.707321  setosa
 ```
 
+Após PCA, avaliamos seleção por correlação para remover redundância entre atributos.
+
 
 ``` r
 # Slides 23–24: Seleção de atributos (correlação alta)
@@ -147,6 +162,8 @@ setdiff(names(iris), names(iris_fs))
 ```
 ## [1] "Petal.Length"
 ```
+
+Na sequência, geramos atributos derivados para enriquecer sinal sem coletar novos dados.
 
 
 ``` r
@@ -170,6 +187,8 @@ head(iris_feat)
 ## 6          5.4         3.9          1.7         0.4  setosa      21.06       0.68    1.384615
 ```
 
+Por fim, agregamos por classe para obter visão resumida (nível analítico mais alto).
+
 
 ``` r
 # Slides 27: Agregação de dados
@@ -191,6 +210,8 @@ transform(tr_agg, iris)
 
 ## Transformação e normalização
 
+Normalização é crítica quando modelos dependem de distância ou escala dos atributos.
+
 
 ``` r
 # Slides 29: Normalização Min-Max
@@ -210,6 +231,8 @@ summary(ndata)
 ##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.00000
 ```
 
+O Z-score centraliza e escala por desvio padrão, útil quando queremos comparar variáveis em unidades padronizadas.
+
 
 ``` r
 # Slides 29: Normalização Z-Score
@@ -228,6 +251,8 @@ summary(ndata)
 ##  3rd Qu.: 0.67225   3rd Qu.: 0.5567   3rd Qu.: 0.7602   3rd Qu.: 0.7880                  
 ##  Max.   : 2.48370   Max.   : 3.0805   Max.   : 1.7799   Max.   : 1.7064
 ```
+
+O comparativo visual abaixo ajuda a decidir qual transformação preserva melhor a estrutura que interessa ao problema.
 
 
 ``` r
@@ -259,6 +284,8 @@ ggplot(vals_long, aes(value, fill = method)) +
 
 ## Discretização e suavização
 
+Nesta etapa, convertemos variável contínua em faixas para facilitar regras, árvores e relatórios interpretáveis.
+
 
 ``` r
 # Slides 33–35: Binning por intervalos
@@ -274,6 +301,8 @@ table(sl.bi)
 ##               95               55
 ```
 
+Aqui, os bins têm frequências semelhantes (quantis), o que tende a equilibrar representatividade entre faixas.
+
 
 ``` r
 # Slides 33–35: Binning por frequência (quantis)
@@ -288,6 +317,8 @@ table(sl.bi)
 ## 5.19875    6.58 
 ##      80      70
 ```
+
+A discretização por clustering busca cortes orientados por estrutura dos dados, não apenas por posição/rank.
 
 
 ``` r
@@ -306,6 +337,8 @@ table(sl.bi)
 
 ## Hierarquias e mapeamento categórico
 
+Quando o alvo é modelagem supervisionada, variáveis categóricas geralmente precisam de codificação explícita.
+
 
 ``` r
 # Slides 38–39: Mapeamento categórico (one-hot)
@@ -323,6 +356,8 @@ head(iris_cm)
 ## 5             1                 0                0
 ## 6             1                 0                0
 ```
+
+Hierarquias conceituais simplificam interpretação ao trocar valores contínuos por níveis semânticos.
 
 
 ``` r
@@ -344,6 +379,8 @@ table(iris_h$Sepal.Length.Level)
 
 ## Amostragem e balanceamento
 
+A qualidade da divisão treino/teste impacta diretamente avaliação e generalização.
+
 
 ``` r
 # Slides 40–41: Amostragem aleatória
@@ -357,6 +394,8 @@ table(split_random$train$Species)
 ##         39         37         44
 ```
 
+Amostragem estratificada preserva proporção de classes, importante quando a distribuição é desigual.
+
 
 ``` r
 # Slides 41–43: Amostragem estratificada
@@ -369,6 +408,8 @@ table(split_strat$train$Species)
 ##     setosa versicolor  virginica 
 ##         40         40         40
 ```
+
+O exemplo seguinte mostra o efeito de reposição na variabilidade da amostra.
 
 
 ``` r
@@ -392,6 +433,8 @@ srswr
 ##  [1] 4.3 5.0 7.7 4.4 4.3 7.7 5.5 5.5 5.5 6.1
 ```
 
+No caso de cluster sampling, a unidade amostral passa a ser o grupo, não o registro individual.
+
 
 ``` r
 # Slides 43: Amostragem por cluster (exemplo simples)
@@ -405,6 +448,8 @@ table(cluster_sample$Species)
 ##     setosa versicolor  virginica 
 ##         50          0         50
 ```
+
+Finalizamos com balanceamento de classes, essencial para evitar viés em classificadores com dados desbalanceados.
 
 
 ``` r

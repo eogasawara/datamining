@@ -253,6 +253,8 @@ while (i <= length(weight)) {
 }
 ```
 
+Resultado do cálculo com `while`:
+
 
 ``` r
 bmi
@@ -425,6 +427,8 @@ average <- function(vec) {
     return(mean(vec, na.rm=TRUE))
 }
 ```
+
+Teste rápido com vetor contendo NA:
 
 
 ``` r
@@ -800,6 +804,8 @@ a <- c(5260,5470,5640,6180,6390,6515,6805,7515,7515,8230,8770)
 b <- c(3910,4220,3885,5160,5645,4680,5265,5975,6790,6900,7335)
 ```
 
+Montamos o `data.frame` base para as operações de coluna:
+
 
 ``` r
 data <- data.frame(A=a, B=b)
@@ -936,6 +942,8 @@ bool
 ##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
 ```
 
+Aplicamos o filtro lógico em duas formas equivalentes:
+
 
 ``` r
 # selecionando elementos nas posicoes verdadeiras
@@ -1004,7 +1012,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.001696825 secs
+## Time difference of 0.002305984 secs
 ```
 
 ``` r
@@ -1029,7 +1037,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 12.06129 secs
+## Time difference of 12.70396 secs
 ```
 
 #### Convertendo data frame para matriz, processando e retornando
@@ -1053,7 +1061,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.220592 secs
+## Time difference of 0.262686 secs
 ```
 
 ## Pipelines e Consultas em Tabelas
@@ -1109,6 +1117,8 @@ head(flight_data)
 ``` r
 # dplyr nao e obrigatorio para os exemplos abaixo (base R)
 ```
+
+Consulta base para selecionar voos com maior atraso:
 
 
 ``` r
@@ -1234,6 +1244,8 @@ weight <- c(60, 72, 57, 90, 95, 72)
 height <- c(1.75, 1.80, 1.65, 1.90, 1.74, 1.91)
 bmi <- weight/height^2 
 ```
+
+Executamos o teste t para comparar a média observada de IMC com o valor teórico `22.5`:
 
 
 ``` r

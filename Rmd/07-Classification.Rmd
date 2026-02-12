@@ -17,6 +17,19 @@ Assim, o ganho de desempenho fica conectado ao custo de complexidade.
 
 ## Configuração
 
+Esta seção prepara os dados e define dois helpers centrais:
+1. `eval_model()`: executa predição e avaliação de forma robusta para diferentes formatos de saída dos modelos;
+2. `pred_to_label()`: converte saídas de predição em rótulos, facilitando matriz de confusão e comparação entre modelos.
+
+### Como funciona o `eval_model()`
+O helper resolve um problema comum em aulas práticas: cada algoritmo pode retornar predições em formato diferente (vetor de classe, fator ou matriz de probabilidades).
+O fluxo interno é:
+1. padronizar o alvo real com `adjust_class_label()`;
+2. tentar avaliação direta com `evaluate()`;
+3. se falhar, reconstruir a predição em formato compatível;
+4. avaliar treino e teste com o mesmo protocolo.
+Assim, a comparação entre modelos fica consistente e reproduzível.
+
 ```{r}
 # Slides 1–3: contexto e definição
 library(daltoolbox)
@@ -41,7 +54,7 @@ class_tbl <- rbind(
   table(iris_train[, "Species"]),
   table(iris_test[, "Species"])
 )
-rownames(class_tbl) <- c("dataset", "training", "test")
+rownames(class_tbl) <- c("dados", "treino", "teste")
 class_tbl
 
 # Helper: avaliacao padrao DALToolbox
@@ -49,20 +62,25 @@ class_tbl
 
 eval_model <- function(model, train, test, target_col) {
   evaluate_safe <- function(data, prediction, target_col) {
+    # Padroniza o alvo real no formato esperado pelo avaliador
     predictand <- adjust_class_label(data[, target_col])
     eval <- evaluate(model, predictand, prediction)
 
+    # Caminho alternativo para modelos cuja saida nao e aceita diretamente por evaluate()
     if (is.null(eval) || is.null(eval$metrics)) {
       proxy <- classification(target_col, colnames(predictand))
 
+      # Caso 1: saida em rótulos (vetor/fator)
       if (is.factor(prediction) || is.character(prediction) || is.vector(prediction)) {
         pred <- factor(as.vector(prediction), levels = colnames(predictand))
         prediction <- adjust_class_label(pred)
       } else {
+      # Caso 2: saida matricial (probabilidades ou escores)
         prediction <- as.matrix(prediction)
         if (is.null(colnames(prediction))) {
           colnames(prediction) <- colnames(predictand)[seq_len(ncol(prediction))]
         }
+        # Alinha colunas previstas com as colunas reais para evitar desalinhamento de classes
         aligned <- matrix(0, nrow(prediction), ncol(predictand))
         colnames(aligned) <- colnames(predictand)
         common <- intersect(colnames(prediction), colnames(predictand))
@@ -93,6 +111,7 @@ eval_model <- function(model, train, test, target_col) {
 }
 
 pred_to_label <- function(pred) {
+  # Converte probabilidades/scores em classe vencedora (argmax por linha)
   if (is.data.frame(pred) || is.matrix(pred)) {
     if (ncol(pred) == 1) {
       return(as.vector(pred[, 1]))
@@ -158,6 +177,11 @@ res_nb <- eval_model(model_nb, iris_train, iris_test, "Species")
 ## Regressão Logística
 Modela a probabilidade de pertencimento a uma classe via função logística. Aqui, reduzimos para um problema binário (versicolor vs. não-versicolor), comparando modelo completo e simplificado.  
 Slides: 41–47.
+
+Leitura didática desta seção:
+1. o modelo completo tende a capturar mais sinal;
+2. o modelo simplificado testa se menos variáveis mantêm desempenho;
+3. a matriz de confusão mostra onde ocorre perda/ganho por simplificação.
 
 ```{r}
 # Slides 41–47: Regressao Logistica (versicolor vs nao-versicolor)
