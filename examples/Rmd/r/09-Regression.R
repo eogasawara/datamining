@@ -18,17 +18,16 @@ split_random <- train_test(split_random, Boston, perc = 0.7)
 train <- split_random$train
 test <- split_random$test
 
-rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
-mae <- function(y, yhat) mean(abs(y - yhat))
-
 # Slides 8 e 11: regressão linear simples e ajuste
 model_lm_simple <- reg_lm(formula = medv ~ lstat)
 model_lm_simple <- fit(model_lm_simple, train)
 summary(model_lm_simple$model)
 
-pred_simple <- predict(model_lm_simple, newdata = test)
-rmse(test$medv, pred_simple)
-mae(test$medv, pred_simple)
+train_pred_simple <- predict(model_lm_simple, newdata = train)
+evaluate(model_lm_simple, train$medv, train_pred_simple)$metrics
+
+test_pred_simple <- predict(model_lm_simple, newdata = test)
+evaluate(model_lm_simple, test$medv, test_pred_simple)$metrics
 
 # Slides 17: visualização do ajuste
 ggplot(train, aes(x = lstat, y = medv)) +
@@ -68,9 +67,11 @@ model_lm_multi <- reg_lm(formula = medv ~ lstat + rm + ptratio)
 model_lm_multi <- fit(model_lm_multi, train)
 summary(model_lm_multi$model)
 
-pred_multi <- predict(model_lm_multi, newdata = test)
-rmse(test$medv, pred_multi)
-mae(test$medv, pred_multi)
+train_pred_multi <- predict(model_lm_multi, newdata = train)
+evaluate(model_lm_multi, train$medv, train_pred_multi)$metrics
+
+test_pred_multi <- predict(model_lm_multi, newdata = test)
+evaluate(model_lm_multi, test$medv, test_pred_multi)$metrics
 
 # Slides 30: ANOVA para regressão múltipla
 model_lm_multi2 <- reg_lm(formula = medv ~ lstat + rm + ptratio + nox)

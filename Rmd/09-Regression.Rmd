@@ -48,12 +48,9 @@ split_random <- sample_random()
 split_random <- train_test(split_random, Boston, perc = 0.7)
 train <- split_random$train
 test <- split_random$test
-
-rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
-mae <- function(y, yhat) mean(abs(y - yhat))
 ```
 
-As funções `rmse` e `mae` padronizam a comparação entre modelos ao longo do roteiro.  
+A avaliação será feita com `evaluate()` para manter o mesmo protocolo em todos os modelos do roteiro.  
 Slides: 10.
 
 ## Regressão linear simples
@@ -67,9 +64,11 @@ model_lm_simple <- reg_lm(formula = medv ~ lstat)
 model_lm_simple <- fit(model_lm_simple, train)
 summary(model_lm_simple$model)
 
-pred_simple <- predict(model_lm_simple, newdata = test)
-rmse(test$medv, pred_simple)
-mae(test$medv, pred_simple)
+train_pred_simple <- predict(model_lm_simple, newdata = train)
+evaluate(model_lm_simple, train$medv, train_pred_simple)$metrics
+
+test_pred_simple <- predict(model_lm_simple, newdata = test)
+evaluate(model_lm_simple, test$medv, test_pred_simple)$metrics
 ```
 
 O gráfico a seguir conecta o ajuste linear à nuvem de pontos, facilitando leitura de tendência e dispersão residual.  
@@ -146,9 +145,11 @@ model_lm_multi <- reg_lm(formula = medv ~ lstat + rm + ptratio)
 model_lm_multi <- fit(model_lm_multi, train)
 summary(model_lm_multi$model)
 
-pred_multi <- predict(model_lm_multi, newdata = test)
-rmse(test$medv, pred_multi)
-mae(test$medv, pred_multi)
+train_pred_multi <- predict(model_lm_multi, newdata = train)
+evaluate(model_lm_multi, train$medv, train_pred_multi)$metrics
+
+test_pred_multi <- predict(model_lm_multi, newdata = test)
+evaluate(model_lm_multi, test$medv, test_pred_multi)$metrics
 ```
 
 A ANOVA entre modelos aninhados testa se incluir `nox` adiciona poder explicativo relevante.  
