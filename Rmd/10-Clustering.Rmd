@@ -8,7 +8,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 Clustering é aprendizado não supervisionado que agrupa observações por similaridade. A qualidade depende de escolha de métricas, escalas e do algoritmo.  
 
 
-```{r}
+```{r install_notes}
 # The easiest way use clustering in daltoolbox is by installing basic packages
 #install.packages("daltoolbox")
 #install.packages("ggplot2")
@@ -21,7 +21,7 @@ Clustering é aprendizado não supervisionado que agrupa observações por simil
 Slides: 1–12.
 ## Configuração
 
-```{r}
+```{r libraries}
   library(daltoolbox)
   library(ggplot2)
   library(cluster)
@@ -30,7 +30,7 @@ Slides: 1–12.
   library(igraph)
 ```
 
-```{r}
+```{r s04_data_prep}
 # Slide 4: dataset de exemplo
 iris <- datasets::iris
 head(iris)
@@ -43,7 +43,7 @@ X <- iris[, 1:4]
 Algoritmo de particionamento que minimiza a variância intra-cluster. Sensível a escala e outliers.  
 Slides: 25–29.
 
-```{r}
+```{r s25_29_kmeans}
 # Slides 25–29: K-means
 model_km <- cluster_kmeans(k = 3)
 model_km <- daltoolbox::fit(model_km, X)
@@ -58,7 +58,7 @@ eval_km
 Normalização reduz o efeito de escalas diferentes e pode melhorar a separação.  
 Slides: 29.
 
-```{r}
+```{r s29_kmeans_norm}
 # Slide 29: normalizacao
 iris_minmax <- transform(daltoolbox::fit(minmax(), iris), iris)
 model_km <- daltoolbox::fit(model_km, iris_minmax[, 1:4])
@@ -71,7 +71,7 @@ eval_km_norm
 Semelhante ao k-means, mas usa medoids (pontos reais) como centros, sendo mais robusto a outliers.  
 Slides: 30–31.
 
-```{r}
+```{r s30_31_pam}
 # Slide 30–31: K-medoids (PAM)
 model_pam <- cluster_pam(k = 3)
 model_pam <- daltoolbox::fit(model_pam, X)
@@ -86,7 +86,7 @@ eval_pam
 Constrói uma árvore de agrupamentos (dendrograma). Pode ser aglomerativo (bottom-up) ou divisivo (top-down).  
 Slides: 32–35.
 
-```{r}
+```{r s32_35_hclust}
 # Slides 32–35: Clustering hierarquico e dendrograma (base R)
 # Distancia euclidiana e metodo de Ward
 model_hc <- cluster_hclust(k = 3, method = "ward.D2", dist = "euclidean", scale = TRUE)
@@ -102,7 +102,7 @@ table(hc_groups)
 Método baseado em densidade que detecta clusters de formato arbitrário e identifica ruído.  
 Slides: 36–41.
 
-```{r}
+```{r s36_41_dbscan}
 # Slides 36–41: DBSCAN
 model_db <- cluster_dbscan(minPts = 3)
 model_db <- daltoolbox::fit(model_db, X)
@@ -117,7 +117,7 @@ eval_db
 Critérios externos podem ser usados quando rótulos são conhecidos. Ajuste de hiperparâmetros ajuda a escolher k.  
 Slides: 42–45.
 
-```{r}
+```{r s42_45_tuning}
 # Slides 42–45: avaliacao e escolha de modelos
 # Ajuste automatico de k para k-means
 model_tune <- clu_tune(cluster_kmeans(k = 0), ranges = list(k = 2:10))
@@ -133,7 +133,7 @@ eval_tune
 Modelos de mistura assumem que os dados vêm de distribuições (ex.: Gaussianas). O EM estima parâmetros e probabilidades a posteriori.  
 Slides: 47–56.
 
-```{r}
+```{r s47_56_gmm}
 # Slides 47–56: clustering probabilistico (GMM via mclust)
 set.seed(1)
 model_gmm <- cluster_gmm()
@@ -151,7 +151,7 @@ head(model_gmm$model$loglik)
 Permite que cada ponto pertença a múltiplos clusters com diferentes graus de pertinência.  
 Slides: 50–51.
 
-```{r}
+```{r s50_51_fuzzy}
 # Slides 50–51: clustering fuzzy (cmeans)
 set.seed(1)
 model_fuzzy <- cluster_cmeans(centers = 3, m = 2)
@@ -165,7 +165,7 @@ table(clu_fuzzy)
 Comunidades em redes podem ser detectadas por métodos como Louvain.  
 Slides: 63–64.
 
-```{r}
+```{r s63_64_graph}
 # Slides 63–64: clustering de grafos e redes (exemplo simples)
 set.seed(1)
 g <- igraph::sample_gnp(n = 20, p = 0.15)
