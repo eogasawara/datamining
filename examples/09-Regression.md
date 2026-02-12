@@ -80,6 +80,16 @@ split_random <- sample_random()
 split_random <- train_test(split_random, Boston, perc = 0.7)
 train <- split_random$train
 test <- split_random$test
+
+eval_reg <- function(model, y_true, y_pred, attribute = "medv") {
+  # Alguns modelos (ex.: reg_lm) podem retornar NULL em evaluate(model, ...)
+  eval <- evaluate(model, y_true, y_pred)
+  if (is.null(eval) || is.null(eval$metrics)) {
+    proxy <- regression(attribute)
+    eval <- evaluate(proxy, as.vector(y_true), as.vector(y_pred))
+  }
+  eval
+}
 ```
 
 A avaliação será feita com `evaluate()` para manter o mesmo protocolo em todos os modelos do roteiro.  
@@ -121,20 +131,22 @@ summary(model_lm_simple$model)
 
 ``` r
 train_pred_simple <- predict(model_lm_simple, newdata = train)
-evaluate(model_lm_simple, train$medv, train_pred_simple)$metrics
+eval_reg(model_lm_simple, train$medv, train_pred_simple, "medv")$metrics
 ```
 
 ```
-## NULL
+##     mse     smape        R2
+## 1 40.88 0.2213839 0.5515344
 ```
 
 ``` r
 test_pred_simple <- predict(model_lm_simple, newdata = test)
-evaluate(model_lm_simple, test$medv, test_pred_simple)$metrics
+eval_reg(model_lm_simple, test$medv, test_pred_simple, "medv")$metrics
 ```
 
 ```
-## NULL
+##        mse     smape        R2
+## 1 33.53909 0.2279417 0.5022216
 ```
 
 O gráfico a seguir conecta o ajuste linear à nuvem de pontos, facilitando leitura de tendência e dispersão residual.  
@@ -311,20 +323,22 @@ summary(model_lm_multi$model)
 
 ``` r
 train_pred_multi <- predict(model_lm_multi, newdata = train)
-evaluate(model_lm_multi, train$medv, train_pred_multi)$metrics
+eval_reg(model_lm_multi, train$medv, train_pred_multi, "medv")$metrics
 ```
 
 ```
-## NULL
+##        mse     smape        R2
+## 1 25.98853 0.1865811 0.7148982
 ```
 
 ``` r
 test_pred_multi <- predict(model_lm_multi, newdata = test)
-evaluate(model_lm_multi, test$medv, test_pred_multi)$metrics
+eval_reg(model_lm_multi, test$medv, test_pred_multi, "medv")$metrics
 ```
 
 ```
-## NULL
+##        mse     smape        R2
+## 1 30.92844 0.2006984 0.5409681
 ```
 
 A ANOVA entre modelos aninhados testa se incluir `nox` adiciona poder explicativo relevante.  
@@ -468,7 +482,7 @@ Para leitura didática, em cada modelo observe principalmente:
 model_dtree <- reg_dtree("medv")
 model_dtree <- fit(model_dtree, boston_train)
 train_pred <- predict(model_dtree, boston_train)
-evaluate(model_dtree, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_dtree, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -478,7 +492,7 @@ evaluate(model_dtree, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_dtree, boston_test)
-evaluate(model_dtree, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_dtree, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
@@ -494,7 +508,7 @@ No kNN, o parâmetro `k` controla o equilíbrio entre variância e viés.
 model_knn <- reg_knn("medv", k = 5)
 model_knn <- fit(model_knn, boston_train)
 train_pred <- predict(model_knn, boston_train)
-evaluate(model_knn, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_knn, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -504,7 +518,7 @@ evaluate(model_knn, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_knn, boston_test)
-evaluate(model_knn, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_knn, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
@@ -520,7 +534,7 @@ A MLP introduz não linearidade; compare com kNN e árvore para avaliar ganho re
 model_mlp <- reg_mlp("medv", size = 5, decay = 0.54)
 model_mlp <- fit(model_mlp, boston_train)
 train_pred <- predict(model_mlp, boston_train)
-evaluate(model_mlp, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_mlp, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -530,7 +544,7 @@ evaluate(model_mlp, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_mlp, boston_test)
-evaluate(model_mlp, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_mlp, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
@@ -546,7 +560,7 @@ Random Forest tende a reduzir variância de árvores individuais; aqui observamo
 model_rf <- reg_rf("medv", mtry = 7, ntree = 30)
 model_rf <- fit(model_rf, boston_train)
 train_pred <- predict(model_rf, boston_train)
-evaluate(model_rf, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_rf, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -556,7 +570,7 @@ evaluate(model_rf, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_rf, boston_test)
-evaluate(model_rf, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_rf, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
@@ -572,7 +586,7 @@ No SVR, `cost` e `epsilon` regulam margem e tolerância ao erro; observe sensibi
 model_svm <- reg_svm("medv", epsilon = 0.2, cost = 40.000)
 model_svm <- fit(model_svm, boston_train)
 train_pred <- predict(model_svm, boston_train)
-evaluate(model_svm, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_svm, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -582,7 +596,7 @@ evaluate(model_svm, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_svm, boston_test)
-evaluate(model_svm, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_svm, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
@@ -601,7 +615,7 @@ tune <- reg_tune(
 )
 model_tuned <- fit(tune, boston_train)
 train_pred <- predict(model_tuned, boston_train)
-evaluate(model_tuned, boston_train[, "medv"], train_pred)$metrics
+eval_reg(model_tuned, boston_train[, "medv"], train_pred, "medv")$metrics
 ```
 
 ```
@@ -611,7 +625,7 @@ evaluate(model_tuned, boston_train[, "medv"], train_pred)$metrics
 
 ``` r
 test_pred <- predict(model_tuned, boston_test)
-evaluate(model_tuned, boston_test[, "medv"], test_pred)$metrics
+eval_reg(model_tuned, boston_test[, "medv"], test_pred, "medv")$metrics
 ```
 
 ```
