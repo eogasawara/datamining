@@ -6,6 +6,14 @@
 A mineração de padrões frequentes busca regularidades em dados transacionais e sequenciais. A partir de padrões frequentes, derivam-se regras de associação com medidas como suporte, confiança e lift.  
 Slides: 1–5.
 
+## Como ler este roteiro
+O fluxo está organizado em quatro passos:
+1. preparar dados transacionais;
+2. minerar regras/itemsets;
+3. reduzir redundância e interpretar qualidade;
+4. avançar para sequências e grafos.
+Em cada passo, compare sempre quantidade de padrões versus utilidade prática.
+
 ## Configuração
 
 
@@ -24,7 +32,7 @@ library(igraph)
 
 
 ``` r
-# Slide 2–4: exemplo transacional
+# Slides 2–4: exemplo transacional
 data(AdultUCI)
 myAdultUCI <- as.data.frame(AdultUCI)
 dim(myAdultUCI)
@@ -71,7 +79,7 @@ myAdultUCI$"education-num" <- NULL
 
 
 ``` r
-# Conceptual Hierarchy and Binning com transformações do DALToolbox
+# Hierarquia conceitual e binning com transformacoes do DALToolbox
 hc_age <- hierarchy_cut(
   attribute = "age",
   breaks = c(15, 25, 45, 65, 100),
@@ -151,6 +159,8 @@ AdultTrans <- as(myAdultUCI, "transactions")
 Apriori explora a propriedade anti-monótona do suporte para gerar e podar candidatos.  
 Slides: 10–20.
 
+Leitura recomendada dos resultados: comece por suporte/confiança, depois use lift para priorização.
+
 
 ``` r
 # A Priori
@@ -177,9 +187,9 @@ rules <- discover(pm_apriori, AdultTrans)
 ## Absolute minimum support count: 15081 
 ## 
 ## set item appearances ...[1 item(s)] done [0.00s].
-## set transactions ...[114 item(s), 30162 transaction(s)] done [0.01s].
+## set transactions ...[114 item(s), 30162 transaction(s)] done [0.03s].
 ## sorting and recoding items ... [9 item(s)] done [0.00s].
-## creating transaction tree ... done [0.01s].
+## creating transaction tree ... done [0.02s].
 ## checking subsets of size 1 2 3 4 5 done [0.00s].
 ## writing ... [30 rule(s)] done [0.00s].
 ## creating S4 object  ... done [0.00s].
@@ -300,7 +310,7 @@ itemsets_eclat <- discover(pm_eclat, AdultTrans)
 ## Absolute minimum support count: 15081 
 ## 
 ## create itemset ... 
-## set transactions ...[114 item(s), 30162 transaction(s)] done [0.01s].
+## set transactions ...[114 item(s), 30162 transaction(s)] done [0.03s].
 ## sorting and recoding items ... [9 item(s)] done [0.00s].
 ## creating bit matrix ... [9 row(s), 30162 column(s)] done [0.00s].
 ## writing  ... [58 set(s)] done [0.00s].
@@ -362,9 +372,11 @@ inspect(head(sort(max_sets, by = "support")))
 Além de suporte e confiança, métricas como lift, leverage e conviction ajudam a priorizar regras.  
 Slides: 4–5, 21.
 
+Aqui, o foco é transformar regras "frequentes" em regras "úteis" para decisão.
+
 
 ``` r
-# Analysis of Rules
+# Analise das regras
 imrules <- interestMeasure(rules, transactions = AdultTrans)
 head(imrules)
 ```
@@ -429,7 +441,7 @@ Slides: 21–24.
 
 
 ``` r
-# Removing redundant rules
+# Removendo regras redundantes
 nrules <- rules[!is.redundant(rules)]
 
 arules::inspect(nrules)
@@ -453,7 +465,7 @@ Slides: 4–5.
 
 
 ``` r
-# Showing the transactions that support the rules
+# Mostrando as transacoes que suportam as regras
 st <- supportingTransactions(nrules[1], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
@@ -473,7 +485,7 @@ print(c(length(trans)/length(AdultTrans), nrules[1]@quality$support))
 
 
 ``` r
-# Supporting transactions for multiple rules
+# Transacoes de suporte para multiplas regras
 st <- supportingTransactions(nrules[1:2], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
@@ -497,7 +509,7 @@ Slides: 21.
 
 
 ``` r
-# Rules visualization
+# Visualizacao de regras
 options(repr.plot.width=10, repr.plot.height=5)
 plot(rules)
 ```
@@ -538,16 +550,16 @@ rare_rules <- discover(pm_apriori_rare, AdultTrans)
 ## Absolute minimum support count: 1508 
 ## 
 ## set item appearances ...[0 item(s)] done [0.00s].
-## set transactions ...[114 item(s), 30162 transaction(s)] done [0.01s].
-## sorting and recoding items ... [37 item(s)] done [0.00s].
-## creating transaction tree ... done [0.01s].
+## set transactions ...[114 item(s), 30162 transaction(s)] done [0.04s].
+## sorting and recoding items ... [37 item(s)] done [0.01s].
+## creating transaction tree ... done [0.02s].
 ## checking subsets of size 1 2 3
 ```
 
 ```
-##  done [0.02s].
-## writing ... [2146 rule(s)] done [0.00s].
-## creating S4 object  ... done [0.00s].
+##  done [0.14s].
+## writing ... [2146 rule(s)] done [0.02s].
+## creating S4 object  ... done [0.01s].
 ```
 
 ``` r
@@ -616,9 +628,9 @@ rules_md <- discover(pm_apriori_md, AdultTransML)
 ## Absolute minimum support count: 6032 
 ## 
 ## set item appearances ...[2 item(s)] done [0.00s].
-## set transactions ...[116 item(s), 30162 transaction(s)] done [0.02s].
-## sorting and recoding items ... [21 item(s)] done [0.00s].
-## creating transaction tree ... done [0.01s].
+## set transactions ...[116 item(s), 30162 transaction(s)] done [0.03s].
+## sorting and recoding items ... [21 item(s)] done [0.01s].
+## creating transaction tree ... done [0.03s].
 ## checking subsets of size 1 2 3
 ```
 
@@ -711,6 +723,8 @@ inspect(rules_md)
 Padrões sequenciais estendem itemsets para ordem temporal. SPADE é uma abordagem vertical eficiente.  
 Slides: 46–62.
 
+Diferença-chave: em mineração sequencial, a ordem dos eventos influencia o padrão descoberto.
+
 
 ``` r
 # Sequence Mining
@@ -752,11 +766,11 @@ s1 <- discover(pm_cspade, x)
 ## summary  : FALSE
 ## tidLists : FALSE
 ## 
-## preprocessing ... 1 partition(s), 0 MB [0.14s]
-## mining transactions ... 0 MB [1.9s]
-## reading sequences ... [0.09s]
+## preprocessing ... 1 partition(s), 0 MB [0.18s]
+## mining transactions ... 0 MB [0.9s]
+## reading sequences ... [0.19s]
 ## 
-## total elapsed time: 2.1s
+## total elapsed time: 1.27s
 ```
 
 ``` r
@@ -791,7 +805,7 @@ Slides: 63–64.
 
 
 ``` r
-# Graph Pattern Mining (toy example)
+# Mineracao de padroes em grafos (exemplo simples)
 
 g1 <- make_ring(4)
 g2 <- make_full_graph(3)
@@ -829,3 +843,5 @@ count_subgraph_isomorphisms(tri, g3)
 - McGarry, K. (2005). A survey of interestingness measures for knowledge discovery. *Knowledge Engineering Review*, 20(1).
 - Borgelt, C. (2005). An implementation of the FP-growth algorithm. *ACM SIGKDD Explorations*.
 - Yan, X., & Han, J. (2002). gSpan: Graph-based substructure pattern mining. *ICDM*.
+
+

@@ -11,7 +11,7 @@ library(arulesViz)
 library(arulesSequences)
 library(igraph)
 
-# Slide 2–4: exemplo transacional
+# Slides 2–4: exemplo transacional
 data(AdultUCI)
 myAdultUCI <- as.data.frame(AdultUCI)
 dim(myAdultUCI)
@@ -24,7 +24,7 @@ myAdultUCI <- transform(na_obj, myAdultUCI)
 myAdultUCI$fnlwgt <- NULL
 myAdultUCI$"education-num" <- NULL
 
-# Conceptual Hierarchy and Binning com transformações do DALToolbox
+# Hierarquia conceitual e binning com transformacoes do DALToolbox
 hc_age <- hierarchy_cut(
   attribute = "age",
   breaks = c(15, 25, 45, 65, 100),
@@ -101,31 +101,31 @@ max_sets <- itemsets_eclat[is.maximal(itemsets_eclat)]
 inspect(head(sort(closed_sets, by = "support")))
 inspect(head(sort(max_sets, by = "support")))
 
-# Analysis of Rules
+# Analise das regras
 imrules <- interestMeasure(rules, transactions = AdultTrans)
 head(imrules)
 
 imrules2 <- interestMeasure(rules, c("support", "confidence", "lift", "leverage", "conviction"), AdultTrans)
 head(imrules2[order(imrules2[, "lift"], decreasing = TRUE), ])
 
-# Removing redundant rules
+# Removendo regras redundantes
 nrules <- rules[!is.redundant(rules)]
 
 arules::inspect(nrules)
 
-# Showing the transactions that support the rules
+# Mostrando as transacoes que suportam as regras
 st <- supportingTransactions(nrules[1], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
 print(c(length(trans)/length(AdultTrans), nrules[1]@quality$support))
 
-# Supporting transactions for multiple rules
+# Transacoes de suporte para multiplas regras
 st <- supportingTransactions(nrules[1:2], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
 print(c(length(trans)/length(AdultTrans), nrules[1:2]@quality$support))
 
-# Rules visualization
+# Visualizacao de regras
 options(repr.plot.width=10, repr.plot.height=5)
 plot(rules)
 
@@ -172,7 +172,7 @@ pm_cspade <- fit(pm_cspade, x)
 s1 <- discover(pm_cspade, x)
 as(s1, "data.frame")
 
-# Graph Pattern Mining (toy example)
+# Mineracao de padroes em grafos (exemplo simples)
 
 g1 <- make_ring(4)
 g2 <- make_full_graph(3)

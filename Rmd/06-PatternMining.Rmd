@@ -8,6 +8,14 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 A mineração de padrões frequentes busca regularidades em dados transacionais e sequenciais. A partir de padrões frequentes, derivam-se regras de associação com medidas como suporte, confiança e lift.  
 Slides: 1–5.
 
+## Como ler este roteiro
+O fluxo está organizado em quatro passos:
+1. preparar dados transacionais;
+2. minerar regras/itemsets;
+3. reduzir redundância e interpretar qualidade;
+4. avançar para sequências e grafos.
+Em cada passo, compare sempre quantidade de padrões versus utilidade prática.
+
 ## Configuração
 
 ```{r}
@@ -24,7 +32,7 @@ library(igraph)
 ```
 
 ```{r}
-# Slide 2–4: exemplo transacional
+# Slides 2–4: exemplo transacional
 data(AdultUCI)
 myAdultUCI <- as.data.frame(AdultUCI)
 dim(myAdultUCI)
@@ -45,7 +53,7 @@ myAdultUCI$"education-num" <- NULL
 ```
 
 ```{r}
-# Conceptual Hierarchy and Binning com transformações do DALToolbox
+# Hierarquia conceitual e binning com transformacoes do DALToolbox
 hc_age <- hierarchy_cut(
   attribute = "age",
   breaks = c(15, 25, 45, 65, 100),
@@ -107,6 +115,8 @@ AdultTrans <- as(myAdultUCI, "transactions")
 Apriori explora a propriedade anti-monótona do suporte para gerar e podar candidatos.  
 Slides: 10–20.
 
+Leitura recomendada dos resultados: comece por suporte/confiança, depois use lift para priorização.
+
 ```{r}
 # A Priori
 pm_apriori <- pat_apriori(
@@ -153,8 +163,10 @@ inspect(head(sort(max_sets, by = "support")))
 Além de suporte e confiança, métricas como lift, leverage e conviction ajudam a priorizar regras.  
 Slides: 4–5, 21.
 
+Aqui, o foco é transformar regras "frequentes" em regras "úteis" para decisão.
+
 ```{r}
-# Analysis of Rules
+# Analise das regras
 imrules <- interestMeasure(rules, transactions = AdultTrans)
 head(imrules)
 ```
@@ -169,7 +181,7 @@ Redução de redundância evita regras repetitivas ou pouco informativas.
 Slides: 21–24.
 
 ```{r}
-# Removing redundant rules
+# Removendo regras redundantes
 nrules <- rules[!is.redundant(rules)]
 
 arules::inspect(nrules)
@@ -180,7 +192,7 @@ Analisar quais transações suportam regras ajuda a validar padrões.
 Slides: 4–5.
 
 ```{r}
-# Showing the transactions that support the rules
+# Mostrando as transacoes que suportam as regras
 st <- supportingTransactions(nrules[1], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
@@ -188,7 +200,7 @@ print(c(length(trans)/length(AdultTrans), nrules[1]@quality$support))
 ```
 
 ```{r}
-# Supporting transactions for multiple rules
+# Transacoes de suporte para multiplas regras
 st <- supportingTransactions(nrules[1:2], AdultTrans)
 trans <- unique(st@data@i)
 length(trans)
@@ -200,7 +212,7 @@ Visualizações auxiliam a interpretação de padrões descobertos.
 Slides: 21.
 
 ```{r}
-# Rules visualization
+# Visualizacao de regras
 options(repr.plot.width=10, repr.plot.height=5)
 plot(rules)
 ```
@@ -257,6 +269,8 @@ inspect(rules_md)
 Padrões sequenciais estendem itemsets para ordem temporal. SPADE é uma abordagem vertical eficiente.  
 Slides: 46–62.
 
+Diferença-chave: em mineração sequencial, a ordem dos eventos influencia o padrão descoberto.
+
 ```{r}
 # Sequence Mining
 x <- read_baskets(con = system.file("misc", "zaki.txt", package = "arulesSequences"), info = c("sequenceID","eventID","SIZE"))
@@ -275,7 +289,7 @@ Em grafos, padrões frequentes são subgrafos recorrentes. Aqui mostramos contag
 Slides: 63–64.
 
 ```{r}
-# Graph Pattern Mining (toy example)
+# Mineracao de padroes em grafos (exemplo simples)
 
 g1 <- make_ring(4)
 g2 <- make_full_graph(3)
@@ -295,3 +309,5 @@ count_subgraph_isomorphisms(tri, g3)
 - McGarry, K. (2005). A survey of interestingness measures for knowledge discovery. *Knowledge Engineering Review*, 20(1).
 - Borgelt, C. (2005). An implementation of the FP-growth algorithm. *ACM SIGKDD Explorations*.
 - Yan, X., & Han, J. (2002). gSpan: Graph-based substructure pattern mining. *ICDM*.
+
+

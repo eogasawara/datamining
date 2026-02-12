@@ -1,8 +1,25 @@
 
 
-#### R Package installation and loading
+# Fundamentos da Linguagem R
 
-Package checking and instalation
+## Visão Geral
+Este roteiro acompanha o conteúdo de `02-R-Basics.pdf` e foi organizado para leitura progressiva: tipos de dados, estruturas, manipulação tabular e integração com Python.  
+Sugestão didática: execute os chunks em sequência e observe como os objetos são reaproveitados nas seções seguintes.  
+Slides: 1-37.
+
+## Como ler este roteiro
+Siga a ordem dos blocos e, ao final de cada seção, revise:
+1. quais objetos foram criados/alterados;
+2. quais tipos de dados estão em uso;
+3. como esse bloco prepara o próximo tópico.
+
+## Instalação e Primeiros Objetos
+Foco: instalar/carregar pacotes e consolidar operações básicas com variáveis numéricas e textuais.  
+Slides: 5-8.
+
+#### Instalacao e carregamento de pacotes R
+
+Verificacao e instalacao de pacotes
 
 
 ``` r
@@ -11,16 +28,16 @@ if(!require(daltoolbox)) {
 }
 ```
 
-Package loading
+Carregamento de pacotes
 
 
 ``` r
 library(daltoolbox)
 ```
 
-#### Variable definitions and evaluation
+#### Definicao e avaliacao de variaveis
 
-Variable definition
+Definicao de variaveis
 
 
 ``` r
@@ -30,7 +47,7 @@ subject <- "A"
 healthy <- TRUE
 ```
 
-Variable evaluation
+Avaliacao de variaveis
 
 
 ``` r
@@ -41,7 +58,7 @@ weight
 ## [1] 60
 ```
 
-#### Functions for type checking
+#### Funcoes para verificacao de tipo
 
 
 ``` r
@@ -76,7 +93,7 @@ is.character(subject)
 ## [1] TRUE
 ```
 
-#### Functions for variable conversion
+#### Funcoes para conversao de variaveis
 
 
 ``` r
@@ -88,9 +105,9 @@ is.integer(weight)
 ## [1] TRUE
 ```
 
-#### Formulas and String formatting
+#### Formulas e formatacao de strings
 
-Computing the body mass index (BMI) from the weight and height
+Calculando o indice de massa corporal (IMC) a partir do peso e da altura
 
 
 ``` r
@@ -103,7 +120,7 @@ bmi
 ## [1] 19.59184
 ```
 
-Functions for string manipulation
+Funcoes para manipulacao de strings
 
 
 ``` r
@@ -115,9 +132,9 @@ print(message)
 ## [1] "19.6"
 ```
 
-#### Vectors
+#### Vetores
 
-definition
+definicao
 
 
 ``` r
@@ -126,7 +143,7 @@ height <- c(1.75, 1.80, 1.65, 1.90, 1.74, 1.91)
 subject <- c("A", "B", "C", "D", "E", "F")
 ```
 
-evaluation
+avaliacao
 
 
 ``` r
@@ -153,9 +170,9 @@ subject
 ## [1] "A" "B" "C" "D" "E" "F"
 ```
 
-#### Establishing the vector size
+#### Definindo o tamanho do vetor
 
-vector of size 10
+vetor de tamanho 10
 
 
 ``` r
@@ -167,7 +184,7 @@ vec
 ##  [1] 0 0 0 0 0 0 0 0 0 0
 ```
 
-vector length
+tamanho do vetor
 
 
 ``` r
@@ -178,9 +195,9 @@ length(weight)
 ## [1] 6
 ```
 
-#### Vector limits
+#### Limites do vetor
 
-from one to the length of the vector
+da primeira ate a ultima posicao do vetor
 
 
 ``` r
@@ -199,9 +216,9 @@ weight[length(weight)]
 ## [1] 72
 ```
 
-#### Iteration: for loop
+#### Iteracao: laco for
 
-from one to the length of weight
+da primeira ate a ultima posicao de weight
 
 
 ``` r
@@ -211,7 +228,7 @@ for (i in 1:length(weight)) {
 }
 ```
 
-evaluation of the bmi vector
+avaliacao do vetor bmi
 
 
 ``` r
@@ -222,9 +239,9 @@ bmi
 ## [1] 19.59184 22.22222 20.93664 24.93075 31.37799 19.73630
 ```
 
-#### Iteration: while loop
+#### Iteracao: laco while
 
-run while i is below or equal to the length of weight
+executa enquanto i for menor ou igual ao tamanho de weight
 
 
 ``` r
@@ -245,7 +262,10 @@ bmi
 ## [1] 19.59184 22.22222 20.93664 24.93075 31.37799 19.73630
 ```
 
-#### Remove a variable
+Nesta etapa, compare a versão com `for` e a versão com `while`: o resultado é igual, mas a clareza do código pode mudar conforme o problema.  
+Slides: 10-11.
+
+#### Removendo uma variavel
 
 
 ``` r
@@ -257,7 +277,7 @@ exists("bmi")
 ## [1] FALSE
 ```
 
-#### Processing vectors at once
+#### Processando vetores de uma vez
 
 
 
@@ -270,7 +290,7 @@ bmi
 ## [1] 19.59184 22.22222 20.93664 24.93075 31.37799 19.73630
 ```
 
-#### Creating functions
+#### Criando funcoes
 
 name <- function(parameters) { body }
 
@@ -282,7 +302,7 @@ compute_bmi <- function(weight, height) {
 }
 ```
 
-calling it
+chamando a funcao
 
 
 ``` r
@@ -294,7 +314,7 @@ bmi
 ## [1] 19.59184
 ```
 
-#### Function processing vectors
+#### Funcao processando vetores
 
 
 ``` r
@@ -306,9 +326,9 @@ bmi
 ## [1] 19.59184 22.22222 20.93664 24.93075 31.37799 19.73630
 ```
 
-#### Example: function to compute the average
+#### Exemplo: funcao para calcular a media
 
-(iterating in all elements of the vector)
+(iterando em todos os elementos do vetor)
 
 
 ``` r
@@ -322,7 +342,7 @@ average <- function(vec) {
 }
 ```
 
-invoking the function
+invocando a funcao
 
 
 ``` r
@@ -334,9 +354,9 @@ avg_bmi
 ## [1] 23.13262
 ```
 
-#### Example of a function to compute the average (improved version)
+#### Exemplo de funcao para calcular a media (versao melhorada)
 
-manipulating vectors at once
+manipulando vetores de uma vez
 
 
 ``` r
@@ -347,7 +367,7 @@ average <- function(vec) {
 }
 ```
 
-invoking the function
+invocando a funcao
 
 
 ``` r
@@ -359,9 +379,9 @@ avg_bmi
 ## [1] 23.13262
 ```
 
-#### Example: function using mean function
+#### Exemplo: funcao usando mean
 
-Major statistical functions are available in R
+As principais funcoes estatisticas estao disponiveis no R
 
 
 ``` r
@@ -370,7 +390,7 @@ average <- function(vec) {
 }
 ```
 
-invoking the function
+invocando a funcao
 
 
 ``` r
@@ -382,9 +402,9 @@ avg_bmi
 ## [1] 23.13262
 ```
 
-#### Not available (NA)
+#### Valores ausentes (NA)
 
-Operations with NA lead to NA.
+Operacoes com NA resultam em NA.
 
 
 ``` r
@@ -397,7 +417,7 @@ y
 ## [1] NA
 ```
 
-Addressing NA with na.rm=TRUE
+Tratando NA com na.rm=TRUE
 
 
 ``` r
@@ -417,9 +437,13 @@ y
 ## [1] 11.5
 ```
 
-#### Plotting basic graphics
+## Visualização e Tipos Categóricos
+Foco: compreender quando usar gráficos básicos, fatores ordenados e discretização com `cut()`.  
+Slides: 13-16.
 
-defining variables
+#### Graficos basicos
+
+definindo variaveis
 
 
 ``` r
@@ -428,7 +452,7 @@ height <- c(1.75, 1.80, 1.65, 1.90, 1.74, 1.91)
 bmi <- weight/height^2 
 ```
 
-scatter plots
+graficos de dispersao
 
 
 ``` r
@@ -437,7 +461,7 @@ plot(height, weight)
 
 ![plot of chunk unnamed-chunk-33](fig/02-R-Basics/unnamed-chunk-33-1.png)
 
-#### Most functions contain many default parameters
+#### A maioria das funcoes possui muitos parametros padrao
 
 
 ``` r
@@ -446,7 +470,7 @@ plot(height, weight, pch=2)
 
 ![plot of chunk unnamed-chunk-34](fig/02-R-Basics/unnamed-chunk-34-1.png)
 
-#### Canvas for plotting is still active until a new plot
+#### A janela de plotagem permanece ativa ate um novo grafico
 
 
 ``` r
@@ -457,9 +481,9 @@ lines(hh, 22.5 * hh^2)
 
 ![plot of chunk unnamed-chunk-35](fig/02-R-Basics/unnamed-chunk-35-1.png)
 
-#### Factors
+#### Fatores
 
-Factors are used to handle categorical data.
+Fatores sao usados para representar dados categoricos.
 
 
 ``` r
@@ -473,7 +497,7 @@ fpain
 ## Levels: 0 < 1 < 2 < 3
 ```
 
-Levels provide correspondence between numerical values and categorical labels
+Os niveis fazem a correspondencia entre valores numericos e rotulos categoricos
 
 
 ``` r
@@ -486,9 +510,9 @@ fpain
 ## Levels: none < mild < medium < severe
 ```
 
-#### Convert height to factor with levels: small, medium, high
+#### Converter height em fator com niveis: pequeno, medio e alto
 
-coding setting element by element
+definindo elemento por elemento
 
 
 ``` r
@@ -512,7 +536,7 @@ lev
 ## Levels: small < medium < tall
 ```
 
-#### Using the function cut
+#### Usando a funcao cut
 
 
 ``` r
@@ -535,9 +559,13 @@ lev
 ## Levels: short < medium < tall
 ```
 
-#### Matrix
+## Estruturas de Dados em R
+Foco: diferenças entre matriz, lista e data frame, e quando cada estrutura é mais adequada.  
+Slides: 17-24.
 
-Matrices can be filled from vectors or data frames. 
+#### Matrizes
+
+Matrizes podem ser preenchidas a partir de vetores ou data frames. 
 
 
 ``` r
@@ -549,7 +577,7 @@ x
 ## [1] 1 2 3 4 5 6 7 8 9
 ```
 
-Converting a vector to matrix
+Convertendo um vetor em matriz
 
 
 ``` r
@@ -564,7 +592,7 @@ x
 ## [3,]    3    6    9
 ```
 
-#### Scalar multiplication
+#### Multiplicacao escalar
 
 
 ``` r
@@ -579,9 +607,9 @@ y
 ## [3,]    9   18   27
 ```
 
-#### Matrix manipulation
+#### Matrizes manipulation
 
-Converting a vector to a matrix by row
+Convertendo um vetor em matriz por linha
 
 
 ``` r
@@ -596,7 +624,7 @@ x
 ## [3,]    7    8    9
 ```
 
-transposing a matrix
+transpondo uma matriz
 
 
 ``` r
@@ -611,9 +639,9 @@ x
 ## [3,]    3    6    9
 ```
 
-#### Lists
+#### Listas
 
-Lists are used to work with "objects"
+Listas sao usadas para trabalhar com "objetos"
 
 
 ``` r
@@ -638,7 +666,7 @@ mybag
 ## [1] "a"
 ```
 
-#### Adding elements into a list
+#### Adicionando elementos em uma lista
 
 
 ``` r
@@ -664,7 +692,7 @@ mybag
 ## [1] "b"
 ```
 
-#### List slicing
+#### Fatiamento de lista
 
 
 ``` r
@@ -685,9 +713,9 @@ is.list(slice)
 ## [1] TRUE
 ```
 
-#### Lists: member reference
+#### Listas: member reference
 
-Picking the first element
+Selecionando o primeiro elemento
 
 
 ``` r
@@ -699,7 +727,7 @@ h
 ##  [1] 5260 5470 5640 6180 6390 6515 6805 7515 7515 8230 8770
 ```
 
-An element can be evaluated. In this case, it is a vector.
+Um elemento pode ser avaliado. Neste caso, e um vetor.
 
 
 ``` r
@@ -718,9 +746,9 @@ is.list(h)
 ## [1] FALSE
 ```
 
-#### Creating lists with attributes
+#### Criando listas com atributos
 
-They are properties on the list
+Sao propriedades da lista
 
 
 ``` r
@@ -742,7 +770,7 @@ mybag
 ## [1] "a"
 ```
 
-#### Adding, accessing, and removing elements
+#### Adicionando, acessando e removendo elementos
 
 
 ``` r
@@ -763,8 +791,8 @@ mybag
 ##  [1] 1350 1250 1755 1020  745 1835 1540 1540  725 1330 1435
 ```
 
-#### Data frames
-Data frames (tables) provide support for structured data. 
+#### Data frames (quadros de dados)
+Data frames (tabelas) oferecem suporte a dados estruturados. 
 
 
 ``` r
@@ -788,7 +816,7 @@ head(data)
 ## 6 6515 4680
 ```
 
-#### Adding a column in a data frame 
+#### Adicionando uma coluna em um data frame 
 
 
 ``` r
@@ -806,7 +834,7 @@ head(data)
 ## 6 6515 4680 11195
 ```
 
-#### Removing a column of a data frame 
+#### Removendo uma coluna de um data frame 
 
 
 ``` r
@@ -824,8 +852,12 @@ head(data)
 ## 6 4680 11195
 ```
 
-####  Reading a csv file
-There are many functions for reading CSV, Excel, and RData formats.
+## Leitura, Escrita e Filtros
+Foco: entrada/saída de dados e seleção de subconjuntos de forma reprodutível.  
+Slides: 25-27.
+
+#### Leitura de arquivo CSV
+Ha diversas funcoes para ler formatos CSV, Excel e RData.
 
 
 ``` r
@@ -850,9 +882,9 @@ head(wine)
 ## 6    1   14.39  1.87 2.45       14.6        96    2.50       2.52          0.30            1.98  5.25 1.02     3.58    1290
 ```
 
-####  saving in binary format 
+#### Salvando em formato binario
 
-saving a data frame
+salvando um data frame
 
 
 
@@ -860,14 +892,14 @@ saving a data frame
 save(wine, file="wine.RData")
 ```
 
-removing a data frame from memory
+removendo um data frame da memoria
 
 
 ``` r
 rm(wine)
 ```
 
-loading it
+carregando novamente
 
 
 ``` r
@@ -882,20 +914,20 @@ head(wine, 3)
 ## 3    1   14.37  1.95 2.50       16.8       113    3.85       3.49          0.24            2.18  7.80 0.86     3.45    1480
 ```
 
-####  exporting data.frame into csv file
+#### Exportando data.frame para arquivo CSV
 
 
 ``` r
 write.table(wine, file="wine.csv", row.names=FALSE, quote = FALSE, sep = ",")
 ```
 
-####  filtering vectors
+#### Filtrando vetores
 
 
 ``` r
 a <- c(5260,5470,5640,6180,6390,6515,6805,7515,7515,8230,8770)
 
-# logical vector
+# vetor logico
 bool <- (a > 7000)
 bool
 ```
@@ -906,7 +938,7 @@ bool
 
 
 ``` r
-# selecting elements from positions that are true
+# selecionando elementos nas posicoes verdadeiras
 a[bool] 
 ```
 
@@ -921,7 +953,7 @@ a[a > 7000]
 ```
 ## [1] 7515 7515 8230 8770
 ```
-####  filtering data frames
+#### Filtrando data frames
 
 
 ``` r
@@ -939,7 +971,7 @@ head(data[data$a > 7000,])
 ## 11 8770 7335
 ```
 
-####  filtering data frames (rows and columns)
+#### Filtrando data frames (linhas e colunas)
 
 
 ``` r
@@ -950,7 +982,7 @@ head(data[data$a > 7000,c(1)])
 ## [1] 7515 7515 8230 8770
 ```
 
-#### Benchmarking performance of matrix and data frames
+#### Comparando desempenho entre matriz e data frame
 
 
 ``` r
@@ -958,7 +990,7 @@ rheight <- rnorm(100000, 1.8, sd=0.2)
 rweight <- rnorm(100000, 72, sd=15)
 ```
 
-#### Computing a column at once in a data frame
+#### Calculando uma coluna de uma vez no data frame
 
 
 ``` r
@@ -972,7 +1004,7 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.001484156 secs
+## Time difference of 0.001696825 secs
 ```
 
 ``` r
@@ -983,7 +1015,7 @@ object.size(hw)
 ## 2400984 bytes
 ```
 
-#### Computing a column in a data frame cell by cell
+#### Calculando uma coluna no data frame celula a celula
 
 
 ``` r
@@ -997,10 +1029,10 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 12.72584 secs
+## Time difference of 12.06129 secs
 ```
 
-#### Converting a data frame to a matrix, processing it, and going back
+#### Convertendo data frame para matriz, processando e retornando
 
 
 ``` r
@@ -1021,15 +1053,19 @@ end_time - start_time
 ```
 
 ```
-## Time difference of 0.2377131 secs
+## Time difference of 0.220592 secs
 ```
 
+## Pipelines e Consultas em Tabelas
+Foco: operações de consulta, agregação e junção para análise tabular.  
+Slides: 28-34.
+
 #### Pipelines
-The operator |> creates a pipeline. 
+O operador |> cria um pipeline. 
 
-The first parameter of the next invoked function receives the data from the pipeline. 
+O primeiro parametro da proxima funcao recebe os dados do pipeline. 
 
-Library $dplyr$ contains a set of functions that support relational algebra operations.
+A biblioteca $dplyr$ contem funcoes que apoiam operacoes de algebra relacional.
 
 
 ``` r
@@ -1049,7 +1085,7 @@ flight_data <- read.table(text = "Year Quarter Flights Delays
                      header = TRUE,sep = "")  
 ```
 
-#### Displaying the data frame
+#### Exibindo o data frame
 
 
 ``` r
@@ -1066,7 +1102,7 @@ head(flight_data)
 ## 6 2017       2       9      3
 ```
 
-#### Basic Query
+#### Consulta basica
 
 
 
@@ -1086,7 +1122,7 @@ head(result)
 ## 8 2017       4      25
 ```
 
-#### Aggregated query
+#### Consulta agregada
 
 
 
@@ -1111,9 +1147,9 @@ head(result)
 ## 3 2018 13.50 1.2909944
 ```
 
-#### Table join
+#### Juncao de tabelas
 
-Store table
+Tabela de lojas
 
 
 ``` r
@@ -1132,7 +1168,7 @@ head(stores)
 ## 5          Tokyo    18
 ```
 
-Division table
+Tabela de divisoes
 
 
 ``` r
@@ -1151,9 +1187,9 @@ head(divisions)
 ## 5          Tokyo   Japan
 ```
 
-#### Merge function
+#### Funcao merge
 
-The function $merge$ can be used to join data frames. It can be used to produce inner, left, right, and outer joins. 
+A funcao $merge$ pode ser usada para juntar data frames. Ela permite juncoes internas, esquerda, direita e externas. 
 
 
 ``` r
@@ -1169,7 +1205,7 @@ head(stdiv)
 ## 4      Sao Paulo    12  Brazil
 ## 5          Tokyo    18   Japan
 ```
-#### Aggregating merged data frame
+#### Agregando data frame mesclado
 
 
 ``` r
@@ -1188,9 +1224,9 @@ head(result)
 ## 4      US     1     25
 ```
 
-#### Statistical analysis
-There are many statistical tests in R.
-One of the most used is the t-test. It checks if the mean of observations is not different from a theoretical value.
+#### Analise estatistica
+Ha muitos testes estatisticos no R.
+Um dos mais usados e o teste t. Ele verifica se a media observada difere de um valor teorico.
 
 
 ``` r
@@ -1218,10 +1254,14 @@ t.test(bmi, mu=22.5)
 ##  23.13262
 ```
 
-#### Python + R integration
+## Integração R + Python
+Foco: reaproveitar funções Python dentro de um fluxo R via `reticulate`.  
+Slides: 36.
+
+#### Integracao Python + R
 
 
-Python code at retic.py
+Codigo Python em retic.py
 ```text
 import pyreadr
 import pandas
@@ -1237,7 +1277,7 @@ def read_rdata_mem(data):
   return(data)
 ```
 
-Library reticulate enables seamless integration with Python
+A biblioteca reticulate permite integracao direta com Python
 
 ``` r
 library(reticulate)
@@ -1251,7 +1291,7 @@ x
 ```
 
 
-#### Python + R dataset integration
+#### Integracao de dados entre Python + R
 
 
 ``` r
@@ -1280,3 +1320,12 @@ head(dfm)
 ## 4 4 14 18
 ## 5 5 15 20
 ```
+
+## Referências
+Slides: 37.
+
+- Wickham, H., Cetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science* (2nd ed.). O'Reilly.
+- Chambers, J. M. (2016). *Extending R*. Chapman and Hall/CRC.
+- Ushey, K., Allaire, J., & Tang, Y. (2024). *reticulate: Interface to Python* (R package).
+
+

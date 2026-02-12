@@ -5,7 +5,17 @@
 Exemplos alinhados aos slides de `4-Regressao.pdf`.  
 Cada chunk indica o **slide** correspondente.
 
+## Como ler este roteiro
+Interprete os resultados em três ciclos:
+1. ajuste do modelo;
+2. diagnóstico/premissas;
+3. comparação de desempenho em teste.
+Esse ciclo ajuda a decidir quando aumentar complexidade.
+
 ## Configuração
+
+Carregamos pacotes para três frentes: modelagem (`daltoolbox`), visualização (`ggplot2`) e manipulação de dados (`dplyr`), além do conjunto de dados `Boston` em `MASS`.  
+Slides: 1–7.
 
 
 ``` r
@@ -16,11 +26,14 @@ library(dplyr)
 library(MASS)
 ```
 
-## Dataset e divisão treino/teste
+## Conjunto de dados e divisao treino/teste
+
+Usamos o `Boston Housing` para prever `medv` (valor mediano de imóveis).  
+Neste ponto, a meta é entender estrutura de variáveis antes de modelar.
 
 
 ``` r
-# Slide 10: Boston Housing Dataset
+# Slides 10: conjunto de dados Boston Housing
 data(Boston)
 str(Boston)
 ```
@@ -59,7 +72,7 @@ head(Boston)
 
 
 ``` r
-# Slide 10: preparação treino/teste
+# Slides 10: preparação treino/teste
 set.seed(1)
 split_random <- sample_random()
 split_random <- train_test(split_random, Boston, perc = 0.7)
@@ -70,7 +83,13 @@ rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
 mae <- function(y, yhat) mean(abs(y - yhat))
 ```
 
+As funções `rmse` e `mae` padronizam a comparação entre modelos ao longo do roteiro.  
+Slides: 10.
+
 ## Regressão linear simples
+
+Começamos com um modelo simples (`medv ~ lstat`) para criar a referência inicial de desempenho e interpretação.  
+Slides: 8 e 11.
 
 
 ``` r
@@ -118,9 +137,12 @@ mae(test$medv, pred_simple)
 ## [1] 4.440043
 ```
 
+O gráfico a seguir conecta o ajuste linear à nuvem de pontos, facilitando leitura de tendência e dispersão residual.  
+Slides: 17.
+
 
 ``` r
-# Slide 17: visualização do ajuste
+# Slides 17: visualização do ajuste
 ggplot(train, aes(x = lstat, y = medv)) +
   geom_point(alpha = 0.6) +
   geom_smooth(method = "lm", se = TRUE, color = "red") +
@@ -129,9 +151,14 @@ ggplot(train, aes(x = lstat, y = medv)) +
 
 ![plot of chunk plot_simple](fig/09-Regression/plot_simple-1.png)
 
+Na sequência, comparamos dois tipos de intervalo:
+- `prediction`: incerteza para uma nova observação individual;
+- `confidence`: incerteza para a média esperada.  
+Slides: 16.
+
 
 ``` r
-# Slide 16: intervalos de predição e confiança
+# Slides 16: intervalos de predição e confiança
 pred_int <- predict(model_lm_simple$model, newdata = test, interval = "prediction")
 head(pred_int)
 ```
@@ -161,9 +188,12 @@ head(conf_int)
 ## 10 18.30031 17.49877 19.10184
 ```
 
+Os diagnósticos clássicos (`Residuals vs Fitted`, `QQ-plot`, `Scale-Location`, `Residuals vs Leverage`) ajudam a verificar premissas do modelo linear.  
+Slides: 18.
+
 
 ``` r
-# Slide 18: diagnóstico visual
+# Slides 18: diagnóstico visual
 par(mfrow = c(2, 2))
 plot(model_lm_simple$model)
 ```
@@ -175,6 +205,10 @@ par(mfrow = c(1, 1))
 ```
 
 ## Regressão polinomial
+
+Agora relaxamos a linearidade com termo quadrático para capturar curvatura entre `lstat` e `medv`.  
+A comparação via ANOVA mostra se o ganho de complexidade é estatisticamente justificável.  
+Slides: 21–26.
 
 
 ``` r
@@ -222,9 +256,12 @@ anova(model_lm_simple$model, model_lm_poly2$model)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
+O gráfico abaixo permite inspeção visual direta da curvatura aprendida pelo modelo polinomial.  
+Slide: 23.
+
 
 ``` r
-# Slide 23: visualização da regressão polinomial
+# Slides 23: visualização da regressão polinomial
 grid <- data.frame(lstat = seq(min(train$lstat), max(train$lstat), length.out = 200))
 grid$pred <- predict(model_lm_poly2, newdata = grid)
 
@@ -237,6 +274,9 @@ ggplot(train, aes(x = lstat, y = medv)) +
 ![plot of chunk plot_poly](fig/09-Regression/plot_poly-1.png)
 
 ## Regressão múltipla
+
+Entramos em regressão múltipla para combinar variáveis explicativas e reduzir erro preditivo fora da amostra.  
+Slides: 27–29.
 
 
 ``` r
@@ -286,9 +326,12 @@ mae(test$medv, pred_multi)
 ## [1] 3.707664
 ```
 
+A ANOVA entre modelos aninhados testa se incluir `nox` adiciona poder explicativo relevante.  
+Slide: 30.
+
 
 ``` r
-# Slide 30: ANOVA para regressão múltipla
+# Slides 30: ANOVA para regressão múltipla
 model_lm_multi2 <- reg_lm(formula = medv ~ lstat + rm + ptratio + nox)
 model_lm_multi2 <- fit(model_lm_multi2, train)
 anova(model_lm_multi$model, model_lm_multi2$model)
@@ -304,17 +347,22 @@ anova(model_lm_multi$model, model_lm_multi2$model)
 ## 2    349 9187.1  1    12.813 0.4868 0.4858
 ```
 
+Em seguida, calculamos VIF para monitorar multicolinearidade entre preditores, que pode inflar variâncias dos coeficientes.  
+Slide: 31.
+
 
 ``` r
-# Slide 31: multicolinearidade (VIF)
+# Slides 31: multicolinearidade (VIF)
 vif_calc <- function(model) {
   X <- model.matrix(model)[, -1, drop = FALSE]
   vifs <- numeric(ncol(X))
   names(vifs) <- colnames(X)
   for (j in seq_len(ncol(X))) {
+    # Regride cada preditor nos demais para obter R^2_j
     y <- X[, j]
     x <- X[, -j, drop = FALSE]
     r2 <- summary(lm(y ~ x))$r.squared
+    # VIF_j = 1 / (1 - R^2_j)
     vifs[j] <- 1 / (1 - r2)
   }
   vifs
@@ -327,9 +375,12 @@ vif_calc(model_lm_multi2$model)
 ## 2.436583 1.771009 1.241960 1.546373
 ```
 
+Esta visualização transforma o modelo em superfície de resposta para facilitar interpretação conjunta de duas variáveis contínuas.  
+Slide: 32.
+
 
 ``` r
-# Slide 32: superfície de regressão múltipla
+# Slides 32: superfície de regressão múltipla
 grid2 <- expand.grid(
   lstat = seq(min(train$lstat), max(train$lstat), length.out = 30),
   rm = seq(min(train$rm), max(train$rm), length.out = 30),
@@ -345,9 +396,12 @@ ggplot(grid2, aes(x = lstat, y = rm, z = pred)) +
 
 ![plot of chunk surface](fig/09-Regression/surface-1.png)
 
+Por fim, ajustamos um modelo com todos os preditores para ilustrar cenário de maior dimensionalidade e discutir risco de overfitting.  
+Slide: 33.
+
 
 ``` r
-# Slide 33: alta dimensionalidade
+# Slides 33: alta dimensionalidade
 model_lm_full <- reg_lm(formula = medv ~ .)
 model_lm_full <- fit(model_lm_full, train)
 summary(model_lm_full$model)
@@ -388,6 +442,9 @@ summary(model_lm_full$model)
 
 ## Modelos supervisionados (DALToolbox)
 
+Esta seção conecta a taxonomia de regressão dos slides com modelos não lineares/mais flexíveis, mantendo protocolo de treino e teste.  
+Slides: 7, 19–20.
+
 
 ``` r
 # Slides 19–20: extensões da regressão linear (modelos mais complexos)
@@ -400,9 +457,13 @@ boston_train <- split_random_m$train
 boston_test <- split_random_m$test
 ```
 
+Para leitura didática, em cada modelo observe principalmente:
+1. diferença entre métricas de treino e teste (generalização);
+2. relação entre complexidade do modelo e erro preditivo.
+
 
 ``` r
-# Slide 7: taxonomia (árvore de regressão)
+# Slides 7: taxonomia (árvore de regressão)
 model_dtree <- reg_dtree("medv")
 model_dtree <- fit(model_dtree, boston_train)
 train_pred <- predict(model_dtree, boston_train)
@@ -426,7 +487,7 @@ evaluate(model_dtree, boston_test[, "medv"], test_pred)$metrics
 
 
 ``` r
-# Slide 7: taxonomia (kNN para regressão)
+# Slides 7: taxonomia (kNN para regressão)
 model_knn <- reg_knn("medv", k = 5)
 model_knn <- fit(model_knn, boston_train)
 train_pred <- predict(model_knn, boston_train)
@@ -450,7 +511,7 @@ evaluate(model_knn, boston_test[, "medv"], test_pred)$metrics
 
 
 ``` r
-# Slide 7: taxonomia (MLP para regressão)
+# Slides 7: taxonomia (MLP para regressão)
 model_mlp <- reg_mlp("medv", size = 5, decay = 0.54)
 model_mlp <- fit(model_mlp, boston_train)
 train_pred <- predict(model_mlp, boston_train)
@@ -474,7 +535,7 @@ evaluate(model_mlp, boston_test[, "medv"], test_pred)$metrics
 
 
 ``` r
-# Slide 7: taxonomia (Random Forest para regressão)
+# Slides 7: taxonomia (Random Forest para regressão)
 model_rf <- reg_rf("medv", mtry = 7, ntree = 30)
 model_rf <- fit(model_rf, boston_train)
 train_pred <- predict(model_rf, boston_train)
@@ -498,7 +559,7 @@ evaluate(model_rf, boston_test[, "medv"], test_pred)$metrics
 
 
 ``` r
-# Slide 7: taxonomia (SVR)
+# Slides 7: taxonomia (SVR)
 model_svm <- reg_svm("medv", epsilon = 0.2, cost = 40.000)
 model_svm <- fit(model_svm, boston_train)
 train_pred <- predict(model_svm, boston_train)
@@ -522,7 +583,7 @@ evaluate(model_svm, boston_test[, "medv"], test_pred)$metrics
 
 
 ``` r
-# Slide 19: extensões e ajuste de modelos (tuning)
+# Slides 19: extensões e ajuste de modelos (tuning)
 tune <- reg_tune(
   reg_svm("medv"),
   ranges = list(seq(0, 1, 0.2), cost = seq(20, 100, 20), kernel = c("radial"))
@@ -547,9 +608,14 @@ evaluate(model_tuned, boston_test[, "medv"], test_pred)$metrics
 ## 1 16.50897 0.141226 0.7256526
 ```
 
+Resumo pedagógico: o roteiro progride de um modelo linear simples para modelos mais expressivos, sempre validando ganho por desempenho e interpretabilidade.  
+Isso ajuda a justificar tecnicamente quando vale sair de regressão linear clássica para métodos de maior complexidade.
+
 ## Referências
 - Montgomery, D. C., Peck, E. A., Vining, G. (2012). *Introduction to Linear Regression Analysis*.
 - James, G., Witten, D., Hastie, T., Tibshirani, R. (2021). *An Introduction to Statistical Learning*.
 - Draper, N. R., Smith, H. (1998). *Applied Regression Analysis*.
 - Breiman, L. (2001). Random Forests. *Machine Learning*.
 - Drucker, H. et al. (1997). Support Vector Regression Machines.
+
+

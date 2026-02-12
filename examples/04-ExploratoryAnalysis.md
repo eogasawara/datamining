@@ -5,6 +5,12 @@
 Este roteiro apresenta exemplos práticos alinhados aos slides de `2-AnaliseExploratoria.pdf`.  
 Cada chunk inclui um comentário com o **número do slide** correspondente.
 
+## Como ler este roteiro
+Use cada bloco com três perguntas-guia:
+1. o que a visualização revela sobre distribuição/separação;
+2. qual hipótese ela sugere para modelagem;
+3. qual limitação ela possui (escala, sobreposição, outliers).
+
 
 ## Configuração
 
@@ -28,11 +34,11 @@ font <- theme(text = element_text(size = 16))
 # plot_correlation(), plot_pair(), plot_pair_adv(), plot_parallel(), plot_pixel()
 ```
 
-## Dataset Iris
+## Conjunto de Dados Iris
 
 
 ``` r
-# Slide 11: O Dataset Iris
+# Slides 11: O conjunto de dados Iris
 head(iris[c(1:2, 51:52, 101:102), ])
 ```
 
@@ -62,7 +68,7 @@ sum
 
 
 ``` r
-# Slide 14: quartis e IQR
+# Slides 14: quartis e IQR
 IQR <- sum["3rd Qu."] - sum["1st Qu."]
 IQR
 ```
@@ -76,7 +82,7 @@ IQR
 
 
 ``` r
-# Slide 18: histograma
+# Slides 18: histograma
 grf <- plot_hist(data.frame(Sepal.Length = iris$Sepal.Length),
                  label_x = "Sepal Length", color = colors[1]) + font
 plot(grf)
@@ -102,7 +108,7 @@ grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 
 
 ``` r
-# Slide 17: densidade
+# Slides 17: densidade
 grf1 <- plot_density(data.frame(Sepal.Length = iris$Sepal.Length),
                      label_x = "Sepal.Length", color = colors[1]) + font
 grf2 <- plot_density(data.frame(Sepal.Width = iris$Sepal.Width),
@@ -120,7 +126,7 @@ grid.arrange(grf1, grf2, grf3, grf4, ncol = 2)
 
 
 ``` r
-# Slide 24: boxplot do Iris
+# Slides 24: boxplot do Iris
 grf <- plot_boxplot(iris, colors = colors[1]) + font
 plot(grf)
 ```
@@ -131,7 +137,7 @@ plot(grf)
 
 
 ``` r
-# Slide 25: densidade com rótulo de classe
+# Slides 25: densidade com rótulo de classe
 grfA <- plot_density_class(data.frame(Species = iris$Species, Sepal.Length = iris$Sepal.Length),
                            class_label = "Species", label_x = "Sepal.Length", color = colors[c(1:3)]) + font
 grfB <- plot_density_class(data.frame(Species = iris$Species, Sepal.Width = iris$Sepal.Width),
@@ -147,7 +153,7 @@ grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 
 
 ``` r
-# Slide 26: boxplot com rótulo de classe
+# Slides 26: boxplot com rótulo de classe
 grfA <- plot_boxplot_class(data.frame(Species = iris$Species, Sepal.Length = iris$Sepal.Length),
                            class_label = "Species", label_x = "Sepal.Length", color = colors[c(1:3)]) + font
 grfB <- plot_boxplot_class(data.frame(Species = iris$Species, Sepal.Width = iris$Sepal.Width),
@@ -165,7 +171,7 @@ grid.arrange(grfA, grfB, grfC, grfD, ncol = 2, nrow = 2)
 
 
 ``` r
-# Slide 28: scatter plot
+# Slides 28: grafico de dispersao
 grf <- plot_scatter(data.frame(x = iris$Sepal.Length, value = iris$Sepal.Width, variable = "iris"),
                     label_x = "Sepal.Length") +
   theme(legend.position = "none") + font
@@ -176,7 +182,7 @@ plot(grf)
 
 
 ``` r
-# Slide 29: scatter plot com classe
+# Slides 29: grafico de dispersao com classe
 grf <- plot_scatter(data.frame(x = iris$Sepal.Length, value = iris$Sepal.Width, variable = iris$Species),
                     label_x = "Sepal.Length", label_y = "Sepal.Width", colors = colors[1:3]) + font
 plot(grf)
@@ -188,7 +194,7 @@ plot(grf)
 
 
 ``` r
-# Slide 31: correlograma
+# Slides 31: correlograma
 grf <- plot_correlation(iris[, c("Sepal.Width", "Sepal.Length", "Petal.Width", "Petal.Length")])
 grf
 ```
@@ -197,7 +203,7 @@ grf
 
 
 ``` r
-# Slide 32: matriz de dispersão
+# Slides 32: matriz de dispersão
 grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
 print(grf)
 ```
@@ -206,7 +212,7 @@ print(grf)
 
 
 ``` r
-# Slide 33: matriz de dispersão com classe
+# Slides 33: matriz de dispersão com classe
 grf <- plot_pair(data = iris, cnames = colnames(iris)[1:4], clabel = "Species", title = "Iris", colors = colors[1:3])
 print(grf)
 ```
@@ -215,7 +221,7 @@ print(grf)
 
 
 ``` r
-# Slide 34: matriz de dispersão avançada
+# Slides 34: matriz de dispersão avançada
 grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", colors = colors[1])
 grf
 ```
@@ -224,7 +230,7 @@ grf
 
 
 ``` r
-# Slide 35: matriz de dispersão avançada com classe
+# Slides 35: matriz de dispersão avançada com classe
 grf <- plot_pair_adv(data = iris, cnames = colnames(iris)[1:4], title = "Iris", clabel = "Species", colors = colors[1:3])
 grf
 ```
@@ -235,7 +241,7 @@ grf
 
 
 ``` r
-# Slide 37: coordenadas paralelas
+# Slides 37: coordenadas paralelas
 grf <- plot_parallel(data = iris, columns = c(1:4), group = 5, colors = colors[1:3]) + font
 plot(grf)
 ```
@@ -244,7 +250,7 @@ plot(grf)
 
 
 ``` r
-# Slide 38: visualização orientada a pixels
+# Slides 38: visualização orientada a pixels
 grf <- plot_pixel(as.matrix(iris[, 1:4]), colors = brewer.pal(11, "Spectral"), title = "Iris")
 plot(grf)
 ```
@@ -266,7 +272,7 @@ faces(isample, labels = labels, print.info = FALSE, cex = 1)
 
 
 ``` r
-# Slide 42: Chernoff faces com classe
+# Slides 42: Chernoff faces com classe
 set.seed(1)
 sample_rows <- sample(1:nrow(iris), 25)
 isample <- iris[sample_rows,]
@@ -284,4 +290,6 @@ faces(isample, labels = labels, print.info = FALSE, cex = 1)
 - Friendly, M. (2002). Corrgrams: Exploratory displays for correlation matrices. *The American Statistician*.
 - Inselberg, A. (1985). The plane with parallel coordinates. *The Visual Computer*.
 - Chernoff, H. (1973). The use of faces to represent points in k-dimensional space graphically. *JASA*.
+
+
 

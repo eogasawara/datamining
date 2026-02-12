@@ -1,6 +1,6 @@
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
-# The easiest way use clustering in daltoolbox is by installing basic packages
+# Forma mais simples de usar clustering no daltoolbox: instalando pacotes basicos
 #install.packages("daltoolbox")
 #install.packages("ggplot2")
 #install.packages("cluster")
@@ -15,7 +15,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
   library(e1071)
   library(igraph)
 
-# Slide 4: dataset de exemplo
+# Slides 4: conjunto de dados de exemplo
 iris <- datasets::iris
 head(iris)
 
@@ -31,14 +31,14 @@ table(clu_km)
 eval_km <- daltoolbox::evaluate(model_km, clu_km, iris$Species)
 eval_km
 
-# Slide 29: normalizacao
+# Slides 29: normalizacao
 iris_minmax <- transform(daltoolbox::fit(minmax(), iris), iris)
 model_km <- daltoolbox::fit(model_km, iris_minmax[, 1:4])
 clu_km <- daltoolbox::cluster(model_km, iris_minmax[, 1:4])
 eval_km_norm <- daltoolbox::evaluate(model_km, clu_km, iris_minmax$Species)
 eval_km_norm
 
-# Slide 30–31: K-medoids (PAM)
+# Slides 30–31: K-medoids (PAM)
 model_pam <- cluster_pam(k = 3)
 model_pam <- daltoolbox::fit(model_pam, X)
 clu_pam <- daltoolbox::cluster(model_pam, X)
@@ -47,7 +47,7 @@ table(clu_pam)
 eval_pam <- daltoolbox::evaluate(model_pam, clu_pam, iris$Species)
 eval_pam
 
-# Slides 32–35: Clustering hierarquico e dendrograma (base R)
+# Slides 32–35: clustering hierarquico e dendrograma (R base)
 # Distancia euclidiana e metodo de Ward
 model_hc <- cluster_hclust(k = 3, method = "ward.D2", dist = "euclidean", scale = TRUE)
 model_hc <- daltoolbox::fit(model_hc, X)

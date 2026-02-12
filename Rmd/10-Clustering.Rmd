@@ -7,9 +7,14 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ## Visão Geral
 Clustering é aprendizado não supervisionado que agrupa observações por similaridade. A qualidade depende de escolha de métricas, escalas e do algoritmo.  
 
+## Como ler este roteiro
+Use a sequência abaixo para interpretar melhor os resultados:
+1. escolha do paradigma (particional, hierárquico, densidade, probabilístico);
+2. efeito de escala/normalização;
+3. avaliação e seleção do modelo.
 
 ```{r install_notes}
-# The easiest way use clustering in daltoolbox is by installing basic packages
+# Forma mais simples de usar clustering no daltoolbox: instalando pacotes basicos
 #install.packages("daltoolbox")
 #install.packages("ggplot2")
 #install.packages("cluster")
@@ -19,6 +24,7 @@ Clustering é aprendizado não supervisionado que agrupa observações por simil
 ```
 
 Slides: 1–12.
+
 ## Configuração
 
 ```{r libraries}
@@ -31,7 +37,7 @@ Slides: 1–12.
 ```
 
 ```{r s04_data_prep}
-# Slide 4: dataset de exemplo
+# Slides 4: conjunto de dados de exemplo
 iris <- datasets::iris
 head(iris)
 
@@ -59,7 +65,7 @@ Normalização reduz o efeito de escalas diferentes e pode melhorar a separaçã
 Slides: 29.
 
 ```{r s29_kmeans_norm}
-# Slide 29: normalizacao
+# Slides 29: normalizacao
 iris_minmax <- transform(daltoolbox::fit(minmax(), iris), iris)
 model_km <- daltoolbox::fit(model_km, iris_minmax[, 1:4])
 clu_km <- daltoolbox::cluster(model_km, iris_minmax[, 1:4])
@@ -72,7 +78,7 @@ Semelhante ao k-means, mas usa medoids (pontos reais) como centros, sendo mais r
 Slides: 30–31.
 
 ```{r s30_31_pam}
-# Slide 30–31: K-medoids (PAM)
+# Slides 30–31: K-medoids (PAM)
 model_pam <- cluster_pam(k = 3)
 model_pam <- daltoolbox::fit(model_pam, X)
 clu_pam <- daltoolbox::cluster(model_pam, X)
@@ -87,7 +93,7 @@ Constrói uma árvore de agrupamentos (dendrograma). Pode ser aglomerativo (bott
 Slides: 32–35.
 
 ```{r s32_35_hclust}
-# Slides 32–35: Clustering hierarquico e dendrograma (base R)
+# Slides 32–35: clustering hierarquico e dendrograma (R base)
 # Distancia euclidiana e metodo de Ward
 model_hc <- cluster_hclust(k = 3, method = "ward.D2", dist = "euclidean", scale = TRUE)
 model_hc <- daltoolbox::fit(model_hc, X)
@@ -186,6 +192,8 @@ comm
 - Fraley, C., & Raftery, A. (2002). Model-based clustering. *JASA*, 97(458), 611–631.
 - Zadeh, L. (1965). Fuzzy sets. *Information and Control*, 8(3), 338–353.
 - Blondel, V. et al. (2008). Fast unfolding of communities in large networks. *J. Statistical Mechanics*.
+
+
 
 
 

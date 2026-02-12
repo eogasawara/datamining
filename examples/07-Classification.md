@@ -6,6 +6,13 @@
 A classificação é uma tarefa de aprendizado supervisionado que aprende a mapear vetores de atributos para rótulos de classe. Ela envolve duas etapas: construção do modelo a partir de dados rotulados e aplicação do modelo a novos casos.  
 Slides: 1–6.
 
+## Como ler este roteiro
+Use este roteiro como comparação incremental de modelos:
+1. estabeleça baseline (Regra Zero);
+2. avance para modelos mais expressivos;
+3. compare sempre matriz de confusão e métricas no conjunto de teste.
+Assim, o ganho de desempenho fica conectado ao custo de complexidade.
+
 ## Configuração
 
 
@@ -13,7 +20,7 @@ Slides: 1–6.
 # Slides 1–3: contexto e definição
 library(daltoolbox)
 
-# Slide 9: conjunto de dados de exemplo
+# Slides 9: conjunto de dados de exemplo
 iris <- datasets::iris
 head(iris)
 ```
@@ -136,7 +143,7 @@ Slides: 10.
 
 
 ``` r
-# Slide 10: Regra Zero (baseline)
+# Slides 10: Regra Zero (baseline)
 model_majority <- cla_majority("Species", slevels)
 model_majority <- fit(model_majority, iris_train)
 res_majority <- eval_model(model_majority, iris_train, iris_test, "Species")
@@ -321,3 +328,5 @@ Métodos avançados (SVM, ensembles, boosting, tuning e seleção de atributos) 
 - Breiman, L. (2001). Random Forests. *Machine Learning*, 45(1), 5–32.
 - Cover, T., & Hart, P. (1967). Nearest neighbor pattern classification. *IEEE Trans. Information Theory*, 13(1), 21–27.
 - Hosmer, D., Lemeshow, S., & Sturdivant, R. (2013). *Applied Logistic Regression* (3rd ed.). Wiley.
+
+

@@ -11,7 +11,7 @@ library(rpart)
 library(adabag)
 library(xgboost)
 
-# Dataset base
+# Conjunto de dados base
 iris <- datasets::iris
 head(iris)
 
@@ -93,7 +93,7 @@ model_rf <- cla_rf("Species", slevels, mtry = 3, ntree = 50)
 model_rf <- fit(model_rf, iris_train)
 res_rf <- eval_model(model_rf, iris_train, iris_test, "Species")
 
-# Slide 25: Boosting
+# Slides 25: Boosting
 set.seed(1)
 model_boost <- cla_boosting("Species", mfinal = 50)
 model_boost <- fit(model_boost, iris_train)
@@ -105,7 +105,7 @@ model_xgb <- fit(model_xgb, iris_train)
 res_xgb <- eval_model(model_xgb, iris_train, iris_test, "Species")
 
 # Slides 26–36: selecao de atributos
-# Dataset binario para alguns metodos
+# Conjunto de dados binario para alguns metodos
 iris_bin <- iris
 tr_fg_bin <- feature_generation(
   IsVersicolor = ifelse(Species == "versicolor", "versicolor", "not_versicolor")
@@ -118,7 +118,7 @@ if (!inherits(tmp_bin, "try-error") && "IsVersicolor" %in% names(tmp_bin)) {
 }
 iris_bin$IsVersicolor <- factor(iris_bin$IsVersicolor)
 
-# Slide 32: Information Gain (discretizacao simples)
+# Slides 32: Information Gain (discretizacao simples)
 entropy <- function(y) {
   p <- prop.table(table(y))
   -sum(p * log2(p))
@@ -160,14 +160,14 @@ ig_scores <- sapply(iris[, 1:4], info_gain, y = iris$Species)
 ig_scores[!is.finite(ig_scores)] <- 0
 ig_scores
 
-# Slide 33: Forward Stepwise Selection (glm binario)
+# Slides 33: Forward Stepwise Selection (glm binario)
 full_glm <- glm(IsVersicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
                 data = iris_bin, family = binomial)
 null_glm <- glm(IsVersicolor ~ 1, data = iris_bin, family = binomial)
 step_model <- step(null_glm, scope = list(lower = null_glm, upper = full_glm), direction = "forward", trace = 0)
 summary(step_model)
 
-# Slide 34: LASSO (glmnet)
+# Slides 34: LASSO (glmnet)
 iris_lasso <- iris_bin[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "IsVersicolor")]
 iris_lasso$IsVersicolor <- factor(iris_lasso$IsVersicolor)
 set.seed(1)
@@ -175,7 +175,7 @@ model_lasso <- cla_glmnet("IsVersicolor", lambda = "lambda.min")
 model_lasso <- fit(model_lasso, iris_lasso)
 coef(model_lasso$model, s = "lambda.min")
 
-# Slide 35: CFS (correlation-based)
+# Slides 35: CFS (correlation-based)
 # CFS simples: correlacao com classe (numerica) e penalidade por correlacao entre features
 class_num <- as.numeric(iris$Species)
 cor_cf <- abs(cor(iris[, 1:4], class_num))
@@ -185,7 +185,7 @@ mean_ff <- mean(cor_ff[upper.tri(cor_ff)])
 cfs_score <- mean_cf / sqrt(mean_ff + 1e-6)
 cfs_score
 
-# Slide 36: RELIEF simplificado (binario)
+# Slides 36: RELIEF simplificado (binario)
 relief_simple <- function(df, target, m = 50) {
   X <- as.matrix(df)
   y <- target
@@ -227,7 +227,7 @@ multinom_model <- fit(multinom_model, iris_train)
 multinom_pred <- predict(multinom_model, iris_test)
 mean(multinom_pred == iris_test$Species)
 
-# Slide 41: semi-supervisionado (pseudo-label simples)
+# Slides 41: semi-supervisionado (pseudo-label simples)
 set.seed(1)
 mask <- sample(seq_len(nrow(iris_train)), size = floor(0.5 * nrow(iris_train)))
 semi_train <- iris_train

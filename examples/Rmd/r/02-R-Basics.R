@@ -233,11 +233,11 @@ write.table(wine, file="wine.csv", row.names=FALSE, quote = FALSE, sep = ",")
 
 a <- c(5260,5470,5640,6180,6390,6515,6805,7515,7515,8230,8770)
 
-# logical vector
+# vetor logico
 bool <- (a > 7000)
 bool
 
-# selecting elements from positions that are true
+# selecionando elementos nas posicoes verdadeiras
 a[bool] 
 
 a[a > 7000] 

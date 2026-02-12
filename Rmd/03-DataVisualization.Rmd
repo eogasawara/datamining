@@ -9,6 +9,12 @@ Este roteiro operacionaliza os exemplos do arquivo `03-DataVisualization.pdf`, c
 O objetivo e mostrar como a escolha do grafico muda a interpretacao dos dados e como o `daltoolbox` simplifica a interface com o `ggplot2` (Wickham, 2016).  
 Slides: 1.
 
+## Como ler este roteiro
+Para cada grafico, avalie sempre:
+1. qual pergunta o grafico responde;
+2. qual variavel esta no eixo x/y (ou categoria);
+3. qual a principal limitacao visual daquele tipo de representacao.
+
 ## Configuracao e Bibliotecas
 Slides: 2-7.
 
@@ -189,7 +195,7 @@ grf <- plot_density(data, label_x = "normal", color = colors[1]) + font
 plot(grf)
 ```
 
-### Box Plot
+### Boxplot
 Resumo robusto com mediana, quartis e possiveis outliers.  
 Slides: 21.
 
@@ -213,3 +219,5 @@ Slides: 24.
 - Wickham, H., Cetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science* (2nd ed.). O'Reilly.
 - Wilke, C. O. (2019). *Fundamentals of Data Visualization*. O'Reilly.
 - Brewer, C. A. (n.d.). ColorBrewer 2.0. https://colorbrewer2.org
+
+

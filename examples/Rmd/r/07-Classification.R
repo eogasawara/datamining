@@ -3,7 +3,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 # Slides 1–3: contexto e definição
 library(daltoolbox)
 
-# Slide 9: conjunto de dados de exemplo
+# Slides 9: conjunto de dados de exemplo
 iris <- datasets::iris
 head(iris)
 table(iris$Species)
@@ -89,7 +89,7 @@ pred_to_label <- function(pred) {
   as.vector(pred)
 }
 
-# Slide 10: Regra Zero (baseline)
+# Slides 10: Regra Zero (baseline)
 model_majority <- cla_majority("Species", slevels)
 model_majority <- fit(model_majority, iris_train)
 res_majority <- eval_model(model_majority, iris_train, iris_test, "Species")

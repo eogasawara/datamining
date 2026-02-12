@@ -1,36 +1,35 @@
 
 
-#### Plotting charts
+# Visualizacao de Dados
+
+## Visao Geral
+Este roteiro operacionaliza os exemplos do arquivo `03-DataVisualization.pdf`, conectando cada trecho de codigo ao slide de origem.  
+O objetivo e mostrar como a escolha do grafico muda a interpretacao dos dados e como o `daltoolbox` simplifica a interface com o `ggplot2` (Wickham, 2016).  
+Slides: 1.
+
+## Como ler este roteiro
+Para cada grafico, avalie sempre:
+1. qual pergunta o grafico responde;
+2. qual variavel esta no eixo x/y (ou categoria);
+3. qual a principal limitacao visual daquele tipo de representacao.
+
+## Configuracao e Bibliotecas
+Slides: 2-7.
 
 
 ``` r
-# The easiest way to get ggplot2 is to install the whole tidyverse
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-```
+# Instalacao (executar apenas uma vez)
+# install.packages("tidyverse")
+# install.packages("ggplot2")
+# install.packages("RColorBrewer")
 
-
-#### ggplot easy encapsulation through daltoolbox
-
-
-``` r
 library(daltoolbox)
 library(ggplot2)
-```
-
-#### Color Brewer R Package
-
-
-``` r
-#install.packages("RColorBrewer")
 library(RColorBrewer)
-colors <- brewer.pal(4, 'Set1')
 ```
 
-
-#### Basic setup for examples
-
-Iris datasets
+Neste conjunto de exemplos, usamos o `iris` como base didatica para manter comparabilidade entre graficos.  
+Slides: 7.
 
 
 ``` r
@@ -44,16 +43,18 @@ head(iris, 3)
 ## 3          4.7         3.2          1.3         0.2  setosa
 ```
 
-Options from graphics: colors and font size
+Configuramos paleta qualitativa do ColorBrewer para classes e um tema com fonte maior para leitura em aula.  
+Slides: 5-6.
 
 
 ``` r
-colors <- brewer.pal(4, 'Set1')
-font <- theme(text = element_text(size=16))
+colors <- brewer.pal(4, "Set1")
+font <- theme(text = element_text(size = 16))
 ```
 
-#### Scatter plot
-
+## Grafico de Dispersao
+Mostra relacao entre duas variaveis continuas e separacao por classe.  
+Slides: 8.
 
 
 ``` r
@@ -62,78 +63,74 @@ data <- data.frame(
   value = iris$Sepal.Width,
   variable = iris$Species
 )
-#head(data)
-grf <- plot_scatter(data, label_x = "Sepal.Length", label_y = "Sepal.Width", colors=colors[1:3]) + font
+grf <- plot_scatter(data, label_x = "Sepal.Length", label_y = "Sepal.Width", colors = colors[1:3]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-6](fig/03-DataVisualization/unnamed-chunk-6-1.png)
+![plot of chunk s08_scatter](fig/03-DataVisualization/s08_scatter-1.png)
 
-#### Bar plot
-
+## Grafico de Barras
+Resume uma estatistica por categoria; aqui usamos media por especie.  
+Slides: 9.
 
 
 ``` r
 agg <- aggregation("Species", Sepal.Length = mean(Sepal.Length))
 data <- transform(agg, iris)
-#head(data)
-grf <- plot_bar(data, colors=colors[1:3]) + font
+grf <- plot_bar(data, colors = colors[1:3]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-7](fig/03-DataVisualization/unnamed-chunk-7-1.png)
+![plot of chunk s09_bar](fig/03-DataVisualization/s09_bar-1.png)
 
-
-#### Lollipop plot
-
+## Lollipop
+Alternativa ao grafico de barras, com menos area preenchida e foco na magnitude.  
+Slides: 10.
 
 
 ``` r
 agg <- aggregation("Species", Sepal.Length = mean(Sepal.Length))
 data <- transform(agg, iris)
-#head(data)
-grf <- plot_lollipop(data, colors=colors[1], max_value_gap=0.2) + font + coord_flip() 
+grf <- plot_lollipop(data, colors = colors[1], max_value_gap = 0.2) + font + coord_flip()
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-8](fig/03-DataVisualization/unnamed-chunk-8-1.png)
+![plot of chunk s10_lollipop](fig/03-DataVisualization/s10_lollipop-1.png)
 
-#### Bar graph with error
-
+## Barras com Erro
+Acrescenta incerteza (desvio-padrao) ao valor medio, evitando leitura excessivamente deterministica.  
+Slides: 11.
 
 
 ``` r
 agg <- aggregation("Species", mean = mean(Sepal.Length), sd = sd(Sepal.Length))
 data <- transform(agg, iris)
-#head(data)
-grf <- plot_bar(data, colors=colors[1], alpha=1) + font
+grf <- plot_bar(data, colors = colors[1], alpha = 1) + font
 grf <- grf + geom_errorbar(data = data, inherit.aes = FALSE,
-                           aes(x=Species, ymin=mean-sd, ymax=mean+sd), 
-                           width=0.2, colour="darkred", alpha=0.8, size=1.1) 
+                           aes(x = Species, ymin = mean - sd, ymax = mean + sd),
+                           width = 0.2, colour = "darkred", alpha = 0.8, size = 1.1)
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-9](fig/03-DataVisualization/unnamed-chunk-9-1.png)
+![plot of chunk s11_bar_error](fig/03-DataVisualization/s11_bar_error-1.png)
 
-
-
-#### Pie plot
-
+## Pizza
+Util para composicao simples; para muitas categorias, barras costumam ser mais legiveis.  
+Slides: 12.
 
 
 ``` r
 agg <- aggregation("Species", n = n())
 data <- transform(agg, iris)
-#head(data)
-grf <- plot_pieplot(data, colors=colors[1:3]) + font
+grf <- plot_pieplot(data, colors = colors[1:3]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-10](fig/03-DataVisualization/unnamed-chunk-10-1.png)
+![plot of chunk s12_pie](fig/03-DataVisualization/s12_pie-1.png)
 
-
-#### Grouped bar
-
+## Barras Agrupadas
+Permite comparar mais de uma metrica para cada categoria.  
+Slides: 13.
 
 
 ``` r
@@ -143,16 +140,15 @@ agg <- aggregation("Species",
 )
 data <- transform(agg, iris)
 
-#head(data)
-grf <- plot_groupedbar(data, colors=colors[1:2]) + font
+grf <- plot_groupedbar(data, colors = colors[1:2]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-11](fig/03-DataVisualization/unnamed-chunk-11-1.png)
+![plot of chunk s13_grouped_bar](fig/03-DataVisualization/s13_grouped_bar-1.png)
 
-
-#### Stacked-bar
-
+## Barras Empilhadas
+Mostra total e composicao no mesmo eixo, com trade-off de precisao para comparar segmentos internos.  
+Slides: 14.
 
 
 ``` r
@@ -162,103 +158,121 @@ agg <- aggregation("Species",
 )
 data <- transform(agg, iris)
 
-#head(data)
-grf <- plot_stackedbar(data, colors=colors[1:2]) + font
-grf <- grf + theme(axis.text.x = element_text(angle=90, hjust=1))
+grf <- plot_stackedbar(data, colors = colors[1:2]) + font
+grf <- grf + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-12](fig/03-DataVisualization/unnamed-chunk-12-1.png)
+![plot of chunk s14_stacked_bar](fig/03-DataVisualization/s14_stacked_bar-1.png)
 
-#### Line chart
-
+## Grafico de Linhas
+Ideal para series ordenadas no tempo ou em eixo continuo.  
+Slides: 15.
 
 
 ``` r
 x <- seq(0, 10, 0.25)
-serie <- data.frame(x, y=sin(x))
+serie <- data.frame(x, y = sin(x))
 
-#head(serie)
-grf <- plot_series(serie, colors=colors[1]) + font
+grf <- plot_series(serie, colors = colors[1]) + font
 plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-13](fig/03-DataVisualization/unnamed-chunk-13-1.png)
+![plot of chunk s15_line](fig/03-DataVisualization/s15_line-1.png)
 
-#### Data distribution example
+## Distribuicoes
+Antes de modelar, avaliamos forma, dispersao e presenca de assimetria/outliers.  
+Slides: 16-17.
 
 
 ``` r
-example <- data.frame(exponential = rexp(10000, rate = 1),
-                      uniform = runif(10000, min=2.5, max = 3.5),
-                      normal = rnorm(10000, mean = 5))
+example <- data.frame(
+  exponential = rexp(10000, rate = 1),
+  uniform = runif(10000, min = 2.5, max = 3.5),
+  normal = rnorm(10000, mean = 5)
+)
 head(example)
 ```
 
 ```
 ##   exponential  uniform   normal
-## 1   1.2100296 3.449605 5.224728
-## 2   1.5311395 2.887654 4.354462
-## 3   1.2037955 2.749018 4.559639
-## 4   0.6728508 2.653039 5.490353
-## 5   0.9607920 2.780687 6.986764
-## 6   1.8530060 3.007532 6.293730
+## 1   0.1096252 3.004124 5.119556
+## 2   2.0550664 3.036043 6.725539
+## 3   0.1786574 3.369387 4.396905
+## 4   0.7781901 3.061361 6.201506
+## 5   1.3307507 3.287657 6.187236
+## 6   0.6654501 2.897380 6.626499
 ```
 
-
-
-
-#### Histogram
+### Histograma
+Mostra frequencias por intervalo e e sensivel ao numero/largura de bins.  
+Slides: 18.
 
 
 ``` r
 data <- data.frame(exponential = example$exponential)
-#head(data)
-grf <- plot_hist(data, label_x = "exponential", color=colors[1]) + font
-plot(grf) 
+grf <- plot_hist(data, label_x = "exponential", color = colors[1]) + font
+plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-16](fig/03-DataVisualization/unnamed-chunk-16-1.png)
+![plot of chunk s18_hist](fig/03-DataVisualization/s18_hist-1.png)
 
-
-#### Multiple Histograms
+### Histogramas Multiplos
+Comparacao lado a lado para identificar diferencas de forma entre distribuicoes.  
+Slides: 19.
 
 
 ``` r
 {
-library(gridExtra)  
-grfe <- plot_hist(data.frame(exponential = example$exponential), label_x = "exponential", color=colors[1]) + font
-grfu <- plot_hist(data.frame(uniform = example$uniform), label_x = "uniform", color=colors[1]) + font 
-grfn <- plot_hist(data.frame(normal = example$normal), label_x = "normal", color=colors[1]) + font
-grid.arrange(grfe, grfu, grfn, ncol=3)
+  library(gridExtra)
+  grfe <- plot_hist(data.frame(exponential = example$exponential), label_x = "exponential", color = colors[1]) + font
+  grfu <- plot_hist(data.frame(uniform = example$uniform), label_x = "uniform", color = colors[1]) + font
+  grfn <- plot_hist(data.frame(normal = example$normal), label_x = "normal", color = colors[1]) + font
+  grid.arrange(grfe, grfu, grfn, ncol = 3)
 }
 ```
 
-![plot of chunk unnamed-chunk-17](fig/03-DataVisualization/unnamed-chunk-17-1.png)
+![plot of chunk s19_hist_multi](fig/03-DataVisualization/s19_hist_multi-1.png)
 
-#### Density plot
-
-
-
-``` r
-data <- data.frame(normal = example$normal)
-#head(data)
-grf <- plot_density(data, label_x = "normal", color=colors[1]) + font
-plot(grf) 
-```
-
-![plot of chunk unnamed-chunk-18](fig/03-DataVisualization/unnamed-chunk-18-1.png)
-
-#### Box plot
-
+### Densidade
+Estimativa suavizada da distribuicao; util para comparar formatos sem depender de bins.  
+Slides: 20.
 
 
 ``` r
 data <- data.frame(normal = example$normal)
-#head(data)
-grf <- plot_boxplot(data, colors="white") + font
-plot(grf) 
+grf <- plot_density(data, label_x = "normal", color = colors[1]) + font
+plot(grf)
 ```
 
-![plot of chunk unnamed-chunk-19](fig/03-DataVisualization/unnamed-chunk-19-1.png)
+![plot of chunk s20_density](fig/03-DataVisualization/s20_density-1.png)
+
+### Boxplot
+Resumo robusto com mediana, quartis e possiveis outliers.  
+Slides: 21.
+
+
+``` r
+data <- data.frame(normal = example$normal)
+grf <- plot_boxplot(data, colors = "white") + font
+plot(grf)
+```
+
+![plot of chunk s21_boxplot](fig/03-DataVisualization/s21_boxplot-1.png)
+
+## Boas Praticas de Uso em Aula
+Ao usar estes exemplos em slides e laboratorio, mantenha tres vinculos explicitos:  
+1. problema analitico (o que quero mostrar);
+2. tipo de variavel (continua, categorica, temporal);
+3. grafico escolhido e suas limitacoes.  
+Slides: 22-23.
+
+## Referencias
+Slides: 24.
+
+- Wickham, H. (2016). *ggplot2: Elegant Graphics for Data Analysis*. Springer.
+- Wickham, H., Cetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science* (2nd ed.). O'Reilly.
+- Wilke, C. O. (2019). *Fundamentals of Data Visualization*. O'Reilly.
+- Brewer, C. A. (n.d.). ColorBrewer 2.0. https://colorbrewer2.org
+
 

@@ -6,6 +6,13 @@
 Esta seção cobre métodos avançados para classificação: redes neurais, SVM, ensembles, seleção de atributos e tópicos como desbalanceamento, multiclasse, semi-supervisão e transferência.  
 Slides: 1–45.
 
+## Como ler este roteiro
+Estratégia sugerida:
+1. compare famílias de modelos (margem, árvores, redes e ensembles);
+2. analise o impacto da seleção de atributos;
+3. observe adaptações para cenários especiais (desbalanceamento e semi-supervisão).
+O objetivo é relacionar ganho preditivo com custo de complexidade.
+
 ## Configuração
 
 
@@ -21,7 +28,7 @@ library(rpart)
 library(adabag)
 library(xgboost)
 
-# Dataset base
+# Conjunto de dados base
 iris <- datasets::iris
 head(iris)
 ```
@@ -98,6 +105,8 @@ eval_model <- function(model, train, test, target_col) {
 Redes feed-forward multicamadas modelam relações não lineares e podem atuar como classificadores potentes, ajustando pesos via backpropagation.  
 Slides: 2–8.
 
+Observe, nesta etapa, se há diferença relevante entre métricas de treino e teste.
+
 
 ``` r
 # Slides 2–8: MLP
@@ -113,9 +122,11 @@ res_mlp <- eval_model(model_mlp, iris_train, iris_test, "Species")
 ## 1 0.9666667 11 19  0  0         1      1           1           1  1
 ```
 
-## Support Vector Machines (SVM)
+## Maquinas de Vetores de Suporte (SVM)
 SVMs buscam hiperplanos de margem máxima e usam kernels para separação não linear em espaços de alta dimensionalidade.  
 Slides: 9–19.
+
+Na prática, os hiperparâmetros de margem/custo concentram boa parte do ganho de desempenho.
 
 
 ``` r
@@ -173,7 +184,7 @@ Slides: 25.
 
 
 ``` r
-# Slide 25: Boosting
+# Slides 25: Boosting
 set.seed(1)
 model_boost <- cla_boosting("Species", mfinal = 50)
 model_boost <- fit(model_boost, iris_train)
@@ -210,10 +221,12 @@ res_xgb <- eval_model(model_xgb, iris_train, iris_test, "Species")
 Em alta dimensionalidade, selecionar atributos relevantes melhora generalização e interpretabilidade.  
 Slides: 26–36.
 
+Critério didático: compare desempenho e legibilidade antes/depois da redução de atributos.
+
 
 ``` r
 # Slides 26–36: selecao de atributos
-# Dataset binario para alguns metodos
+# Conjunto de dados binario para alguns metodos
 iris_bin <- iris
 tr_fg_bin <- feature_generation(
   IsVersicolor = ifelse(Species == "versicolor", "versicolor", "not_versicolor")
@@ -226,7 +239,7 @@ if (!inherits(tmp_bin, "try-error") && "IsVersicolor" %in% names(tmp_bin)) {
 }
 iris_bin$IsVersicolor <- factor(iris_bin$IsVersicolor)
 
-# Slide 32: Information Gain (discretizacao simples)
+# Slides 32: Information Gain (discretizacao simples)
 entropy <- function(y) {
   p <- prop.table(table(y))
   -sum(p * log2(p))
@@ -275,7 +288,7 @@ ig_scores
 ```
 
 ``` r
-# Slide 33: Forward Stepwise Selection (glm binario)
+# Slides 33: Forward Stepwise Selection (glm binario)
 full_glm <- glm(IsVersicolor ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
                 data = iris_bin, family = binomial)
 null_glm <- glm(IsVersicolor ~ 1, data = iris_bin, family = binomial)
@@ -306,7 +319,7 @@ summary(step_model)
 ```
 
 ``` r
-# Slide 34: LASSO (glmnet)
+# Slides 34: LASSO (glmnet)
 iris_lasso <- iris_bin[, c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "IsVersicolor")]
 iris_lasso$IsVersicolor <- factor(iris_lasso$IsVersicolor)
 set.seed(1)
@@ -326,7 +339,7 @@ coef(model_lasso$model, s = "lambda.min")
 ```
 
 ``` r
-# Slide 35: CFS (correlation-based)
+# Slides 35: CFS (correlation-based)
 # CFS simples: correlacao com classe (numerica) e penalidade por correlacao entre features
 class_num <- as.numeric(iris$Species)
 cor_cf <- abs(cor(iris[, 1:4], class_num))
@@ -342,7 +355,7 @@ cfs_score
 ```
 
 ``` r
-# Slide 36: RELIEF simplificado (binario)
+# Slides 36: RELIEF simplificado (binario)
 relief_simple <- function(df, target, m = 50) {
   X <- as.matrix(df)
   y <- target
@@ -427,7 +440,7 @@ mean(multinom_pred == iris_test$Species)
 ```
 
 ``` r
-# Slide 41: semi-supervisionado (pseudo-label simples)
+# Slides 41: semi-supervisionado (pseudo-label simples)
 set.seed(1)
 mask <- sample(seq_len(nrow(iris_train)), size = floor(0.5 * nrow(iris_train)))
 semi_train <- iris_train
@@ -493,3 +506,5 @@ mean(fine_pred == iris_test$Species)
 - Freund, Y., & Schapire, R. (1997). A decision-theoretic generalization of on-line learning and an application to boosting. *Journal of Computer and System Sciences*, 55(1), 119–139.
 - Tibshirani, R. (1996). Regression shrinkage and selection via the Lasso. *Journal of the Royal Statistical Society B*, 58(1), 267–288.
 - Kohavi, R. (1995). A study of cross-validation and bootstrap for accuracy estimation and model selection. *IJCAI*.
+
+

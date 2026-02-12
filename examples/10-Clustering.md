@@ -5,10 +5,15 @@
 ## Visão Geral
 Clustering é aprendizado não supervisionado que agrupa observações por similaridade. A qualidade depende de escolha de métricas, escalas e do algoritmo.  
 
+## Como ler este roteiro
+Use a sequência abaixo para interpretar melhor os resultados:
+1. escolha do paradigma (particional, hierárquico, densidade, probabilístico);
+2. efeito de escala/normalização;
+3. avaliação e seleção do modelo.
 
 
 ``` r
-# The easiest way use clustering in daltoolbox is by installing basic packages
+# Forma mais simples de usar clustering no daltoolbox: instalando pacotes basicos
 #install.packages("daltoolbox")
 #install.packages("ggplot2")
 #install.packages("cluster")
@@ -18,6 +23,7 @@ Clustering é aprendizado não supervisionado que agrupa observações por simil
 ```
 
 Slides: 1–12.
+
 ## Configuração
 
 
@@ -32,7 +38,7 @@ Slides: 1–12.
 
 
 ``` r
-# Slide 4: dataset de exemplo
+# Slides 4: conjunto de dados de exemplo
 iris <- datasets::iris
 head(iris)
 ```
@@ -98,7 +104,7 @@ Slides: 29.
 
 
 ``` r
-# Slide 29: normalizacao
+# Slides 29: normalizacao
 iris_minmax <- transform(daltoolbox::fit(minmax(), iris), iris)
 model_km <- daltoolbox::fit(model_km, iris_minmax[, 1:4])
 clu_km <- daltoolbox::cluster(model_km, iris_minmax[, 1:4])
@@ -128,7 +134,7 @@ Slides: 30–31.
 
 
 ``` r
-# Slide 30–31: K-medoids (PAM)
+# Slides 30–31: K-medoids (PAM)
 model_pam <- cluster_pam(k = 3)
 model_pam <- daltoolbox::fit(model_pam, X)
 clu_pam <- daltoolbox::cluster(model_pam, X)
@@ -168,14 +174,14 @@ Slides: 32–35.
 
 
 ``` r
-# Slides 32–35: Clustering hierarquico e dendrograma (base R)
+# Slides 32–35: clustering hierarquico e dendrograma (R base)
 # Distancia euclidiana e metodo de Ward
 model_hc <- cluster_hclust(k = 3, method = "ward.D2", dist = "euclidean", scale = TRUE)
 model_hc <- daltoolbox::fit(model_hc, X)
 plot(model_hc[["hc"]])
 ```
 
-![plot of chunk unnamed-chunk-7](fig/10-Clustering/unnamed-chunk-7-1.png)
+![plot of chunk s32_35_hclust](fig/10-Clustering/s32_35_hclust-1.png)
 
 ``` r
 # Cortando em 3 grupos
@@ -628,6 +634,8 @@ comm
 - Fraley, C., & Raftery, A. (2002). Model-based clustering. *JASA*, 97(458), 611–631.
 - Zadeh, L. (1965). Fuzzy sets. *Information and Control*, 8(3), 338–353.
 - Blondel, V. et al. (2008). Fast unfolding of communities in large networks. *J. Statistical Mechanics*.
+
+
 
 
 
