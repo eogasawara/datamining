@@ -13,7 +13,8 @@
 - 12. Gestão de Dados - Bem-vindo ao mundo da gestão de dados empresariais, onde informações estratégicas impulsionam decisões inteligentes e transformam negócios. [PDF](12-DataManagement.pdf)
 - 13. Deep Learning: Visão Geral - Deep Learning representa o aprendizado com redes neurais profundas, onde a característica central é o aprendizado automático de representações. [PDF](13-DeepLearning.pdf)
 - d01. DAL Toolbox - Visão prática das ferramentas do DAL Toolbox. [PDF](d01-daltoolbox.pdf)
-- d02. DAL Toolbox - Visão prática de pré-processamento de dados com o DAL Toolbox. [PDF](d02-data-preprocessing.pdf)
+- d02. DAL Toolbox - Tutorial prático do DAL Toolbox. [PDF](d02-tutorial.pdf)
+- d03. DAL Toolbox - Casos de pré-processamento com DAL Toolbox. [PDF](d03-data-preprocessing.pdf)
 
 ## Playlist
 
