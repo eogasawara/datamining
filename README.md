@@ -12,9 +12,14 @@
 - 11. Outliers - Uma introdução abrangente aos conceitos, tipos e desafios na detecção de anomalias em dados. [PDF](11-Outliers.pdf)
 - 12. Gestão de Dados - Bem-vindo ao mundo da gestão de dados empresariais, onde informações estratégicas impulsionam decisões inteligentes e transformam negócios. [PDF](12-DataManagement.pdf)
 - 13. Deep Learning: Visão Geral - Deep Learning representa o aprendizado com redes neurais profundas, onde a característica central é o aprendizado automático de representações. [PDF](13-DeepLearning.pdf)
-- d01. DAL Toolbox - Visão prática das ferramentas do DAL Toolbox. [PDF](d01-daltoolbox.pdf)
-- d02. DAL Toolbox - Tutorial prático do DAL Toolbox. [PDF](d02-tutorial.pdf)
-- d03. DAL Toolbox - Casos de pré-processamento com DAL Toolbox. [PDF](d03-data-preprocessing.pdf)
+- d01. DAL Toolbox - Visão prática das ferramentas do DAL Toolbox. [PDF](d01-daltoolbox.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/transf)
+- d02. DAL Toolbox - Tutorial prático do DAL Toolbox. [PDF](d02-tutorial.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/tutorial)
+- d03. DAL Toolbox - Casos de pré-processamento com DAL Toolbox. [PDF](d03-data-preprocessing.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/transf)
+- d04. DAL Toolbox - Classificação. [PDF](d04-classification.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/classification)
+- d05. DAL Toolbox - Regressão. [PDF](d05-regression.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/regression)
+- d06. DAL Toolbox - Clustering. [PDF](d06-clustering.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/clustering)
+- d07. DAL Toolbox - Gráficos. [PDF](d07-graphics.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/graphics)
+- d08. DAL Toolbox - Exemplos customizados. [PDF](d08-custom.pdf) | [Código](https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples/custom)
 
 ## Playlist
 
