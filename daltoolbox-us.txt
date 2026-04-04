@@ -1,0 +1,50 @@
+<strong>DAL Toolbox</strong> is a data analytics framework inspired by the <em>Experiment Lines</em> model. The package organizes, within an integrated environment, preprocessing, classification, regression, clustering, graphical analysis, and the construction of reproducible analytical pipelines. In the current package version, <strong>1.3.727</strong>, the documentation was reorganized to support a guided learning track and more didactic thematic collections.
+
+<h3><strong>Didactic organization</strong></h3>
+<p>The <code>daltoolbox</code> material is now organized around two complementary entry points. The first is a guided track, recommended for readers who want to learn the flow of an analytical experiment step by step. The second is composed of thematic collections, aimed at readers who want to study specific families of transformations, models, and visualizations.</p>
+
+<p>This organization reinforces the central idea behind the framework: data analytics should not be treated as a loose sequence of isolated functions, but as a coherent workflow that integrates data preparation, modeling, evaluation, model comparison, visualization, and framework extension.</p>
+
+<h3><strong>Available stages and methods</strong></h3>
+<ul>
+	<li><p><strong>Transformations:</strong><br />sampling, data cleaning, outlier handling, scaling, categorical encoding, discretization, balancing, feature selection, dimensionality reduction, and curvature-based heuristics.</p></li>
+	<li><p><strong>Classification:</strong><br />baselines, decision trees, instance-based methods, probabilistic models, ensembles, support vector machines, neural networks, and hyperparameter selection.</p></li>
+	<li><p><strong>Regression:</strong><br />interpretable models, neighborhood-based methods, ensembles, margin-based regression, neural networks, and hyperparameter tuning.</p></li>
+	<li><p><strong>Clustering:</strong><br />partitional methods, medoid-based methods, density-based approaches, and model selection in unsupervised settings.</p></li>
+	<li><p><strong>Graphics:</strong><br />visualizations for category comparison, distribution analysis, relationships between variables, time series, and figure export for reports.</p></li>
+	<li><p><strong>Customization:</strong><br />integration of new transformations, classifiers, regressors, and clustering methods while preserving the framework contract.</p></li>
+	<li><p><strong>Integration and extensibility:</strong><br />support for integration with external libraries and complementary use of ecosystems such as Python when needed.</p></li>
+</ul>
+
+<h3><strong>Architecture</strong></h3>
+<p>The <code>daltoolbox</code> architecture was built to keep the experimental cycle of split, fit, predict, evaluate, and compare stable regardless of the method family being used. With a uniform data model and a consistent API, the framework supports reproducibility, extensibility, and integration across the different stages of the analytical process.</p>
+
+<h3>Installation</h3>
+The stable version of <strong>DAL Toolbox</strong> on CRAN is available at: <a href="https://CRAN.R-project.org/package=daltoolbox">https://CRAN.R-project.org/package=daltoolbox</a>
+
+<p>To install the stable CRAN version:</p>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">install.packages("daltoolbox")</code></pre>
+</div>
+
+<p>To install the development version directly from GitHub:</p>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">library(devtools)
+devtools::install_github("cefet-rj-dal/daltoolbox", force = TRUE, dependencies = FALSE, upgrade = "never")</code></pre>
+</div>
+
+<h3>Documentation and examples</h3>
+<p>The <code>daltoolbox</code> examples are organized into a guided track and thematic collections covering transformations, classification, regression, clustering, graphics, and customization:</p>
+
+<a href="https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples">https://github.com/cefet-rj-dal/daltoolbox/tree/main/examples</a>
+
+<h3>Guided track</h3>
+<p>The current guided track covers the full logic of an analytical experiment: first experiment, sampling strategies, data quality and cleaning, preprocessing, baselines, metrics, model comparison, tuning, end-to-end pipelines, regression, clustering, visual analysis, and custom framework extension.</p>
+
+<h3>Additional material</h3>
+<p>Beyond the thematic examples, <code>daltoolbox</code> serves as the conceptual and architectural foundation for other frameworks in the DAL ecosystem, such as <code>tspredit</code> and <code>harbinger</code>, providing the common infrastructure for organizing reproducible analytical workflows.</p>
+
+<a href="https://cefet-rj-dal.github.io/daltoolbox/">https://cefet-rj-dal.github.io/daltoolbox/</a>
+
+<p>Introductory video:</p>
+<a href="https://youtu.be/CPk6IDB6bxY?si=SVBGzjDODQN5VVPE">https://youtu.be/CPk6IDB6bxY?si=SVBGzjDODQN5VVPE</a>
