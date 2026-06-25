@@ -1275,7 +1275,6 @@ Slides: 36.
 
 Codigo Python em retic.py
 ```text
-import pyreadr
 import pandas
 
 def add(x, y):

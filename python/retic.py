@@ -1,4 +1,3 @@
-import pyreadr
 import pandas
 
 def add(x, y):
